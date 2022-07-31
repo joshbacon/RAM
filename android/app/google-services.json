@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "658512774596",
+    "project_id": "ramemes-e5710",
+    "storage_bucket": "ramemes-e5710.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658512774596:android:0e99702ecac0f0eaad5091",
+        "android_client_info": {
+          "package_name": "com.tyro.ram"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "658512774596-qcdskj27rlm49r7cebo3p7jnrglgvn4o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tyro.ram",
+            "certificate_hash": "20bee7ac6147a15c980da8f2d61f3c0aabc15759"
+          }
+        },
+        {
+          "client_id": "658512774596-549kpncaaadn1n730vppim4352qibckq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDbwIxBkIeaLyuRl3RvIKbn_adP0uWjV8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "658512774596-549kpncaaadn1n730vppim4352qibckq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

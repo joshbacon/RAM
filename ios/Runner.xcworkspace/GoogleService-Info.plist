@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>58837124174-118lmvb8n4hhu69ikjbbvmal4om1g29r.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.58837124174-118lmvb8n4hhu69ikjbbvmal4om1g29r</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>58837124174-58eiun7a31r1uq4sqpi2fge7r1s5gptv.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDw75hVTOKzk75rTs8g6lLJdqhzEm4J9w0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>58837124174</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.tyro.ram</string>
+	<key>PROJECT_ID</key>
+	<string>ramemes-4d76e</string>
+	<key>STORAGE_BUCKET</key>
+	<string>ramemes-4d76e.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:58837124174:ios:6e83c155aeeef11fce6f1f</string>
+</dict>
+</plist>
