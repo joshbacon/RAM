@@ -11,6 +11,12 @@ then: figure out how to abstract the postlist
 -- like we need to be able to filter the search, honestly like 4 separate ones? (home, profilePosts, profileUps, profileDowns)
 
 
+if you get bored of the current task: implement ups/downs interaction
+-- i.e. make a relations table to hold the ups and downs (disable the chosen button after pressing)
+-- also do the same thing for people following people (put a little plus next to any users post that isn't being followed)
+-- will also need screens for [viewing another users profile, searching users]
+
+
 to finish user updating: trying to get the images to update when they change it, not leave the page and come back
 then: have it clear profile pictues of that name but not extnesion when the user updates.
         so it doesn't take up unnecsssary space

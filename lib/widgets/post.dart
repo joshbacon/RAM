@@ -27,7 +27,7 @@ class _PostState extends State<Post> {
   //  'uid': '1',
   //  'ups': 0,
   //  'downs': 0,
-  //  'image': const AssetImage('assets/postNotFoundImage.jpg')
+  //  'image': const AssetImage('assets/postNotFoundImage.png')
   //};
   
   _PostState(this.data);
@@ -123,7 +123,16 @@ class _PostState extends State<Post> {
                 ),
               ],
             )
-          )
+          ),
+         Center(
+            child: Container(width: 365, height: 3, decoration:
+              BoxDecoration(
+                borderRadius: BorderRadius.circular(1),
+               color: Color.fromARGB(26, 0, 0, 0)
+             ),
+            ),
+          ),
+          const SizedBox( height: 10 ),
         ],
       //),
     );
