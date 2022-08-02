@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:ram/widgets/post.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
 
@@ -20,11 +22,24 @@ class _HomePageState extends State<HomePage> {
   bool _isLoading = false;
 
   Future<void> getPost() async {
-    setState(() {
-      postList.add(Post(nextPID));
-      nextPID = postList[postList.length-1].pid - 1;
-      print(nextPID);
-    });
+
+    final response = await http.get(
+      Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid="+nextPID.toString())
+    );
+    // make get call here and set data
+    Map<String, dynamic> data;
+    if (response.statusCode == 200){
+      Map<String, dynamic> data = json.decode(response.body);
+      if ( data['status'] ){
+        data.remove('status');
+        data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
+        setState(() {
+          postList.add(Post(data));
+          nextPID = data['pid'] - 1;
+          print(nextPID);
+        });
+      }
+    }
   }
 
   @override
@@ -82,12 +97,14 @@ class _HomePageState extends State<HomePage> {
           //postList.removeXPosts(postList.len);
           // run get first post again
           print('refreshing...');
-          setState(() {
-            postList = [Post(0)];
-            //postList.add(nextPost);
-            //nextPID = nextPost.pid - 1;
-            //postList.getNewestPost();
-          });
+          nextPID = 0;
+          getPost();
+          //setState(() {
+          //  postList = [Post(0)];
+          //  //postList.add(nextPost);
+          //  //nextPID = nextPost.pid - 1;
+          //  //postList.getNewestPost();
+          //});
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

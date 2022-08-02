@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
             //  children: [
             //    Column(
             //      children: const [
-                    Post(0),//{
+                    //Post(0),//{
                     //  'pid': 3,
                     //  'uid': '1',
                     //  'ups': 420,
