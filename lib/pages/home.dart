@@ -13,17 +13,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  PostList postList = PostList();
+  //PostList postList = PostList();
+  List<Post> postList = [];
+  int nextPID = 0;
   ScrollController controller = ScrollController();
   bool _isLoading = false;
 
-  Future<void> getInit() async {
-    //setState(() {
-    //  //while (postList.len == 0) {
-    //    postList = PostList();
-    // // }
-    //  //postList.addXPosts(1);
-    //});
+  Future<void> getPost() async {
+    setState(() {
+      postList.add(Post(nextPID));
+      nextPID = postList[postList.length-1].pid - 1;
+      print(nextPID);
+    });
   }
 
   @override
@@ -31,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //getInit();
     setState(() {
-      postList.getNewestPost();
+      getPost();
     });
     controller.addListener(_scrollListener);
   }
@@ -47,7 +48,10 @@ class _HomePageState extends State<HomePage> {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
       setState(() {
         _isLoading = true;
-        postList.addXPosts(1);
+        //postList.addXPosts(1);
+        //Post nextPost = Post(nextPID);
+        //postList.add(nextPost);
+        //nextPID = nextPost.pid - 1;
       });
     }
     //print(controller.position.extentAfter);
@@ -63,7 +67,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
         setState(() {
-          postList.getPost();
+          getPost();
+          //postList.add(Post(nextPID));
+          //nextPID = postList[postList.length-1].pid - 1;
           //postList.getNewestPost();
         });
       }),
@@ -77,7 +83,10 @@ class _HomePageState extends State<HomePage> {
           // run get first post again
           print('refreshing...');
           setState(() {
-            postList.getNewestPost();
+            postList = [Post(0)];
+            //postList.add(nextPost);
+            //nextPID = nextPost.pid - 1;
+            //postList.getNewestPost();
           });
         },
         child: SingleChildScrollView(
@@ -99,18 +108,18 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const News(),
-              postList.len == 0 ?
+              postList.isEmpty ?
               Column(children: const [
                 SizedBox(height: 100),
                 CircularProgressIndicator(color: Color.fromRGBO(255, 163, 0, 1.0))
               ]) :
               ListView.builder(
-                key: const ValueKey(1),
+               // key: const ValueKey(1),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: postList.len,
+                itemCount: postList.length,
                 itemBuilder: (context, index) {
-                  return Post(postList.data.elementAt(index));
+                  return postList[index];
                 },
               )
             ]
@@ -121,21 +130,3 @@ class _HomePageState extends State<HomePage> {
   }
 
 }
-
-
-
-
-
-          //const Padding(
-          //  padding: EdgeInsets.fromLTRB(0, 50, 0, 15),
-          //  child: Text("Random Access Memes",
-          //    textAlign: TextAlign.center,
-          //    style: TextStyle(
-          //      fontFamily: "dubai",
-          //      decoration: TextDecoration.underline,
-          //      color: Color.fromRGBO(255, 163, 0, 1.0),
-          //      fontSize: 28,
-          //      height: 1,
-          //    ),
-          //  ),
-          //),

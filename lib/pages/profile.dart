@@ -138,13 +138,13 @@ class _ProfilePageState extends State<ProfilePage> {
             //  children: [
             //    Column(
             //      children: const [
-                    const Post({
-                      'pid': 3,
-                      'uid': '1',
-                      'ups': 420,
-                      'downs': 69,
-                      'image': NetworkImage("http://192.168.2.17:80/../../ram_images/posts/1post2022_07_28_161413000000.jpg")
-                    }),
+                    Post(0),//{
+                    //  'pid': 3,
+                    //  'uid': '1',
+                    //  'ups': 420,
+                    //  'downs': 69,
+                    //  'image': NetworkImage("http://192.168.2.17:80/../../ram_images/posts/1post2022_08_01_20-35-36.jpg")
+                    //}),
                 //  ],
                 //),
                 //Column(

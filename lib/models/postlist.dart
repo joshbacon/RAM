@@ -15,37 +15,37 @@ class PostList {
 
   late int nextPID;
 
-  List get data => list;
-  int get len => list.length;
+  //List get data => list;
+  //int get len => list.length;
 
   PostList() {
     //somehow query the most recent pid, set to nextPIDinstead of below number
     //nextPID = 5;
     
-    getNewestPost();
+    //getNewestPost();
     // make get call h
     //list.removeAt(0);
   }
 
-  Future<bool> getNewestPost() async{
-    final response = await http.get(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid=0")
-    );
-    // make get call here and set data
-    if (response.statusCode == 200){
-      Map<String, dynamic> data = json.decode(response.body);
-      data.remove('status');
-      data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
-      list = [data];
-      //list.add(data);
-      nextPID = data['pid'] - 1;
-      //addXPosts(1);
-      return true;
-    } else {
-      nextPID = 8;
-      return false;
-    }
-  }
+  //Future<bool> getNewestPost() async{
+  //  final response = await http.get(
+  //    Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid=0")
+  //  );
+  //  // make get call here and set data
+  //  if (response.statusCode == 200){
+  //    Map<String, dynamic> data = json.decode(response.body);
+  //    data.remove('status');
+  //    data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
+  //    list = [data];
+  //    //list.add(data);
+  //    nextPID = data['pid'] - 1;
+  //    //addXPosts(1);
+  //    return true;
+  //  } else {
+  //    nextPID = 8;
+  //    return false;
+  //  }
+  //}
 
   Future<bool> getPost() async{
     final response = await http.get(

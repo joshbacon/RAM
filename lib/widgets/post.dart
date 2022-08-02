@@ -11,39 +11,64 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Post extends StatefulWidget {
 
-  final Map<String, dynamic> data;
+  int pid;
 
-  const Post(this.data, {Key? key}) : super(key: key);
+  Post(this.pid, {Key? key}) : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  State<Post> createState() => _PostState(data);
+  State<Post> createState() => _PostState();
 }
 
 class _PostState extends State<Post> {
-
-  Map<String, dynamic> data;// = {
-  //  'pid': 0,
-  //  'uid': '1',
-  //  'ups': 0,
-  //  'downs': 0,
-  //  'image': const AssetImage('assets/postNotFoundImage.png')
-  //};
   
-  _PostState(this.data);
+  _PostState();
 
-  //@override
-  //void initState() async {
-  //  super.initState();
-  //  final response = await http.get(
-  //    Uri.parse("http://192.168.2.17:80/ramdb_api/user/getpost.php?pid="+data['pid'].toString())
-  //  );
-  //  // make get call here and set data
-  //  if (response.statusCode == 200){
-  //    data = json.decode(response.body);
-  //    data['image'] = Image.network(data['image']).image;
-  //  }
-  //}
+  Map<String, dynamic> data = {
+    'pid': 0,
+    'uid': '1',
+    'ups': 1,
+    'downs': 1,
+    'image': const AssetImage('assets/postNotFoundImage.png')
+  };
+
+  Future<bool> getData() async{
+    final response = await http.get(
+      Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid="+widget.pid.toString())
+    );
+    // make get call here and set data
+    if (response.statusCode == 200){
+      Map<String, dynamic> data = json.decode(response.body);
+      if ( data['status'] ){
+        data.remove('status');
+        data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
+        setState(() {
+          this.data = data;
+          widget.pid = data['pid'];
+          //if (pid == 0){
+          //  pid = data['pid'];
+          //}
+        });
+        return true;
+      }
+    }
+    return false;
+  }
+  
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+    //final response = await http.get(
+    //  Uri.parse("http://192.168.2.17:80/ramdb_api/user/getpost.php?pid="+data['pid'].toString())
+    //);
+    //// make get call here and set data
+    //if (response.statusCode == 200){
+    //  data = json.decode(response.body);
+    //  data['image'] = Image.network(data['image']).image;
+    //}
+  }
 
   @override
   Widget build(BuildContext context) {

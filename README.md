@@ -1,6 +1,6 @@
 # RAM - random access memes
 
-A CS focused cosial media app.
+A CS focused social media app.
 
 ## Use
 
