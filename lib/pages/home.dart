@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:ram/widgets/post.dart';
 import 'package:ram/widgets/news.dart';
-import 'package:ram/models/postlist.dart';
+// import 'package:ram/models/postlist.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import '../models/paths.dart' as paths;
 
 class HomePage extends StatefulWidget {
 
@@ -17,26 +18,25 @@ class _HomePageState extends State<HomePage> {
 
   //PostList postList = PostList();
   List<Post> postList = [];
-  int nextPID = 0;
+  int lastPID = 0;
   ScrollController controller = ScrollController();
   bool _isLoading = false;
 
   Future<void> getPost() async {
 
     final response = await http.get(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid="+nextPID.toString())
+      Uri.parse(paths.getPost(lastPID.toString()))
     );
     // make get call here and set data
-    Map<String, dynamic> data;
     if (response.statusCode == 200){
       Map<String, dynamic> data = json.decode(response.body);
       if ( data['status'] ){
         data.remove('status');
-        data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
+        data['image'] = NetworkImage(paths.image(data['image']));
         setState(() {
           postList.add(Post(data));
-          nextPID = data['pid'] - 1;
-          print(nextPID);
+          lastPID = data['pid'];
+          print(lastPID);
         });
       }
     }
@@ -45,7 +45,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    //getInit();
     setState(() {
       getPost();
     });
@@ -97,7 +96,7 @@ class _HomePageState extends State<HomePage> {
           //postList.removeXPosts(postList.len);
           // run get first post again
           print('refreshing...');
-          nextPID = 0;
+          lastPID = 0;
           getPost();
           //setState(() {
           //  postList = [Post(0)];

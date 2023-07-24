@@ -1,13 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
+// import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import "package:async/async.dart";
-import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-
-
+// import "package:async/async.dart";
+// import 'package:path/path.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import '../models/paths.dart' as paths;
 
 class PostList {
 
@@ -29,13 +27,13 @@ class PostList {
 
   //Future<bool> getNewestPost() async{
   //  final response = await http.get(
-  //    Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid=0")
+  //    Uri.parse("http://192.168.2.14:80/ramdb_api/objects/getpost.php?pid=0")
   //  );
   //  // make get call here and set data
   //  if (response.statusCode == 200){
   //    Map<String, dynamic> data = json.decode(response.body);
   //    data.remove('status');
-  //    data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
+  //    data['image'] = NetworkImage("http://192.168.2.14:80/"+data['image']);
   //    list = [data];
   //    //list.add(data);
   //    nextPID = data['pid'] - 1;
@@ -49,14 +47,14 @@ class PostList {
 
   Future<bool> getPost() async{
     final response = await http.get(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/objects/getpost.php?pid="+nextPID.toString())
+      Uri.parse(paths.getPost(nextPID.toString()))
     );
     // make get call here and set data
     if (response.statusCode == 200){
       Map<String, dynamic> data = json.decode(response.body);
       if ( data['status'] ){
         data.remove('status');
-        data['image'] = NetworkImage("http://192.168.2.17:80/"+data['image']);
+        data['image'] = NetworkImage(paths.image(data['image']));
         list.add(data);
         nextPID -= 1;
         return true;

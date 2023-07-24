@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import "package:async/async.dart";
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/paths.dart' as paths;
 
 class User with ChangeNotifier{
 
@@ -49,7 +50,7 @@ class User with ChangeNotifier{
 
   Future<bool> login(usernameIn, passwordIn) async{
     final response = await http.get(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/user/login.php?username="+usernameIn+"&password="+passwordIn)
+      Uri.parse(paths.login(usernameIn, passwordIn))
     );
     // figure out how to convert json thingy to an array (php to flutter array conversion)
     if (response.statusCode == 200){
@@ -59,10 +60,10 @@ class User with ChangeNotifier{
       userData['username'] = data["username"].toString();
       userData['password'] = passwordIn;
       if (data['profile'] != null){
-        userData['profile'] = NetworkImage("http://192.168.2.17:80/"+data["profile"].toString());//Image.network("http://192.168.2.17:80/"+data["profile"].toString()).image;
+        userData['profile'] = NetworkImage(paths.image(data["profile"].toString()));
       }
       if (data['banner'] != null){
-        userData['banner'] = NetworkImage("http://192.168.2.17:80/"+data["banner"].toString());//Image.network("http://192.168.2.17:80/"+data["banner"].toString()).image;
+        userData['banner'] = NetworkImage(paths.image(data["banner"].toString()));
       }
       saveData(passwordIn);
       notifyListeners();
@@ -73,7 +74,7 @@ class User with ChangeNotifier{
 
   Future<bool> signup(usernameIn, passwordIn, emailIn) async {
     final response = await http.post(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/user/signup.php"),
+      Uri.parse(paths.signup()),
       body: {
         'username': usernameIn,
         'password': passwordIn,
@@ -95,7 +96,7 @@ class User with ChangeNotifier{
   
   Future<bool> updateUsername(newUsername) async{
     final response = await http.put(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/user/updateusername.php"),
+      Uri.parse(paths.updateUsername()),
       body: newUsername + ";" + userData['uid']
     );
 
@@ -117,7 +118,7 @@ class User with ChangeNotifier{
 
     var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
     var length = await image.length();
-    var uri = Uri.parse("http://192.168.2.17:80/ramdb_api/user/acceptimage.php");
+    var uri = Uri.parse(paths.acceptImage());
 
     var request = http.MultipartRequest("POST", uri);
 
@@ -130,7 +131,7 @@ class User with ChangeNotifier{
   
     var response = await request.send();
     if (response.statusCode == 200){
-      var path = "http://192.168.2.17:80/../../ram_images/users/"+userData['uid']+"profile"+extension(image.path);
+      var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"profile"+extension(image.path);
       print("path: " + path);
       userData['profile'] = Image.network(path).image;
       print("Image Uploaded");
@@ -146,7 +147,7 @@ class User with ChangeNotifier{
 
     var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
     var length = await image.length();
-    var uri = Uri.parse("http://192.168.2.17:80/ramdb_api/user/acceptimage.php");
+    var uri = Uri.parse(paths.acceptImage());
 
     var request = http.MultipartRequest("POST", uri);
 
@@ -159,7 +160,7 @@ class User with ChangeNotifier{
   
     var response = await request.send();
     if (response.statusCode == 200){
-      var path = "http://192.168.2.17:80/../../ram_images/users/"+userData['uid']+"banner"+extension(image.path);
+      var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"banner"+extension(image.path);
       userData['banner'] = Image.network(path).image;
       print("Image Uploaded");
       saveData(userData['password']);
@@ -174,7 +175,7 @@ class User with ChangeNotifier{
 
     var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
     var length = await image.length();
-    var uri = Uri.parse("http://192.168.2.17:80/ramdb_api/user/acceptimage.php");
+    var uri = Uri.parse(paths.acceptImage());
 
     var request = http.MultipartRequest("POST", uri);
 
@@ -187,7 +188,7 @@ class User with ChangeNotifier{
   
     var response = await request.send();
     if (response.statusCode == 200){
-      //var path = "http://192.168.2.17:80/../../ram_images/users/"+userData['uid']+"post"+ DateTime.now().toString()+extension(image.path);
+      //var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"post"+ DateTime.now().toString()+extension(image.path);
       print("Image Uploaded");
       return true;
     }
@@ -197,7 +198,7 @@ class User with ChangeNotifier{
   // Copied from updateBannerPicture, need to adapt to upload a post
   Future<bool> uploadPostFromURL(image) async{
     final response = await http.post(
-      Uri.parse("http://192.168.2.17:80/ramdb_api/user/acceptimageurl.php"),
+      Uri.parse(paths.acceptImageURL()),
       body: {
         'uid': userData['uid'],
         'image': image

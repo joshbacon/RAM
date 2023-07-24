@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:ram/widgets/post.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
+import '../models/paths.dart' as paths;
 
 
 class ProfilePage extends StatefulWidget {
@@ -143,7 +144,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     //  'uid': '1',
                     //  'ups': 420,
                     //  'downs': 69,
-                    //  'image': NetworkImage("http://192.168.2.17:80/../../ram_images/posts/1post2022_08_01_20-35-36.jpg")
+                    //  'image': NetworkImage("http://192.168.2.14:80/../../ram_images/posts/1post2022_08_01_20-35-36.jpg")
                     //}),
                 //  ],
                 //),
@@ -154,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 //      'uid': '1',
                 //      'ups': 69,
                 //      'downs': 420,
-                //      'image': NetworkImage("http://192.168.2.17:80/../../ram_images/posts/1post2022_07_28_17-03-25.jpg")
+                //      'image': NetworkImage("http://192.168.2.14:80/../../ram_images/posts/1post2022_07_28_17-03-25.jpg")
                 //    }),
                 //  ],
                 //),

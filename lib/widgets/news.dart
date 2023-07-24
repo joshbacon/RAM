@@ -1,7 +1,7 @@
 /*
 
   This widget is displayed at the top of the home page;
-  Change this instead of the home screen when we want to communicate a new update.
+  Make updates here when there is news for the user
 
 */
 
