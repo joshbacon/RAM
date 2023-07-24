@@ -1,4 +1,4 @@
-package com.example.ram
+package com.blacknail.ram
 
 import io.flutter.embedding.android.FlutterActivity
 

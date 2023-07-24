@@ -1,0 +1,88 @@
+TODO
+RAM DB & API
+
+*** Check your IP if the login/signup things stop working for no reason, it's dynamic for some reason ***
+
+but actually: post interactions (ups and downs); they aren't neing sent to the database
+CURRENTLY DOING == load more when scroll to bottom, adapt for profile page [need 3, 1 for each of the menu's]
+-- figure out how to filter posts on profile pages, need to account for last PID used
+
+
+then: figure out how to abstract the postlist
+-- like we need to be able to filter the search, honestly like 4 separate ones? (home, profilePosts, profileUps, profileDowns)
+
+filtering posts:
+- pass a filter keyword [home(anything), profile(that users posts), ups(that users likes), downs (that users dislikes)]
+        and the most recent pid used. query the next x amount from the below query
+
+        // for home list (filter out nothing)
+        SELECT (the values we need so post data)
+        FROM posts
+        WHERE pid < (last pid used)
+        ORDER BY pid DESC
+        LIMIT x
+
+        // for profile list
+        WHERE pid < (last pid used) AND post_uid = passed_uid
+
+        // This link is where I got the logic for the ups and downs lists
+        https://stackoverflow.com/questions/4083632/can-mysql-use-index-in-a-range-query-with-order-by
+
+        // for profile ups list
+        WHERE pid < (last pid used) AND post_uid = (
+                SELECT pid
+                FROM likes table
+
+        )
+
+        // for profile downs list
+        WHERE pid < (last pid used) AND post_uid = (
+                SELECT pid
+                FROM likes table
+        )
+
+
+
+NOTE: getpost.php returns the actual pid no matter what, so keep track of last pid used in front end,
+        we pass this to the php so we can filter for onyl things below it (cause descending order)
+- will need to calculate the total ups and downs (just update locally aswell, don't re-query a whole table)
+        from the interactions table
+
+
+
+if you get bored of the current task: implement ups/downs interaction
+-- i.e. make a relations table to hold the ups and downs (disable the chosen button after pressing)
+-- also do the same thing for people following people (put a little plus next to any users post that isn't being followed)
+-- will also need screens for [viewing another users profile, searching users]
+
+
+to finish user updating: trying to get the images to update when they change it, not leave the page and come back
+then: have it clear profile pictues of that name but not extnesion when the user updates.
+        so it doesn't take up unnecsssary space
+
+
+
+
+roadmap:
+- all response messages
+-- want to change api to return an int as the status msg, 0 == success, >0 == error code
+
+✓- then work on the profile page
+✓-- display proper information ( how often do we refresh? everytime they open it..?)
+
+✓- lastly work on uploading and displaying pictures
+-- have a window thast gets loaded in ( SELECT range(lastLoadedPID + 1, lastLoadedPID + 11) ) so they don't have to wait everytime they scroll
+
+- lastly quality of life stuff and refactoring
+-- fix spacing ( especially when keyboard is update )
+--- look at the app on the emulator so it's a different perspective )
+--- try putting everything in a single scroll thingy like the home page is
+-- add restriction ( regex on email, min length on username and )
+-- add page transitions / animations
+-- just keep adding stuff lmao
+-- move all the themes into one theme file (i.e. text input themes, fonts, )
+
+AN ASIDE FOR DOWN THE ROAD:
+to verify a user by email, have a link that triggers a column to flip in the db user table
+- this allows them to change their password in the app ( i.e. app checks this column to allow resetting a password)
+- just a little post link ( can do that in an email cause html right? )
