@@ -10,7 +10,7 @@ import '../models/paths.dart' as paths;
 class User with ChangeNotifier{
 
   Map<String, dynamic> userData = {
-    "uid":'0',
+    "uid": "0",
     "username": "null",
     "password": "null",
     "profile": const AssetImage('assets/defaultProfile.png'),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ram/widgets/post.dart';
@@ -32,6 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     //final user = Provider.of<User>(context);
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return Scaffold(
       key: _drawerKey,
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
@@ -56,12 +60,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 Image(
                   image: context.watch<User>().banner,
                   width: double.infinity,
-                  height: 288
+                  height: h/3,
+                  fit: BoxFit.cover,
                 ),
                 Positioned(
-                  top: 181,
+                  top: h/3 - w/4,
                   child: CircleAvatar(
-                    radius: 72,
+                    radius: w/6,
                     backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
                     backgroundImage: context.watch<User>().profile,
                   )
@@ -93,17 +98,21 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(width: 50),
-                Container(width: (totalUps / (totalUps + totalDowns))*250, height: 3, decoration:
-                  BoxDecoration(
+                Container(
+                  width: (totalUps / (totalUps + totalDowns))*(w-100),
+                  height: 3,
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(1),
                     color: const Color.fromRGBO(255, 163, 0, 1.0)
                   ),
                 ),
-                Container(width: (totalDowns / (totalUps + totalDowns))*250, height: 3, decoration:
-                  BoxDecoration(
+                Container(
+                  width: (totalDowns / (totalUps + totalDowns))*(w-100),
+                  height: 3,
+                  decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(1),
-                   color: const Color.fromRGBO(170 , 0, 0, 1.0)
-                 ),
+                    color: const Color.fromRGBO(170 , 0, 0, 1.0)
+                  ),
                 ),
                 const SizedBox(width: 50),
               ],
@@ -117,15 +126,23 @@ class _ProfilePageState extends State<ProfilePage> {
                   splashRadius: 0.1,
                   splashColor: Colors.transparent,
                   icon: const Icon(Icons.dashboard),
-                  iconSize: 48,
+                  iconSize: w/6.5,
                   color: const Color.fromRGBO(255, 163, 0, 1.0)
                 ),
                 GestureDetector(
-                  child: const Image( image: AssetImage("assets/dPlus.png"), width: 48, height: 48,),
+                  child: Image(
+                    image: const AssetImage("assets/dPlus.png"),
+                    width: w/6.5,
+                    height: w/6.5,
+                  ),
                   onTap: (){}
                 ),
                 GestureDetector(
-                  child: const Image( image: AssetImage("assets/dMinus.png"), width: 48, height: 48,),
+                  child: Image(
+                    image: const AssetImage("assets/dMinus.png"),
+                    width: w/6.5,
+                    height: w/6.5,
+                  ),
                   onTap: (){}
                 )
               ]

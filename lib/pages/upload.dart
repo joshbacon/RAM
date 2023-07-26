@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ram/models/user.dart';
 import 'package:image_picker/image_picker.dart';
@@ -65,153 +67,157 @@ class _UploadPageState extends State<UploadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 75),
-      child: Column( children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            TextButton(
-              onPressed: (){
-                setState(() {
-                  addLocal = true;
-                  showUploadErr = false;
-                });
-              },
-              child: Text("Local", style: TextStyle(
-                  fontFamily: "dubai",
-                  decoration: TextDecoration.none,
-                  color: addLocal ? Colors.white : const Color.fromRGBO(255, 163, 0, 1.0),
-                  fontSize: 27,
-              ))
-            ),
-            TextButton(
-              onPressed: (){
-                setState(() {
-                  addLocal = false;
-                  showUploadErr = false;
-                });
-              },
-              child: Text("URL", style: TextStyle(
-                  fontFamily: "dubai",
-                  decoration: TextDecoration.none,
-                  color: !addLocal ? Colors.white : const Color.fromRGBO(255, 163, 0, 1.0),
-                  fontSize: 27,
-              ))
-            ),
-          ]
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: addLocal ? [
-            const SizedBox(height: 100),
-            IconButton(
-              onPressed: () async {
-                XFile? imagePicked = await acceptImage();
-                if ( imagePicked != null && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
+    double w = MediaQuery.of(context).size.width;
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 75),
+        child: Column( children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              TextButton(
+                onPressed: (){
                   setState(() {
-                    _showDialog('Your post has been uploaded');
+                    addLocal = true;
                     showUploadErr = false;
                   });
-                } else {
+                },
+                child: Text("Local", style: TextStyle(
+                    fontFamily: "dubai",
+                    decoration: TextDecoration.none,
+                    color: addLocal ? Colors.white : const Color.fromRGBO(255, 163, 0, 1.0),
+                    fontSize: 27,
+                ))
+              ),
+              TextButton(
+                onPressed: (){
                   setState(() {
-                    showUploadErr = true;
+                    addLocal = false;
+                    showUploadErr = false;
                   });
-                }
-              },
-              iconSize: 100,
-              icon: const Icon(
-                Icons.add_a_photo_outlined,
-                color: Color.fromRGBO(255, 163, 0, 1.0)
-              )
-            ),
-            const SizedBox(height: 50),
-            const Text(
-              "choose an image to upload",
-              style: TextStyle(
-                fontFamily: "dubai",
-                decoration: TextDecoration.none,
-                color: Colors.white,
-                fontSize: 28,
-                height: 1,
+                },
+                child: Text("URL", style: TextStyle(
+                    fontFamily: "dubai",
+                    decoration: TextDecoration.none,
+                    color: !addLocal ? Colors.white : const Color.fromRGBO(255, 163, 0, 1.0),
+                    fontSize: 27,
+                ))
               ),
-            ),
-            const SizedBox(height: 10),
-            Visibility(
-              visible: showUploadErr,
-              child: const Text(
-                "woops try again",
+            ]
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: addLocal ? [
+              const SizedBox(height: 100),
+              IconButton(
+                onPressed: () async {
+                  XFile? imagePicked = await acceptImage();
+                  if ( imagePicked != null && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
+                    setState(() {
+                      _showDialog('Your post has been uploaded');
+                      showUploadErr = false;
+                    });
+                  } else {
+                    setState(() {
+                      showUploadErr = true;
+                    });
+                  }
+                },
+                iconSize: min(w/5, 100),
+                icon: const Icon(
+                  Icons.add_a_photo_outlined,
+                  color: Color.fromRGBO(255, 163, 0, 1.0)
+                )
+              ),
+              const SizedBox(height: 50),
+              const Text(
+                "choose an image to upload",
                 style: TextStyle(
                   fontFamily: "dubai",
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontSize: 28,
+                  height: 1,
                 ),
               ),
-            ),
-          ] : [
-            const SizedBox(height: 100),
-            const Text(
-              "enter URL to the image you want to upload",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: "dubai",
-                decoration: TextDecoration.none,
-                color: Color.fromRGBO(255, 163, 0, 1.0),
-                fontSize: 28,
-                height: 1,
-              ),
-            ),
-            const SizedBox(height: 25),
-            TextFormField(
-              controller: urlController,
-              maxLines: 3,
-              minLines: 1,
-              decoration: const InputDecoration(
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white)
+              const SizedBox(height: 10),
+              Visibility(
+                visible: showUploadErr,
+                child: const Text(
+                  "woops try again",
+                  style: TextStyle(
+                    fontFamily: "dubai",
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-              style: const TextStyle(
-                fontFamily: "dubai",
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
-            const SizedBox(height: 25),
-            IconButton(
-              onPressed: () async {
-                if (await context.read<User>().uploadPostFromURL(urlController.text) ) {
-                  print("Image Uploaded");
-                  showUploadErr = false;
-                } else {
-                  showUploadErr = true;
-                }
-              },
-              iconSize: 100,
-              icon: const Icon(
-                Icons.add_box_outlined,
-                color: Color.fromRGBO(255, 163, 0, 1.0)
-              )
-            ),
-            const SizedBox(height: 10),
-            Visibility(
-              visible: showUploadErr,
-              child: const Text(
-                "woops try again",
+            ] : [
+              const SizedBox(height: 100),
+              const Text(
+                "enter URL to the image you want to upload",
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "dubai",
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  decoration: TextDecoration.none,
+                  color: Color.fromRGBO(255, 163, 0, 1.0),
+                  fontSize: 28,
+                  height: 1,
                 ),
               ),
-            ),
-          ],
-        ),
-      ],),
+              const SizedBox(height: 25),
+              TextFormField(
+                controller: urlController,
+                maxLines: 3,
+                minLines: 1,
+                decoration: const InputDecoration(
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white)
+                  ),
+                ),
+                style: const TextStyle(
+                  fontFamily: "dubai",
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
+              const SizedBox(height: 25),
+              IconButton(
+                onPressed: () async {
+                  if (await context.read<User>().uploadPostFromURL(urlController.text) ) {
+                    print("Image Uploaded");
+                    showUploadErr = false;
+                  } else {
+                    showUploadErr = true;
+                  }
+                },
+                iconSize: min(w/5, 100),
+                icon: const Icon(
+                  Icons.add_box_outlined,
+                  color: Color.fromRGBO(255, 163, 0, 1.0)
+                )
+              ),
+              const SizedBox(height: 10),
+              Visibility(
+                visible: showUploadErr,
+                child: const Text(
+                  "woops try again",
+                  style: TextStyle(
+                    fontFamily: "dubai",
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],),
+      ),
     );
   }
 }
