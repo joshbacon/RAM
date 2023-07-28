@@ -73,6 +73,9 @@ class User with ChangeNotifier{
 
 
   Future<bool> signup(usernameIn, passwordIn, emailIn) async {
+    print("dart: "+usernameIn);
+    print("dart: "+passwordIn);
+    print("dart: "+emailIn);
     final response = await http.post(
       Uri.parse(paths.signup()),
       body: {
@@ -81,8 +84,10 @@ class User with ChangeNotifier{
         'email': emailIn
       }
     );
+    print(response);
 
     if (response.statusCode == 200){
+      print("body " +  response.body);
       Map<String, dynamic> data = json.decode(response.body);
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();

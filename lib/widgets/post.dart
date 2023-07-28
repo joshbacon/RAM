@@ -53,15 +53,18 @@ class _PostState extends State<Post> {
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Row(
             children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                splashColor: const Color(0x00000000),
-                icon: CircleAvatar(
-                  radius: min(64, w/6),
-                  backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-                  backgroundImage: widget.data['profilepicture'],
+              Padding(
+                padding: const EdgeInsets.only(left: 5),
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  splashColor: const Color(0x00000000),
+                  icon: CircleAvatar(
+                    radius: min(64, w/6),
+                    backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+                    backgroundImage: widget.data['profilepicture'],
+                  ),
+                  onPressed: () {}, // goto users profile page
                 ),
-                onPressed: () {}, // goto users profile page
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 15),
