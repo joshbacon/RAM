@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 import "package:async/async.dart";
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/paths.dart' as paths;
+import './paths.dart' as paths;
+import './security.dart';
 
 class User with ChangeNotifier{
 
@@ -29,11 +30,13 @@ class User with ChangeNotifier{
   dynamic get profile => userData['profile'];
   dynamic get banner => userData['banner'];
 
-  Future<bool> saveData(password) async{
+
+  Future<bool> saveData() async{
     
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('username', userData['username']);
-    prefs.setString('password', password);
+    prefs.setString('password', userData['password']);
+    print('LOOK RIGHT HERE MY DUDE: ' + userData['password']);
 
     return true;
   }
@@ -44,7 +47,7 @@ class User with ChangeNotifier{
     userData['password'] = 'null';
     userData['profile'] = const AssetImage('assets/defaultProfile.png');
     userData['banner'] = const AssetImage('assets/defaultBanner.png');
-    saveData('null');
+    saveData();
     return true;
   }
 
@@ -52,7 +55,8 @@ class User with ChangeNotifier{
     final response = await http.get(
       Uri.parse(paths.login(usernameIn, passwordIn))
     );
-    // figure out how to convert json thingy to an array (php to flutter array conversion)
+    
+    passwordIn = EncryptData.encryptAES(passwordIn);
     if (response.statusCode == 200){
       print(response.body);
       Map<String, dynamic> data = json.decode(response.body);
@@ -65,10 +69,11 @@ class User with ChangeNotifier{
       if (data['banner'] != null){
         userData['banner'] = NetworkImage(paths.image(data["banner"].toString()));
       }
-      saveData(passwordIn);
       notifyListeners();
       return true;
-    } else { return false; }
+    } else {
+      return false;
+    }
   }
 
 
@@ -85,6 +90,7 @@ class User with ChangeNotifier{
       }
     );
     print(response);
+    passwordIn = EncryptData.encryptAES(passwordIn);
 
     if (response.statusCode == 200){
       print("body " +  response.body);
@@ -93,7 +99,7 @@ class User with ChangeNotifier{
       userData['username'] = data["username"].toString();
       userData['password'] = passwordIn;
       notifyListeners();
-      saveData(passwordIn);
+      saveData();
       return true;
     } else { return false; }
   }
@@ -110,7 +116,7 @@ class User with ChangeNotifier{
       Map<String, dynamic> data = json.decode(response.body);
       if (data['status']){
         userData['username'] = newUsername;
-        saveData(userData['password']);
+        saveData();
         notifyListeners();
         return true;
       }
@@ -140,7 +146,6 @@ class User with ChangeNotifier{
       print("path: " + path);
       userData['profile'] = Image.network(path).image;
       print("Image Uploaded");
-      saveData(userData['password']);
       notifyListeners();
       return true;
     }
@@ -168,7 +173,6 @@ class User with ChangeNotifier{
       var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"banner"+extension(image.path);
       userData['banner'] = Image.network(path).image;
       print("Image Uploaded");
-      saveData(userData['password']);
       notifyListeners();
       return true;
     }

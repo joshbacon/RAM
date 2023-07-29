@@ -17,11 +17,15 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  // TODO:
+  // - make category buttons functional
+  // - grab posts based on selected category
+  // - fix the alignment on the racket logo
+  // - make it username button drop down and show a bio and date joined
+
   var totalUps = 1;
   var totalDowns = 1;
-  
-  //var profileImage = const AssetImage('assets/defaultProfile.png');
-  //var bannerImage = const AssetImage('assets/defaultBanner.png');
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
@@ -33,7 +37,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    //final user = Provider.of<User>(context);
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(

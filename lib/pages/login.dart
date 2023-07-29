@@ -5,6 +5,7 @@ import 'package:ram/pages/anonhome.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/widgets/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../models/security.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
     if( perfs.containsKey('username') && perfs.containsKey('password') &&
         perfs.getString('username') != 'null' && perfs.getString('password') != 'null'){
       username.text = perfs.getString('username')!;
-      password.text = perfs.getString('password')!;
+      password.text = EncryptData.decryptAES(perfs.getString('password')!);
       login();
     }
   }
@@ -81,22 +82,29 @@ class _LoginPageState extends State<LoginPage> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(25, 100, 25, 0),
             child: Column(children: [
-              const Text("RAM", style: TextStyle(
-                fontFamily: "dubai",
-                decoration: TextDecoration.none,
-                color: Color.fromRGBO(255, 163, 0, 1.0),
-                fontSize: 100,
-                height: 1,
-              ),),
-              const Text("Random Access Memes", style: TextStyle(
-                fontFamily: "dubai",
-                decoration: TextDecoration.none,
-                color: Colors.white,
-                fontSize: 28,
-                height: 1,
-              ),),
+              const Text(
+                "RAM",
+                style: TextStyle(
+                  fontFamily: "dubai",
+                  decoration: TextDecoration.none,
+                  color: Color.fromRGBO(255, 163, 0, 1.0),
+                  fontSize: 100,
+                  height: 1,
+                ),
+              ),
+              const Text(
+                "Random Access Memes",
+                style: TextStyle(
+                  fontFamily: "dubai",
+                  decoration: TextDecoration.none,
+                  color: Colors.white,
+                  fontSize: 28,
+                  height: 1,
+                ),
+              ),
               const Spacer(flex: 7),
-              const Text( "Create an account or sign in.",
+              const Text(
+                "Create an account or sign in.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "dubai",
@@ -204,6 +212,7 @@ class _LoginPageState extends State<LoginPage> {
                 visible: showLoginErr,
                 child: const Text(
                   "Login failed, check your username and password.",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "dubai",
                     color: Colors.red,

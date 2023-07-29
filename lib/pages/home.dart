@@ -16,6 +16,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  // TODO:
+  // - get posts loading in batches of 5
+  // - load more posts when they get close the bottom
+  // - remove floating action button when this is working
+
   //PostList postList = PostList();
   List<Post> postList = [];
   int nextPID = 0;

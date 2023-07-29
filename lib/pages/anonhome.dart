@@ -10,6 +10,11 @@ class AnonPage extends StatefulWidget {
 
 class _AnonPageState extends State<AnonPage> {
 
+  // TODO:
+  // - same post loading behaviour as main home page
+  // - implement the button functionality
+  // - make a new anon-type post, show the up/down bar but not the interaction buttons
+
   void onTap(index) {
     if (index == 0){
       Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
@@ -17,7 +22,6 @@ class _AnonPageState extends State<AnonPage> {
       // back to top
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
