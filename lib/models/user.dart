@@ -9,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import './paths.dart' as paths;
 import './security.dart';
 
-class User with ChangeNotifier{
+class User with ChangeNotifier {
 
   // TODO:
   // - fix the updateBlank methods

@@ -21,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   // TODO:
   // - make category buttons functional
   // - grab posts based on selected category
+  // - show in a weird cool style (think pinterest)
   // - fix the alignment on the racket logo
   // - make it username button drop down and show a bio and date joined
 

@@ -1,78 +1,60 @@
 import 'dart:convert';
-// import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-// import "package:async/async.dart";
-// import 'package:path/path.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ram/widgets/post.dart';
 import '../models/paths.dart' as paths;
 
 class PostList {
 
-  List<Map<String, dynamic>> list = [];
+  static List<Post> list = [];
+  static int nextPID = 0;
 
-  late int nextPID;
+  PostList();
 
-  //List get data => list;
-  //int get len => list.length;
-
-  PostList() {
-    //somehow query the most recent pid, set to nextPIDinstead of below number
-    //nextPID = 5;
-    
-    //getNewestPost();
-    // make get call h
-    //list.removeAt(0);
+  int length() {
+    return list.length;
   }
 
-  //Future<bool> getNewestPost() async{
-  //  final response = await http.get(
-  //    Uri.parse("http://192.168.2.14:80/ramdb_api/objects/getpost.php?pid=0")
-  //  );
-  //  // make get call here and set data
-  //  if (response.statusCode == 200){
-  //    Map<String, dynamic> data = json.decode(response.body);
-  //    data.remove('status');
-  //    data['image'] = NetworkImage("http://192.168.2.14:80/"+data['image']);
-  //    list = [data];
-  //    //list.add(data);
-  //    nextPID = data['pid'] - 1;
-  //    //addXPosts(1);
-  //    return true;
-  //  } else {
-  //    nextPID = 8;
-  //    return false;
-  //  }
-  //}
+  bool isEmpty() {
+    return list.isEmpty;
+  }
 
-  Future<bool> getPost() async{
+  Post at(index) {
+    return list[index];
+  }
+
+  Future<void> getPosts() async {
+
     final response = await http.get(
       Uri.parse(paths.getPost(nextPID.toString()))
     );
     // make get call here and set data
-    if (response.statusCode == 200){
-      Map<String, dynamic> data = json.decode(response.body);
-      if ( data['status'] ){
-        data.remove('status');
-        data['image'] = NetworkImage(paths.image(data['image']));
-        list.add(data);
-        nextPID -= 1;
-        return true;
+    if (response.statusCode == 200) {
+      List<dynamic> results = json.decode(response.body);
+      for (var post in results) {
+        if ( post['status'] ){
+          post.remove('status');
+          post['profilepicture'] = NetworkImage(paths.image(post['profilepicture']));
+          post['image'] = NetworkImage(paths.image(post['image']));
+          if(post['ups'] == 0 && post['downs'] == 0) {
+            post['ups']++;
+            post['downs']++;
+          }
+          list.add(Post(post));
+          nextPID = post['pid']-1;
+        }
       }
     }
-    return false;
+    // Limit the list to 25 posts?
+    // this might do a weird scrolling thing cause the list builder doesn't account for it
+    // if (length() > 25) {
+    //   list.removeRange(0, length()-25);
+    // }
   }
 
-  Future<void> addXPosts(int x) async {
-    for (int i = 0; i < x; i++){
-      getPost();
-    }
-  }
-
-  Future<void> removeXPosts(int x) async {
-    for (int i = 0; i < x; i++){
-      list.removeAt(1);
-    }
+  Future<void> reset() async {
+    list = [];
+    nextPID = 0;
   }
 
 }

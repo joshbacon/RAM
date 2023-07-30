@@ -42,9 +42,6 @@ class _LoginPageState extends State<LoginPage> {
   void login(autoLogin) async {
     final response = await context.read<User>().login(username.text, password.text, autoLogin);
 
-    print(response);
-    print(context.read<User>().username);
-
     if (response[0] && context.read<User>().username != 'null'){
       showLoginErr = false;
       Navigator.push(context, MaterialPageRoute(builder: (context) => NavPage()));
@@ -133,7 +130,10 @@ class _LoginPageState extends State<LoginPage> {
                   disabledBorder: borderTheme,
                   enabledBorder: borderTheme,
                   border: borderTheme,
-                  prefixIcon: const Icon(Icons.arrow_forward_ios, color: Color.fromRGBO(255, 163, 0, 1.0)),
+                  prefixIcon: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Color.fromRGBO(255, 163, 0, 1.0)
+                  ),
                   hintText: "username",
                   hintStyle: const TextStyle(
                     fontFamily: "dubai",
@@ -162,7 +162,10 @@ class _LoginPageState extends State<LoginPage> {
                   disabledBorder: borderTheme,
                   enabledBorder: borderTheme,
                   border: borderTheme,
-                  prefixIcon: const Icon(Icons.arrow_forward_ios, color: Color.fromRGBO(255, 163, 0, 1.0)),
+                  prefixIcon: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Color.fromRGBO(255, 163, 0, 1.0)
+                  ),
                   hintText: "password",
                   hintStyle: const TextStyle(
                     fontFamily: "dubai",
@@ -179,18 +182,23 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: (){
                       if (username.text == '' || password.text == '') {
-                        // show some error message
-                        print("username or password is empty");
+                        setState(() {
+                          errorMessage = "username or password is empty";
+                          showLoginErr = true;        
+                        });
                       } else {
                         login(false);
                       }
                     },
-                    child: const Text("sign in", style: TextStyle(
-                      fontFamily: "dubai",
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontSize: 25,
-                    )),
+                    child: const Text(
+                      "sign in",
+                      style: TextStyle(
+                        fontFamily: "dubai",
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontSize: 25,
+                      )
+                    ),
                   ),
                   Container(width: 3, height: 30, decoration:
                     BoxDecoration(
@@ -202,12 +210,15 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: (){
                       signup();
                     },
-                    child: const Text("sign up", style: TextStyle(
-                      fontFamily: "dubai",
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontSize: 25,
-                    )),
+                    child: const Text(
+                      "sign up",
+                      style: TextStyle(
+                        fontFamily: "dubai",
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontSize: 25,
+                      )
+                    ),
                   ),
                 ],
               ),
@@ -230,12 +241,15 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const AnonPage()));
                 },
-                child: const Text("browse anonymously", style: TextStyle(
-                  fontFamily: "dubai",
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontSize: 24,
-                )),
+                child: const Text(
+                  "browse anonymously",
+                  style: TextStyle(
+                    fontFamily: "dubai",
+                    decoration: TextDecoration.none,
+                    color: Colors.white,
+                    fontSize: 24,
+                  )
+                ),
               ),
               Container(width: 275, height: 3, decoration:
                 BoxDecoration(
