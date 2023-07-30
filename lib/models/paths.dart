@@ -25,7 +25,7 @@ String image(value) {
 }
 
 String getPost(pid) {
-  return dotenv.env['API_PATH']!+"/ramdb_api/objects/getpost.php?pid="+pid;
+  return dotenv.env['API_PATH']!+"/ramdb_api/post/getpost.php?pid="+pid;
 }
 
 String interact() {

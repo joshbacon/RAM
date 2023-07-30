@@ -3,22 +3,17 @@ import 'package:encrypt/encrypt.dart';
 
 class EncryptData {
 
-  static Encrypted? encrypted;
-  static var decrypted;
+  static final iv = IV.fromLength(16);
+  static final key = Key.fromUtf8(dotenv.env['KEY']!);
+  static final encrypter = Encrypter(AES(key));
 
   static encryptAES(plainText){
-    final key = Key.fromUtf8(dotenv.env['KEY']!);
-    final iv = IV.fromLength(16);
-    final encrypter = Encrypter(AES(key));
-    encrypted = encrypter.encrypt(plainText, iv: iv);
-    return encrypted!.base64;
+    Encrypted? encrypted = encrypter.encrypt(plainText, iv: iv);
+    return encrypted.base64;
   }
 
   static decryptAES(plainText){
-    final key = Key.fromUtf8(dotenv.env['KEY']!);
-    final iv = IV.fromLength(16);
-    final encrypter = Encrypter(AES(key));
-    decrypted = encrypter.decrypt(encrypted!, iv: iv);
+    String decrypted = encrypter.decrypt64(plainText, iv: iv);
     return decrypted;
   }
 }

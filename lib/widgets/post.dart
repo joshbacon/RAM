@@ -27,8 +27,10 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
 
   // TODO:
-  // - have the username or pcrofile pic (the top bar basically) navigate to users page
+  // - have the username or profile pic (the top bar basically) navigate to users page
   // -- will need a view style of the profile page (just hide the settings button actually)
+  // --- change the settings button to an add or chat button or something
+  // - double check the interactions are working
 
   Future<bool> interact(uid, up) async {
     

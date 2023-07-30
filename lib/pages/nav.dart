@@ -16,6 +16,11 @@ class NavPage extends StatefulWidget {
 }
 
 class _NavPageState extends State<NavPage> {
+
+  // TODO:
+  // - add a social tab
+  // -- allows to search for, add, and chat with other users
+  // -- will need to update the database (have a chats table most likely, just watch a generic video for the principles)
   
   //User user = User.asNull();
   int pageIndex = 0;

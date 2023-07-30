@@ -5,7 +5,6 @@ import 'package:ram/pages/anonhome.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/widgets/signup.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/security.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -20,7 +19,8 @@ class _LoginPageState extends State<LoginPage> {
 
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
-  //User user = User.asNull();
+
+  String errorMessage = "Login failed, check your username and password.";
   bool showLoginErr = false;
 
   @override
@@ -34,23 +34,25 @@ class _LoginPageState extends State<LoginPage> {
     if( perfs.containsKey('username') && perfs.containsKey('password') &&
         perfs.getString('username') != 'null' && perfs.getString('password') != 'null'){
       username.text = perfs.getString('username')!;
-      password.text = EncryptData.decryptAES(perfs.getString('password')!);
-      login();
+      password.text = perfs.getString('password')!;
+      login(true);
     }
   }
 
-  void login() async {
-    final response = await context.read<User>().login(username.text, password.text);
+  void login(autoLogin) async {
+    final response = await context.read<User>().login(username.text, password.text, autoLogin);
 
-    if (response){
-      if (context.read<User>().username != 'null'){
-        showLoginErr = false;
-        Navigator.push(context, MaterialPageRoute(builder: (context) => NavPage()));
-      } else {
-        showLoginErr = true;
-      }
+    print(response);
+    print(context.read<User>().username);
+
+    if (response[0] && context.read<User>().username != 'null'){
+      showLoginErr = false;
+      Navigator.push(context, MaterialPageRoute(builder: (context) => NavPage()));
     } else {
-      showLoginErr = true;
+      setState(() {
+        errorMessage = response[1];
+        showLoginErr = true;        
+      });
     }
   }
 
@@ -179,7 +181,9 @@ class _LoginPageState extends State<LoginPage> {
                       if (username.text == '' || password.text == '') {
                         // show some error message
                         print("username or password is empty");
-                      } else { login(); }
+                      } else {
+                        login(false);
+                      }
                     },
                     child: const Text("sign in", style: TextStyle(
                       fontFamily: "dubai",
@@ -210,10 +214,10 @@ class _LoginPageState extends State<LoginPage> {
               const Spacer(flex: 1),
               Visibility(
                 visible: showLoginErr,
-                child: const Text(
-                  "Login failed, check your username and password.",
+                child: Text(
+                  errorMessage,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontFamily: "dubai",
                     color: Colors.red,
                     fontWeight: FontWeight.bold,

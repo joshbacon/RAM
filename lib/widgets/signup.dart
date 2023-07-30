@@ -16,11 +16,13 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
+
+  String message = "create an account.";
+  bool isError = false;
+
   late final TextEditingController username = TextEditingController(text: widget.usernameIn);
   late final TextEditingController password = TextEditingController(text: widget.passwordIn);
   final TextEditingController email = TextEditingController();
-
-  //User user = User.asNull();
   
   final OutlineInputBorder borderTheme = OutlineInputBorder(
     borderRadius: BorderRadius.circular(25.0),
@@ -33,11 +35,18 @@ class _SignupPageState extends State<SignupPage> {
   
   void signup() async {
     final result = await context.read<User>().signup(username.text, password.text, email.text);
-    if (result) {
+    print(result);
+    if (result[0]) {
+      setState(() {
+        isError = false;
+        message = result[1];
+      });
       Navigator.push(context, MaterialPageRoute(builder: (context) => NavPage()));
     } else {
-      // show some error message
-      print("uid == 0, username == ''");
+      setState(() {
+        isError = true;
+        message = result[1];
+      });
     }
   }
 
@@ -51,7 +60,9 @@ class _SignupPageState extends State<SignupPage> {
         backgroundColor: const Color.fromRGBO(255, 163, 0, 1.0),
         foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
         child: const Icon(Icons.check_outlined, size: 36,),
-        onPressed: () { signup(); }
+        onPressed: () {
+          signup();
+        }
       ),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -62,24 +73,29 @@ class _SignupPageState extends State<SignupPage> {
             padding: const EdgeInsets.fromLTRB(25, 100, 25, 0),
             child: Column(
               children: [
-                const Text("RAM", style: TextStyle(
-                  fontFamily: "dubai",
-                  decoration: TextDecoration.none,
-                  color: Color.fromRGBO(255, 163, 0, 1.0),
-                  fontSize: 100,
-                  height: 1,
-                ),),
-                const Text("create an account.",
+                const Text(
+                  "RAM",
+                  style: TextStyle(
+                    fontFamily: "dubai",
+                    decoration: TextDecoration.none,
+                    color: Color.fromRGBO(255, 163, 0, 1.0),
+                    fontSize: 100,
+                    height: 1,
+                  ),
+                ),
+                Text(
+                  message,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "dubai",
-                    color: Colors.white,
+                    color: isError ?  Colors.red: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 21,
                   ),
                 ),
                 const Spacer(flex: 3),
-                const Text("username",
+                const Text(
+                  "username",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: "dubai",

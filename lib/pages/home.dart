@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
       Uri.parse(paths.getPost(nextPID.toString()))
     );
     // make get call here and set data
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
       if ( data['status'] ){
         data.remove('status');
@@ -54,9 +54,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      getPost();
-    });
+    getPost();
     controller.addListener(_scrollListener);
   }
 
@@ -90,12 +88,12 @@ class _HomePageState extends State<HomePage> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: () {
-        setState(() {
+        // setState(() {
           getPost();
           //postList.add(Post(nextPID));
           //nextPID = postList[postList.length-1].pid - 1;
           //postList.getNewestPost();
-        });
+        // });
       }),
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
       body: RefreshIndicator(
@@ -107,6 +105,7 @@ class _HomePageState extends State<HomePage> {
           // run get first post again
           print('refreshing...');
           nextPID = 0;
+          postList = [];
           getPost();
           //setState(() {
           //  postList = [Post(0)];

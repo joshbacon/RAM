@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:encrypt/encrypt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import "package:async/async.dart";
@@ -9,6 +10,10 @@ import './paths.dart' as paths;
 import './security.dart';
 
 class User with ChangeNotifier{
+
+  // TODO:
+  // - fix the updateBlank methods
+  // - test the upload, and upload from url functionality
 
   Map<String, dynamic> userData = {
     "uid": "0",
@@ -36,7 +41,6 @@ class User with ChangeNotifier{
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('username', userData['username']);
     prefs.setString('password', userData['password']);
-    print('LOOK RIGHT HERE MY DUDE: ' + userData['password']);
 
     return true;
   }
@@ -51,18 +55,19 @@ class User with ChangeNotifier{
     return true;
   }
 
-  Future<bool> login(usernameIn, passwordIn) async{
+  Future<List<dynamic>> login(usernameIn, passwordIn, autoLogin) async{
+
+    String encrypted = autoLogin ? passwordIn : EncryptData.encryptAES(passwordIn);
+
     final response = await http.get(
-      Uri.parse(paths.login(usernameIn, passwordIn))
+      Uri.parse(paths.login(usernameIn, encrypted))
     );
-    
-    passwordIn = EncryptData.encryptAES(passwordIn);
+
+    Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200){
-      print(response.body);
-      Map<String, dynamic> data = json.decode(response.body);
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();
-      userData['password'] = passwordIn;
+      userData['password'] = encrypted;
       if (data['profile'] != null){
         userData['profile'] = NetworkImage(paths.image(data["profile"].toString()));
       }
@@ -70,17 +75,14 @@ class User with ChangeNotifier{
         userData['banner'] = NetworkImage(paths.image(data["banner"].toString()));
       }
       notifyListeners();
-      return true;
-    } else {
-      return false;
+      saveData();
     }
+    return [data['status'], data['message']];
   }
 
 
-  Future<bool> signup(usernameIn, passwordIn, emailIn) async {
-    print("dart: "+usernameIn);
-    print("dart: "+passwordIn);
-    print("dart: "+emailIn);
+  Future<List<dynamic>> signup(usernameIn, passwordIn, emailIn) async {
+    passwordIn = EncryptData.encryptAES(passwordIn);
     final response = await http.post(
       Uri.parse(paths.signup()),
       body: {
@@ -89,19 +91,16 @@ class User with ChangeNotifier{
         'email': emailIn
       }
     );
-    print(response);
-    passwordIn = EncryptData.encryptAES(passwordIn);
 
-    if (response.statusCode == 200){
-      print("body " +  response.body);
-      Map<String, dynamic> data = json.decode(response.body);
+    Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200 && data['status']){
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();
       userData['password'] = passwordIn;
       notifyListeners();
       saveData();
-      return true;
-    } else { return false; }
+    }
+    return [data['status'], data['message']];
   }
 
   
@@ -112,7 +111,6 @@ class User with ChangeNotifier{
     );
 
     if (response.statusCode == 200){
-      print(response.body);
       Map<String, dynamic> data = json.decode(response.body);
       if (data['status']){
         userData['username'] = newUsername;
