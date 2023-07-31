@@ -98,20 +98,23 @@ class _PostState extends State<Post> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                icon: const Image( image: AssetImage("assets/dPlus.png"), width: 40, height: 40,),
-                onPressed: () {
-                  //setState(() {
-                    widget.data['ups'] += 1;
-                    interact(context.read<User>().uid, 'true');
-                    // make a DB call to update post
-                  //});
-                },
+              Visibility(
+                visible: !widget.data['anon'],
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Image( image: AssetImage("assets/dPlus.png"), width: 40, height: 40,),
+                  onPressed: () {
+                    //setState(() {
+                      widget.data['ups'] += 1;
+                      interact(context.read<User>().uid, true);
+                      // make a DB call to update post
+                    //});
+                  },
+                ),
               ),
-              const SizedBox( width: 15, ),
+              const SizedBox( width: 15, height: 25 ),
               Container(
-                width: (widget.data['ups'] / (widget.data['ups'] + widget.data['downs']))*(w-156),
+                width: (widget.data['ups'] / (widget.data['ups'] + widget.data['downs']))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
@@ -119,24 +122,28 @@ class _PostState extends State<Post> {
                 ),
               ),
               Container(
-                width: (widget.data['downs'] / (widget.data['ups'] + widget.data['downs']))*(w-156),
+                // width: (widget.data['downs'] / (widget.data['ups'] + widget.data['downs']))*(w-156),
+                width: (widget.data['downs'] / (widget.data['ups'] + widget.data['downs']))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
                   color: const Color.fromRGBO(170 , 0, 0, 1.0)
                 ),
               ),
-              const SizedBox( width: 15, ),
-              IconButton(
-                padding: EdgeInsets.zero,
-                icon: const Image( image: AssetImage("assets/dMinusRed.png"), width: 40, height: 40,),
-                onPressed: () {
-                  //setState(() {
-                    widget.data['downs'] += 1;
-                    interact(context.read<User>().uid, 'false');
-                    // make a DB call to update post
-                  //});
-                },
+              const SizedBox( width: 15, height: 25 ),
+              Visibility(
+                visible: !widget.data['anon'],
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Image( image: AssetImage("assets/dMinusRed.png"), width: 40, height: 40,),
+                  onPressed: () {
+                    //setState(() {
+                      widget.data['downs'] += 1;
+                      interact(context.read<User>().uid, false);
+                      // make a DB call to update post
+                    //});
+                  },
+                ),
               ),
             ],
           )

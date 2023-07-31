@@ -17,6 +17,11 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  // TODO:
+  // - fix the lastLogin thing
+  // -- php file prints an empty line because it's a new query it seems
+  // -- i.e. the thing we actually want to return now has a suffix of <br />
+
   TextEditingController username = TextEditingController();
   TextEditingController password = TextEditingController();
 

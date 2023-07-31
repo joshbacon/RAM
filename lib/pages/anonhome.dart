@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ram/pages/login.dart';
+import 'package:ram/models/postlist.dart';
 
 class AnonPage extends StatefulWidget {
   const AnonPage({Key? key}) : super(key: key);
@@ -11,15 +12,53 @@ class AnonPage extends StatefulWidget {
 class _AnonPageState extends State<AnonPage> {
 
   // TODO:
-  // - same post loading behaviour as main home page
-  // - implement the button functionality
   // - make a new anon-type post, show the up/down bar but not the interaction buttons
+
+  PostList postList = PostList();
+  ScrollController controller = ScrollController();
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+    controller.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_scrollListener);
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _refresh() async {
+    postList.reset();
+    postList.getPosts(true).then((_) {
+      setState(() {
+        isLoading = true;
+        isLoading = false;
+      });
+    });
+  }
+
+  void _scrollListener() {
+    if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
+    postList.getPosts(true).then((_) {
+      setState(() {
+        isLoading = true;
+        isLoading = false;
+      });
+    });
+    }
+  }
 
   void onTap(index) {
     if (index == 0){
       Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
     } else {
-      // back to top
+      controller.animateTo(0, duration: const Duration(seconds: 1), curve: Curves.easeOut);
+      _refresh();
     }
   }
 
@@ -27,15 +66,31 @@ class _AnonPageState extends State<AnonPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-      body: Column(
-        children: const [
-          Text("AnonPage", style: TextStyle(
-              fontFamily: "dubai",
-              decoration: TextDecoration.none,
-              color: Colors.white,
-              fontSize: 25,
-            ),),
-        ],
+      body: RefreshIndicator(
+        color: const Color.fromRGBO(255, 163, 0, 1.0),
+        backgroundColor: const Color.fromARGB(255, 69, 69, 69),
+        onRefresh: () async {
+          _refresh();
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: controller,
+          child: postList.isEmpty() ?
+            Column(
+              children: const [
+                SizedBox(height: 100),
+                CircularProgressIndicator(color: Color.fromRGBO(255, 163, 0, 1.0))
+              ]
+            ) :
+            ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: postList.length(),
+              itemBuilder: (context, index) {
+                return postList.at(index);
+              },
+            ),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTap,

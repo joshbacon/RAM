@@ -27,6 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   var totalUps = 1;
   var totalDowns = 1;
+  int category = 0;
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
@@ -35,6 +36,20 @@ class _ProfilePageState extends State<ProfilePage> {
       _drawerKey.currentState?.openDrawer();
     });
   }
+
+  void setCategory(int index) {
+    // at some point look into caching images
+    if (index == 0) {
+      // query for the users posts
+      category = index;
+    } else if (index == 1) {
+      // query for posts liked by the user
+      category = index;
+    } else if (index == 2) {
+      // query for posts disliked by the user
+      category = index;
+    }
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +143,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 IconButton(
                   onPressed: () {},
                   splashRadius: 0.1,
-                  splashColor: Colors.transparent,
                   icon: const Icon(Icons.dashboard),
                   iconSize: w/6.5,
                   color: const Color.fromRGBO(255, 163, 0, 1.0)

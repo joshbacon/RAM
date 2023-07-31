@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ram/widgets/post.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
 // import 'package:ram/models/postlist.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import '../models/paths.dart' as paths;
 
 class HomePage extends StatefulWidget {
 
@@ -16,10 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  // TODO:
-  // - error handling
-  // -- when we are out of posts after srcolling to bottom
 
   PostList postList = PostList();
   ScrollController controller = ScrollController();
@@ -40,12 +32,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _refresh() async {
-    setState(() {
-      isLoading = true;
-    });
     postList.reset();
-    postList.getPosts().then((_) {
+    postList.getPosts(false).then((_) {
       setState(() {
+        isLoading = true;
         isLoading = false;
       });
     });
@@ -53,11 +43,9 @@ class _HomePageState extends State<HomePage> {
 
   void _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-    setState(() {
-      isLoading = true;
-    });
-    postList.getPosts().then((_) {
+    postList.getPosts(false).then((_) {
       setState(() {
+        isLoading = true;
         isLoading = false;
       });
     });

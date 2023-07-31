@@ -23,26 +23,33 @@ class PostList {
     return list[index];
   }
 
-  Future<void> getPosts() async {
+  Future<void> getPosts(bool isAnon) async {
 
     final response = await http.get(
       Uri.parse(paths.getPost(nextPID.toString()))
     );
     // make get call here and set data
     if (response.statusCode == 200) {
-      List<dynamic> results = json.decode(response.body);
-      for (var post in results) {
-        if ( post['status'] ){
-          post.remove('status');
-          post['profilepicture'] = NetworkImage(paths.image(post['profilepicture']));
-          post['image'] = NetworkImage(paths.image(post['image']));
-          if(post['ups'] == 0 && post['downs'] == 0) {
-            post['ups']++;
-            post['downs']++;
+      try {
+        List<dynamic> results = json.decode(response.body);
+        for (var post in results) {
+          if ( post['status'] ){
+            post.remove('status');
+            post['anon'] = isAnon;
+            post['profilepicture'] = NetworkImage(paths.image(post['profilepicture']));
+            post['image'] = NetworkImage(paths.image(post['image']));
+            if(post['ups'] == 0 && post['downs'] == 0) {
+              post['ups']++;
+              post['downs']++;
+            }
+            print(post);
+            list.add(Post(post));
+            nextPID = post['pid']-1;
           }
-          list.add(Post(post));
-          nextPID = post['pid']-1;
         }
+      } catch (e) {
+        Map<String, dynamic> result = json.decode(response.body);
+        
       }
     }
     // Limit the list to 25 posts?
