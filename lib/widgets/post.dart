@@ -30,6 +30,10 @@ class _PostState extends State<Post> {
   // - have the username or profile pic (the top bar basically) navigate to users page
   // -- will need a view style of the profile page (just hide the settings button actually)
   // --- change the settings button to an add or chat button or something
+  // - tapping the image makes it full screen and the comments appear when you scroll down (need a back button)
+  // -- also have a add comment box at the top UNLESS it's in anon mode
+  // -- will most likely reload whatever page you go back to because it's a new object
+  // --- figure out if theres a history type thing so the same posts are loaded
   // - double check the interactions are working
 
   Future<bool> interact(uid, up) async {
@@ -42,7 +46,6 @@ class _PostState extends State<Post> {
     request.fields['up'] = up;
   
     var response = await request.send();
-    //return response.statusCode == 200;
     if( response.statusCode == 200 ){
       print('worked');
       return true;

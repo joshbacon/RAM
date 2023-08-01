@@ -28,7 +28,6 @@ class PostList {
     final response = await http.get(
       Uri.parse(paths.getPost(nextPID.toString()))
     );
-    // make get call here and set data
     if (response.statusCode == 200) {
       try {
         List<dynamic> results = json.decode(response.body);

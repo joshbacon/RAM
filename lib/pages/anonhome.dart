@@ -11,9 +11,6 @@ class AnonPage extends StatefulWidget {
 
 class _AnonPageState extends State<AnonPage> {
 
-  // TODO:
-  // - make a new anon-type post, show the up/down bar but not the interaction buttons
-
   PostList postList = PostList();
   ScrollController controller = ScrollController();
   bool isLoading = false;

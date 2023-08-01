@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
-// import 'package:ram/models/postlist.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -70,7 +69,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               const Padding(
                 padding: EdgeInsets.fromLTRB(0, 50, 0, 15),
-                child: Text("Random Access Memes",
+                child: Text(
+                  "Random Access Memes",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "dubai",

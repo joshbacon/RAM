@@ -11,10 +11,6 @@ import './security.dart';
 
 class User with ChangeNotifier {
 
-  // TODO:
-  // - fix the updateBlank methods
-  // - test the upload, and upload from url functionality
-
   Map<String, dynamic> userData = {
     "uid": "0",
     "username": "null",
@@ -63,7 +59,7 @@ class User with ChangeNotifier {
       Uri.parse(paths.login(usernameIn, encrypted))
     );
 
-    Map<String, dynamic> data = json.decode(response.body);
+    Map<String, dynamic> data = json.decode(response.body.trim());
     if (response.statusCode == 200){
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();
@@ -140,10 +136,8 @@ class User with ChangeNotifier {
   
     var response = await request.send();
     if (response.statusCode == 200){
-      var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"profile"+extension(image.path);
-      print("path: " + path);
+      String path = paths.profileImage(userData['uid'], extension(image.path));
       userData['profile'] = Image.network(path).image;
-      print("Image Uploaded");
       notifyListeners();
       return true;
     }
@@ -168,9 +162,8 @@ class User with ChangeNotifier {
   
     var response = await request.send();
     if (response.statusCode == 200){
-      var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"banner"+extension(image.path);
+      String path = paths.bannerImage(userData['uid'], extension(image.path));
       userData['banner'] = Image.network(path).image;
-      print("Image Uploaded");
       notifyListeners();
       return true;
     }
@@ -195,8 +188,6 @@ class User with ChangeNotifier {
   
     var response = await request.send();
     if (response.statusCode == 200){
-      //var path = "http://192.168.2.14:80/../../ram_images/users/"+userData['uid']+"post"+ DateTime.now().toString()+extension(image.path);
-      print("Image Uploaded");
       return true;
     }
     return false;

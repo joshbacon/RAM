@@ -31,3 +31,11 @@ String getPost(pid) {
 String interact() {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/interact.php";
 }
+
+String profileImage(uid, exten) {
+  return dotenv.env['API_PATH']!+"/ram_images/users/"+uid+"profile"+exten;
+}
+
+String bannerImage(uid, exten) {
+  return dotenv.env['API_PATH']!+"/ram_images/users/"+uid+"banner"+exten;
+}
