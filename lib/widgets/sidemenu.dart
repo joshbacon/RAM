@@ -38,7 +38,6 @@ class _SideMenuState extends State<SideMenu> {
     showUserErr = false;
     showProfileErr = false;
     showBannerErr = false;
-    //final user = Provider.of<User>(context, listen: false);
     context.read<User>().logout();
     Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
@@ -46,10 +45,11 @@ class _SideMenuState extends State<SideMenu> {
   Future<void> _showDialog(String msg) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text( msg,
+          title: Text(
+            msg,
             style: const TextStyle(
               fontFamily: "dubai",
               color: Color.fromRGBO(255, 163, 0, 1.0),
@@ -73,7 +73,8 @@ class _SideMenuState extends State<SideMenu> {
               },
             ) : const Text(''),
             TextButton(
-              child: const Text( "Ok",
+              child: const Text(
+                "Ok",
                 style: TextStyle(
                   fontFamily: "dubai",
                   color: Color.fromARGB(255, 56, 56, 56),
@@ -94,9 +95,6 @@ class _SideMenuState extends State<SideMenu> {
 
   @override
   Widget build(BuildContext context) {
-    //final user = Provider.of<User>(context);
-    //profileImage = user.userData['profile'];
-    //bannerImage = user.userData['banner'];
     return Drawer(
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
       child: Column(
@@ -114,7 +112,8 @@ class _SideMenuState extends State<SideMenu> {
               )
             ),
           ),
-          const Text("Settings",
+          const Text(
+            "Settings",
             style: TextStyle(
               fontFamily: "dubai",
               color: Color.fromRGBO(255, 163, 0, 1.0),

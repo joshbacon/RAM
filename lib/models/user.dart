@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:encrypt/encrypt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import "package:async/async.dart";
@@ -14,6 +12,7 @@ class User with ChangeNotifier {
   Map<String, dynamic> userData = {
     "uid": "0",
     "username": "null",
+    "joinedat": "null",
     "password": "null",
     "profile": const AssetImage('assets/defaultProfile.png'),
     "banner": const AssetImage('assets/defaultBanner.png')
@@ -22,8 +21,7 @@ class User with ChangeNotifier {
   User.asNull();
 
   User(Map<String, dynamic> userIn) {
-    userData['uid'] = userIn['uid'];
-    userData['username'] = userIn['username'];
+    userData = userIn;
   }
 
   String get uid => userData['uid'];
@@ -31,6 +29,28 @@ class User with ChangeNotifier {
   dynamic get profile => userData['profile'];
   dynamic get banner => userData['banner'];
 
+
+  Future<User> getUserInfo(uid) async{
+    final response = await http.get(
+      Uri.parse(paths.getUser(uid.toString()))
+    );
+
+    print(response.body);
+    Map<String, dynamic> data = json.decode(response.body);
+    if (response.statusCode == 200 && data["status"]){
+      userData['uid'] = data["uid"].toString();
+      userData['username'] = data["username"].toString();
+      userData['joinedat'] = data['joinedat'].toString();
+      if (data['profile'] != null){
+        userData['profile'] = NetworkImage(paths.image(data["profile"].toString()));
+      }
+      if (data['banner'] != null){
+        userData['banner'] = NetworkImage(paths.image(data["banner"].toString()));
+      }
+      return User(userData);
+    }
+    return User.asNull();
+  }
 
   Future<bool> saveData() async{
     
@@ -62,7 +82,9 @@ class User with ChangeNotifier {
     Map<String, dynamic> data = json.decode(response.body.trim());
     if (response.statusCode == 200){
       userData['uid'] = data["uid"].toString();
+      print(userData['uid']);
       userData['username'] = data["username"].toString();
+      userData['joinedat'] = data["joinedat"].toString();
       userData['password'] = encrypted;
       if (data['profile'] != null){
         userData['profile'] = NetworkImage(paths.image(data["profile"].toString()));
@@ -91,6 +113,7 @@ class User with ChangeNotifier {
     Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200 && data['status']){
       userData['uid'] = data["uid"].toString();
+      userData['joinedat'] = data['joinedat'].toString();
       userData['username'] = data["username"].toString();
       userData['password'] = passwordIn;
       notifyListeners();

@@ -41,7 +41,6 @@ class PostList {
               post['ups']++;
               post['downs']++;
             }
-            print(post);
             list.add(Post(post));
             nextPID = post['pid']-1;
           }

@@ -24,6 +24,10 @@ String image(value) {
   return dotenv.env['API_PATH']!+"/"+value;
 }
 
+String getUser(uid) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/getuserinfo.php?uid="+uid;
+}
+
 String getPost(pid) {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/getpost.php?pid="+pid;
 }

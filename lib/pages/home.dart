@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
+
+import '../models/user.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -53,6 +56,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("THIS ONE " + context.watch<User>().uid);
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),

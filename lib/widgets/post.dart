@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:ram/models/user.dart';
 import "package:async/async.dart";
 import 'package:path/path.dart';
+import 'package:ram/pages/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/paths.dart' as paths;
 
@@ -54,41 +55,58 @@ class _PostState extends State<Post> {
     return false;
   }
 
+  Future<void> showProfile(context, user) async {
+    final author = await user(widget.data['uid']);
+    print(author);
+    print(author.uid);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(author)));
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("THIS ONE POST " + context.watch<User>().uid);
     double w = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  splashColor: const Color(0x00000000),
-                  icon: CircleAvatar(
-                    radius: min(64, w/6),
-                    backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-                    backgroundImage: widget.data['profilepicture'],
-                  ),
-                  onPressed: () {}, // goto users profile page
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 15),
-                child: Text(
-                  widget.data['username'],
-                  style: const TextStyle(
-                    fontFamily: "dubai",
-                    decoration: TextDecoration.none,
-                    color: Colors.white,
-                    fontSize: 30,
+          child: GestureDetector(
+            // onTap: () => showProfile(context, context.read<User>().getUserInfo),
+            onTap: () async {
+              final author = await context.read<User>().getUserInfo(widget.data['uid']);
+              print(author);
+              print(author.uid);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(author)));
+            },
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    splashColor: const Color(0x00000000),
+                    icon: CircleAvatar(
+                      radius: min(64, w/6),
+                      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+                      backgroundImage: widget.data['profilepicture'],
+                    ),
+                    onPressed: () {}, // goto users profile page
                   ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text(
+                    widget.data['username'],
+                    style: const TextStyle(
+                      fontFamily: "dubai",
+                      decoration: TextDecoration.none,
+                      color: Colors.white,
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
         const SizedBox( height: 10, ),
@@ -105,7 +123,11 @@ class _PostState extends State<Post> {
                 visible: !widget.data['anon'],
                 child: IconButton(
                   padding: EdgeInsets.zero,
-                  icon: const Image( image: AssetImage("assets/dPlus.png"), width: 40, height: 40,),
+                  icon: const Image(
+                    image: AssetImage("assets/dPlus.png"),
+                    width: 40,
+                    height: 40,
+                  ),
                   onPressed: () {
                     //setState(() {
                       widget.data['ups'] += 1;

@@ -32,7 +32,7 @@ class _NavPageState extends State<NavPage> {
   }
 
   late var pages = [
-    const HomePage(), const UploadPage(), const SocialPage(), const ProfilePage()
+    const HomePage(), const UploadPage(), const SocialPage(), ProfilePage(context.watch<User>())
   ];
 
 
