@@ -35,19 +35,19 @@ class User with ChangeNotifier {
       Uri.parse(paths.getUser(uid.toString()))
     );
 
-    print(response.body);
-    Map<String, dynamic> data = json.decode(response.body);
-    if (response.statusCode == 200 && data["status"]){
-      userData['uid'] = data["uid"].toString();
-      userData['username'] = data["username"].toString();
-      userData['joinedat'] = data['joinedat'].toString();
-      if (data['profile'] != null){
-        userData['profile'] = NetworkImage(paths.image(data["profile"].toString()));
+    Map<String, dynamic> info = json.decode(response.body);
+    if (response.statusCode == 200 && info["status"]){
+      Map<String, dynamic> userInfo = {};
+      userInfo['uid'] = info["uid"].toString();
+      userInfo['username'] = info["username"].toString();
+      userInfo['joinedat'] = info['joinedat'].toString();
+      if (info['profile'] != null){
+        userInfo['profile'] = NetworkImage(paths.image(info["profile"].toString()));
       }
-      if (data['banner'] != null){
-        userData['banner'] = NetworkImage(paths.image(data["banner"].toString()));
+      if (info['banner'] != null){
+        userInfo['banner'] = NetworkImage(paths.image(info["banner"].toString()));
       }
-      return User(userData);
+      return User(userInfo);
     }
     return User.asNull();
   }

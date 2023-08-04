@@ -74,7 +74,7 @@ class _SideMenuState extends State<SideMenu> {
             ) : const Text(''),
             TextButton(
               child: const Text(
-                "Ok",
+                "ok",
                 style: TextStyle(
                   fontFamily: "dubai",
                   color: Color.fromARGB(255, 56, 56, 56),

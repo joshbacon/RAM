@@ -4,6 +4,7 @@ import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
 
 import '../models/user.dart';
+import '../widgets/loader.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -56,7 +57,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("THIS ONE " + context.watch<User>().uid);
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
@@ -86,18 +86,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const News(),
-              Center(
-                child: Container(width: w, height: 3, decoration:
-                  BoxDecoration(
-                    borderRadius: BorderRadius.circular(1),
-                    color: const Color.fromARGB(26, 0, 0, 0)
-                  ),
-                ),
+              const Divider(
+                thickness: 3,
               ),
               postList.isEmpty() ?
               Column(children: const [
                 SizedBox(height: 100),
-                CircularProgressIndicator(color: Color.fromRGBO(255, 163, 0, 1.0))
+                Loader()
               ]) :
               ListView.builder(
                 // key: const ValueKey(1),

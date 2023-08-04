@@ -57,7 +57,6 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => SignupPage(username.text, password.text)));
   }
 
-
   OutlineInputBorder borderTheme = OutlineInputBorder(
     borderRadius: BorderRadius.circular(25.0),
     borderSide: const BorderSide(
@@ -81,16 +80,20 @@ class _LoginPageState extends State<LoginPage> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(25, 100, 25, 0),
             child: Column(children: [
-              const Text(
-                "RAM",
-                style: TextStyle(
-                  fontFamily: "dubai",
-                  decoration: TextDecoration.none,
-                  color: Color.fromRGBO(255, 163, 0, 1.0),
-                  fontSize: 100,
-                  height: 1,
-                ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(15, 0, 15, 20),
+                child: Image.asset('assets/icon.png'),
               ),
+              // const Text(
+              //   "RAM",
+              //   style: TextStyle(
+              //     fontFamily: "dubai",
+              //     decoration: TextDecoration.none,
+              //     color: Color.fromRGBO(255, 163, 0, 1.0),
+              //     fontSize: 100,
+              //     height: 1,
+              //   ),
+              // ),
               const Text(
                 "Random Access Memes",
                 style: TextStyle(

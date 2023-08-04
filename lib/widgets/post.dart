@@ -57,8 +57,6 @@ class _PostState extends State<Post> {
 
   Future<void> showProfile(context, user) async {
     final author = await user(widget.data['uid']);
-    print(author);
-    print(author.uid);
     Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(author)));
   }
 
@@ -74,7 +72,6 @@ class _PostState extends State<Post> {
             // onTap: () => showProfile(context, context.read<User>().getUserInfo),
             onTap: () async {
               final author = await context.read<User>().getUserInfo(widget.data['uid']);
-              print(author);
               print(author.uid);
               Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(author)));
             },

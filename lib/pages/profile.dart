@@ -56,9 +56,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
 
-    print("THIS ONE " + context.watch<User>().uid);
-    print("THIS ONE TWO " + widget.user.uid);
-
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -66,17 +63,54 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
       drawer: const SideMenu(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
-        foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-        child: Icon(
-          context.watch<User>().uid == widget.user.uid ? Icons.settings : Icons.group_add_outlined,
-          size: 48,
-          color: const Color.fromRGBO(255, 163, 0, 1.0)
-        ),
-        onPressed: () {
-          openDrawer();
-        }
+      floatingActionButton: Column(
+        children: [
+          Visibility(
+            visible: context.watch<User>().uid != widget.user.uid,
+            child: FloatingActionButton(
+              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
+              foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+              child: const Icon(
+                Icons.arrow_back_rounded,
+                size: 48,
+                color: Color.fromRGBO(255, 163, 0, 1.0)
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+            ),
+          ),
+          Visibility(
+            visible: context.watch<User>().uid != widget.user.uid,
+            child:  FloatingActionButton(
+              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
+              foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+              child: const Icon(
+                Icons.group_add_outlined,
+                size: 48,
+                color: Color.fromRGBO(255, 163, 0, 1.0)
+              ),
+              onPressed: () {
+                //send a friend request
+              }
+            ),
+          ),
+          Visibility(
+            visible: context.watch<User>().uid == widget.user.uid,
+            child: FloatingActionButton(
+              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
+              foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+              child: const Icon(
+                Icons.settings,
+                size: 48,
+                color: Color.fromRGBO(255, 163, 0, 1.0)
+              ),
+              onPressed: () {
+                openDrawer();
+              }
+            ),
+          ),
+        ]
       ),
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
