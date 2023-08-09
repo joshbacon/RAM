@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               const News(),
-              const Divider(
+              const Divider( 
                 thickness: 3,
               ),
               postList.isEmpty() ?

@@ -1,6 +1,4 @@
-
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:ram/models/user.dart';
 import 'package:image_picker/image_picker.dart';
@@ -63,7 +61,6 @@ class _UploadPageState extends State<UploadPage> {
       },
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -173,6 +170,9 @@ class _UploadPageState extends State<UploadPage> {
                 controller: urlController,
                 maxLines: 3,
                 minLines: 1,
+                onTapOutside: (event) {
+                  FocusScope.of(context).unfocus();
+                },
                 decoration: const InputDecoration(
                   enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white)
@@ -188,11 +188,20 @@ class _UploadPageState extends State<UploadPage> {
               const SizedBox(height: 25),
               IconButton(
                 onPressed: () async {
-                  if (await context.read<User>().uploadPostFromURL(urlController.text) ) {
-                    print("Image Uploaded");
-                    showUploadErr = false;
+                  if (
+                    urlController.text.isNotEmpty &&
+                    await context.read<User>().uploadPostFromURL(urlController.text)
+                  ) {
+                    setState(() {
+                      _showDialog('Your post has been uploaded');
+                      urlController.clear();
+                      FocusScope.of(context).unfocus();
+                      showUploadErr = false;
+                    });
                   } else {
-                    showUploadErr = true;
+                    setState(() {
+                      showUploadErr = true;
+                    });
                   }
                 },
                 iconSize: min(w/5, 100),

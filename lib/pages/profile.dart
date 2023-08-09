@@ -68,6 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Visibility(
             visible: context.watch<User>().uid != widget.user.uid,
             child: FloatingActionButton(
+              heroTag: "backBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
               foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
               child: const Icon(
@@ -83,6 +84,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Visibility(
             visible: context.watch<User>().uid != widget.user.uid,
             child:  FloatingActionButton(
+              heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
               foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
               child: const Icon(

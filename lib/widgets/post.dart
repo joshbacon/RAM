@@ -1,18 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ram/models/postlist.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:ram/models/user.dart';
-import "package:async/async.dart";
-import 'package:path/path.dart';
 import 'package:ram/pages/profile.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../models/paths.dart' as paths;
+import 'package:ram/widgets/fullimage.dart';
+import 'package:ram/models/paths.dart' as paths;
 
 
 class Post extends StatefulWidget {
@@ -28,14 +21,11 @@ class Post extends StatefulWidget {
 class _PostState extends State<Post> {
 
   // TODO:
-  // - have the username or profile pic (the top bar basically) navigate to users page
-  // -- will need a view style of the profile page (just hide the settings button actually)
-  // --- change the settings button to an add or chat button or something
   // - tapping the image makes it full screen and the comments appear when you scroll down (need a back button)
   // -- also have a add comment box at the top UNLESS it's in anon mode
-  // -- will most likely reload whatever page you go back to because it's a new object
-  // --- figure out if theres a history type thing so the same posts are loaded
-  // - double check the interactions are working
+  // - get interactions working
+
+  bool fullImage = false;
 
   Future<bool> interact(uid, up) async {
     
@@ -60,34 +50,31 @@ class _PostState extends State<Post> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(author)));
   }
 
+  showFullImage(context) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => FullImage(widget.data)));
+  }
+
   @override
   Widget build(BuildContext context) {
-    print("THIS ONE POST " + context.watch<User>().uid);
     double w = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(
-            // onTap: () => showProfile(context, context.read<User>().getUserInfo),
-            onTap: () async {
-              final author = await context.read<User>().getUserInfo(widget.data['uid']);
-              print(author.uid);
-              Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(author)));
+            onTap: () {
+              if (!widget.data['anon'] && context.read<User>().uid != widget.data['uid']){
+                showProfile(context, context.read<User>().getUserInfo);
+              }
             },
             child: Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 5),
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    splashColor: const Color(0x00000000),
-                    icon: CircleAvatar(
-                      radius: min(64, w/6),
-                      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-                      backgroundImage: widget.data['profilepicture'],
-                    ),
-                    onPressed: () {}, // goto users profile page
+                  child: CircleAvatar(
+                    radius: min(24, w/6),
+                    backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+                    backgroundImage: widget.data['profilepicture'],
                   ),
                 ),
                 Padding(
@@ -107,9 +94,14 @@ class _PostState extends State<Post> {
           ),
         ),
         const SizedBox( height: 10, ),
-        Image(
-          image: widget.data['image'],
-          fit: BoxFit.fitWidth
+        GestureDetector(
+          onTap: () {
+            showFullImage(context);
+          },
+          child: Image(
+            image: widget.data['image'],
+            fit: BoxFit.fitWidth
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

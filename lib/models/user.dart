@@ -215,14 +215,14 @@ class User with ChangeNotifier {
     }
     return false;
   }
-    
-  // Copied from updateBannerPicture, need to adapt to upload a post
+
   Future<bool> uploadPostFromURL(image) async{
     final response = await http.post(
       Uri.parse(paths.acceptImageURL()),
       body: {
         'uid': userData['uid'],
-        'image': image
+        'image': image,
+        'state': 'post'
       }
     );
 
