@@ -141,26 +141,29 @@ class _ProfilePageState extends State<ProfilePage> {
               ]
             ),
             const SizedBox(height: 45,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                (widget.user.username == 'bacon') ? const Image( image: AssetImage('assets/racketTag.png'), width: 25, height: 25,): const Text(''),
-                (widget.user.username == 'bacon') ? const SizedBox(width: 15,): const Text(''),
-                TextButton(
-                  onPressed: (){}, // slide everything below the bar down to show user info (data joined and such)
-                  child: Text(
-                    widget.user.username,
-                    style: const TextStyle(
-                      fontFamily: "dubai",
-                      decoration: TextDecoration.none,
-                      color: Colors.white,
-                      fontSize: 30,
-                      height: 1,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              child: GestureDetector(
+                onTap: (){}, // slide everything below the bar down to show user info (data joined and such)
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    (widget.user.username == 'bacon') ? const Image( image: AssetImage('assets/racketTag.png'), width: 25, height: 25,): const Text(''),
+                    (widget.user.username == 'bacon') ? const SizedBox(width: 15,): const Text(''),
+                    Text(
+                      widget.user.username,
+                      style: const TextStyle(
+                        fontFamily: "dubai",
+                        decoration: TextDecoration.none,
+                        color: Colors.white,
+                        fontSize: 30,
+                        height: 1,
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
