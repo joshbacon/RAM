@@ -34,13 +34,9 @@ class _UploadPageState extends State<UploadPage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text( msg,
-            style: const TextStyle(
-              fontFamily: "dubai",
-              color: Color.fromRGBO(255, 163, 0, 1.0),
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
+          title: Text(
+            msg,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           actions: <Widget>[
             TextButton(
@@ -80,12 +76,15 @@ class _UploadPageState extends State<UploadPage> {
                     showUploadErr = false;
                   });
                 },
-                child: Text("Local", style: TextStyle(
+                child: Text(
+                  "Local",
+                  style: TextStyle(
                     fontFamily: "dubai",
                     decoration: TextDecoration.none,
-                    color: addLocal ? Colors.white : const Color.fromRGBO(255, 163, 0, 1.0),
+                    color: addLocal ? Colors.white : Theme.of(context).colorScheme.primary,
                     fontSize: 27,
-                ))
+                  )
+                )
               ),
               TextButton(
                 onPressed: (){
@@ -94,12 +93,15 @@ class _UploadPageState extends State<UploadPage> {
                     showUploadErr = false;
                   });
                 },
-                child: Text("URL", style: TextStyle(
+                child: Text(
+                  "URL",
+                  style: TextStyle(
                     fontFamily: "dubai",
                     decoration: TextDecoration.none,
-                    color: !addLocal ? Colors.white : const Color.fromRGBO(255, 163, 0, 1.0),
+                    color: !addLocal ? Colors.white : Theme.of(context).colorScheme.primary,
                     fontSize: 27,
-                ))
+                  )
+                )
               ),
             ]
           ),
@@ -123,21 +125,16 @@ class _UploadPageState extends State<UploadPage> {
                   }
                 },
                 iconSize: min(w/5, 100),
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_a_photo_outlined,
-                  color: Color.fromRGBO(255, 163, 0, 1.0)
+                  color: Theme.of(context).colorScheme.primary
                 )
               ),
               const SizedBox(height: 50),
-              const Text(
+              Text(
                 "choose an image to upload",
-                style: TextStyle(
-                  fontFamily: "dubai",
-                  decoration: TextDecoration.none,
-                  color: Colors.white,
-                  fontSize: 28,
-                  height: 1,
-                ),
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 10),
               Visibility(
@@ -154,13 +151,13 @@ class _UploadPageState extends State<UploadPage> {
               ),
             ] : [
               const SizedBox(height: 100),
-              const Text(
+              Text(
                 "enter URL to the image you want to upload",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "dubai",
                   decoration: TextDecoration.none,
-                  color: Color.fromRGBO(255, 163, 0, 1.0),
+                  color: Theme.of(context).colorScheme.primary,
                   fontSize: 28,
                   height: 1,
                 ),
@@ -173,9 +170,12 @@ class _UploadPageState extends State<UploadPage> {
                 onTapOutside: (event) {
                   FocusScope.of(context).unfocus();
                 },
-                decoration: const InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
+                decoration: InputDecoration(
+                  enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white)
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)
                   ),
                 ),
                 style: const TextStyle(
@@ -205,9 +205,9 @@ class _UploadPageState extends State<UploadPage> {
                   }
                 },
                 iconSize: min(w/5, 100),
-                icon: const Icon(
+                icon: Icon(
                   Icons.add_box_outlined,
-                  color: Color.fromRGBO(255, 163, 0, 1.0)
+                  color: Theme.of(context).colorScheme.primary
                 )
               ),
               const SizedBox(height: 10),

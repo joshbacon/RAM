@@ -59,9 +59,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: RefreshIndicator(
-        color: const Color.fromRGBO(255, 163, 0, 1.0),
+        color: Theme.of(context).colorScheme.primary,
         backgroundColor: const Color.fromARGB(255, 69, 69, 69),
         onRefresh: () async {
           _refresh();
@@ -71,18 +71,12 @@ class _HomePageState extends State<HomePage> {
           controller: controller,
           child: Column(
             children: [
-              const Padding(
-                padding: EdgeInsets.fromLTRB(0, 50, 0, 15),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 50, 0, 15),
                 child: Text(
                   "Random Access Memes",
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontFamily: "dubai",
-                    decoration: TextDecoration.underline,
-                    color: Color.fromRGBO(255, 163, 0, 1.0),
-                    fontSize: 28,
-                    height: 1,
-                  ),
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
               const News(),

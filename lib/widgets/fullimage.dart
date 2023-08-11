@@ -8,7 +8,7 @@ class FullImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -20,6 +20,7 @@ class FullImage extends StatelessWidget {
               width: w,
               height: h,
               child: Image(
+                fit: BoxFit.contain,
                 image: data['image'],
               ),
             ),

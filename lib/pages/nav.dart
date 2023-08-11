@@ -8,7 +8,7 @@ import 'package:ram/models/user.dart';
 
 class NavPage extends StatefulWidget {
 
-  NavPage({Key? key}) : super(key: key);
+  const NavPage({Key? key}) : super(key: key);
 
   @override
   State<NavPage> createState() => _NavPageState();
@@ -45,18 +45,14 @@ class _NavPageState extends State<NavPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: pages[pageIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: pageIndex,
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromRGBO(91, 91, 91, 1.0),
-        unselectedItemColor: const Color.fromRGBO(255, 163, 0, 1.0),
-        selectedItemColor: Colors.white,
         selectedFontSize: 13,
         unselectedFontSize: 13,
-        elevation: 1,
         iconSize: 35,
         items: const [
           BottomNavigationBarItem(

@@ -25,8 +25,6 @@ class _PostState extends State<Post> {
   // -- also have a add comment box at the top UNLESS it's in anon mode
   // - get interactions working
 
-  bool fullImage = false;
-
   Future<bool> interact(uid, up) async {
     
     var uri = Uri.parse(paths.interact());
@@ -73,7 +71,7 @@ class _PostState extends State<Post> {
                   padding: const EdgeInsets.only(left: 5),
                   child: CircleAvatar(
                     radius: min(24, w/6),
-                    backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+                    backgroundColor: Theme.of(context).colorScheme.background,
                     backgroundImage: widget.data['profilepicture'],
                   ),
                 ),
@@ -132,7 +130,7 @@ class _PostState extends State<Post> {
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
-                  color: const Color.fromRGBO(255, 163, 0, 1.0)
+                  color: Theme.of(context).colorScheme.primary
                 ),
               ),
               Container(
@@ -141,7 +139,7 @@ class _PostState extends State<Post> {
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
-                  color: const Color.fromRGBO(170 , 0, 0, 1.0)
+                  color: Theme.of(context).colorScheme.secondary
                 ),
               ),
               const SizedBox( width: 15, height: 25 ),

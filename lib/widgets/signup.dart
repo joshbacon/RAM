@@ -26,6 +26,7 @@ class _SignupPageState extends State<SignupPage> {
   final OutlineInputBorder borderTheme = OutlineInputBorder(
     borderRadius: BorderRadius.circular(25.0),
     borderSide: const BorderSide(
+      // color: Theme.of(context).colorScheme.primary,
       color: Color.fromRGBO(255, 163, 0, 1.0),
       width: 2.0,
     )
@@ -40,7 +41,7 @@ class _SignupPageState extends State<SignupPage> {
         isError = false;
         message = result[1];
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => NavPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const NavPage()));
     } else {
       setState(() {
         isError = true;
@@ -54,10 +55,10 @@ class _SignupPageState extends State<SignupPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color.fromRGBO(255, 163, 0, 1.0),
-        foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.background,
         child: const Icon(Icons.check_outlined, size: 36,),
         onPressed: () {
           signup();
@@ -72,12 +73,12 @@ class _SignupPageState extends State<SignupPage> {
             padding: const EdgeInsets.fromLTRB(25, 100, 25, 0),
             child: Column(
               children: [
-                const Text(
+                Text(
                   "RAM",
                   style: TextStyle(
                     fontFamily: "dubai",
                     decoration: TextDecoration.none,
-                    color: Color.fromRGBO(255, 163, 0, 1.0),
+                    color: Theme.of(context).colorScheme.primary,
                     fontSize: 100,
                     height: 1,
                   ),
@@ -113,18 +114,22 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color.fromRGBO(91, 91, 91, 1.0),
+                    fillColor: Theme.of(context).colorScheme.surface,
                     errorBorder: borderTheme,
                     focusedBorder: borderTheme,
                     focusedErrorBorder: borderTheme,
                     disabledBorder: borderTheme,
                     enabledBorder: borderTheme,
                     border: borderTheme,
-                    prefixIcon: const Icon(Icons.arrow_forward_ios, color: Color.fromRGBO(255, 163, 0, 1.0)),
+                    prefixIcon: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary
+                    ),
                   ),
                 ),
                 const Spacer(flex: 1),
-                const Text("password",
+                const Text(
+                  "password",
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontFamily: "dubai",
@@ -143,14 +148,17 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color.fromRGBO(91, 91, 91, 1.0),
+                    fillColor: Theme.of(context).colorScheme.surface,
                     errorBorder: borderTheme,
                     focusedBorder: borderTheme,
                     focusedErrorBorder: borderTheme,
                     disabledBorder: borderTheme,
                     enabledBorder: borderTheme,
                     border: borderTheme,
-                    prefixIcon: const Icon(Icons.arrow_forward_ios, color: Color.fromRGBO(255, 163, 0, 1.0)),
+                    prefixIcon: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary
+                    ),
                   ),
                 ),
                 const Spacer(flex: 1),
@@ -173,22 +181,26 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: const Color.fromRGBO(91, 91, 91, 1.0),
+                    fillColor: Theme.of(context).colorScheme.surface,
                     errorBorder: borderTheme,
                     focusedBorder: borderTheme,
                     focusedErrorBorder: borderTheme,
                     disabledBorder: borderTheme,
                     enabledBorder: borderTheme,
                     border: borderTheme,
-                    prefixIcon: const Icon(Icons.arrow_forward_ios, color: Color.fromRGBO(255, 163, 0, 1.0)),
+                    prefixIcon: Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).colorScheme.primary
+                    ),
                   ),
                 ),
                 const Spacer(flex: 1),
-                const Text( "idc email can be fake but you won't be able to recover your password.",
+                Text(
+                  "idc email can be fake but you won't be able to recover your password.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: "dubai",
-                    color: Color.fromRGBO(255, 163, 0, 1.0),
+                    color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),

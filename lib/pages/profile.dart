@@ -1,11 +1,9 @@
-import 'dart:math';
-
+import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ram/widgets/post.dart';
+import 'package:ram/widgets/littlepost.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
-import '../models/paths.dart' as paths;
 
 
 class ProfilePage extends StatefulWidget {
@@ -26,6 +24,45 @@ class _ProfilePageState extends State<ProfilePage> {
   // - show in a weird cool style (think pinterest)
   // - fix the alignment on the racket logo
   // - make it username button drop down and show a bio and date joined
+
+  static const List<LittlePost> lillist = [
+    LittlePost(
+      {
+        'pid': 0,
+        'uid': 1,
+        'username': 'Bacon',
+        'profilepicture': AssetImage('assets/defaultProfile.png'),
+        'ups': 420,
+        'downs': 69,
+        'anon': false,
+        'image': AssetImage('assets/test1.jpg')
+      }
+    ),
+    LittlePost(
+      {
+        'pid': 0,
+        'uid': 1,
+        'username': 'Bacon',
+        'profilepicture': AssetImage('assets/defaultProfile.png'),
+        'ups': 420,
+        'downs': 69,
+        'anon': false,
+        'image': AssetImage('assets/test2.png')
+      }
+    ),
+    LittlePost(
+      {
+        'pid': 0,
+        'uid': 1,
+        'username': 'Bacon',
+        'profilepicture': AssetImage('assets/defaultProfile.png'),
+        'ups': 420,
+        'downs': 69,
+        'anon': false,
+        'image': AssetImage('assets/test3.jpg')
+      }
+    ),
+  ];
 
   var totalUps = 1;
   var totalDowns = 1;
@@ -60,7 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
       key: _drawerKey,
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       drawer: const SideMenu(),
       floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       floatingActionButton: Column(
@@ -70,11 +107,11 @@ class _ProfilePageState extends State<ProfilePage> {
             child: FloatingActionButton(
               heroTag: "backBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
-              foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-              child: const Icon(
+              foregroundColor: Theme.of(context).colorScheme.background,
+              child: Icon(
                 Icons.arrow_back_rounded,
                 size: 48,
-                color: Color.fromRGBO(255, 163, 0, 1.0)
+                color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -86,11 +123,11 @@ class _ProfilePageState extends State<ProfilePage> {
             child:  FloatingActionButton(
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
-              foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-              child: const Icon(
+              foregroundColor: Theme.of(context).colorScheme.background,
+              child: Icon(
                 Icons.group_add_outlined,
                 size: 48,
-                color: Color.fromRGBO(255, 163, 0, 1.0)
+                color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
                 //send a friend request
@@ -101,11 +138,11 @@ class _ProfilePageState extends State<ProfilePage> {
             visible: context.watch<User>().uid == widget.user.uid,
             child: FloatingActionButton(
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
-              foregroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
-              child: const Icon(
+              foregroundColor: Theme.of(context).colorScheme.background,
+              child: Icon(
                 Icons.settings,
                 size: 48,
-                color: Color.fromRGBO(255, 163, 0, 1.0)
+                color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
                 openDrawer();
@@ -134,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   top: h/3 - w/4,
                   child: CircleAvatar(
                     radius: w/6,
-                    backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+                    backgroundColor: Theme.of(context).colorScheme.background,
                     backgroundImage: widget.user.profile,
                   )
                 )
@@ -153,13 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     (widget.user.username == 'bacon') ? const SizedBox(width: 15,): const Text(''),
                     Text(
                       widget.user.username,
-                      style: const TextStyle(
-                        fontFamily: "dubai",
-                        decoration: TextDecoration.none,
-                        color: Colors.white,
-                        fontSize: 30,
-                        height: 1,
-                      ),
+                      style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ],
                 ),
@@ -174,7 +205,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 3,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(1),
-                    color: const Color.fromRGBO(255, 163, 0, 1.0)
+                    color: Theme.of(context).colorScheme.primary
                   ),
                 ),
                 Container(
@@ -182,7 +213,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 3,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(1),
-                    color: const Color.fromRGBO(170 , 0, 0, 1.0)
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
                 const SizedBox(width: 50),
@@ -197,7 +228,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   splashRadius: 0.1,
                   icon: const Icon(Icons.dashboard),
                   iconSize: w/6.5,
-                  color: const Color.fromRGBO(255, 163, 0, 1.0)
+                  color: Theme.of(context).colorScheme.primary
                 ),
                 GestureDetector(
                   child: Image(
@@ -218,7 +249,13 @@ class _ProfilePageState extends State<ProfilePage> {
               ]
             ),
             const SizedBox(height: 30),
-
+            MasonryView(
+              listOfItem: lillist,
+              numberOfColumn: 2,
+              itemBuilder: (item) {
+                return item;
+              },
+            ),
           ],
         )
       )

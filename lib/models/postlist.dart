@@ -47,7 +47,6 @@ class PostList {
         }
       } catch (e) {
         Map<String, dynamic> result = json.decode(response.body);
-        
       }
     }
     // Limit the list to 25 posts?

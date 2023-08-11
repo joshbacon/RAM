@@ -50,12 +50,7 @@ class _SideMenuState extends State<SideMenu> {
         return AlertDialog(
           title: Text(
             msg,
-            style: const TextStyle(
-              fontFamily: "dubai",
-              color: Color.fromRGBO(255, 163, 0, 1.0),
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           actions: <Widget>[
             msg.contains('logout') ?
@@ -96,7 +91,7 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       child: Column(
         children: <Widget>[
           DrawerHeader(
@@ -112,14 +107,9 @@ class _SideMenuState extends State<SideMenu> {
               )
             ),
           ),
-          const Text(
+          Text(
             "Settings",
-            style: TextStyle(
-              fontFamily: "dubai",
-              color: Color.fromRGBO(255, 163, 0, 1.0),
-              fontWeight: FontWeight.bold,
-              fontSize: 22,
-            ),
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           ListTile(
             leading: const Icon(Icons.edit_rounded),
@@ -138,12 +128,7 @@ class _SideMenuState extends State<SideMenu> {
               tileColor: const Color.fromRGBO(69, 69, 69, 1.0),
               title: TextField(
                 controller: newUsername,
-                style: const TextStyle(
-                  fontFamily: "dubai",
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               trailing: IconButton(
                 alignment: Alignment.centerRight,
@@ -163,7 +148,7 @@ class _SideMenuState extends State<SideMenu> {
                   }
                 },
               ),
-              iconColor: const Color.fromRGBO(255, 163, 0, 1.0),
+              iconColor: Theme.of(context).colorScheme.primary,
               textColor: Colors.white,
               onTap: () => {},
             ),

@@ -20,7 +20,7 @@ class _SocialPageState extends State<SocialPage> {
   // - implement a chat feature
   //
   // - really should have a top level theme, then add this:
-  // - bottomSheetTheme: BottomSheetThemeData(backgroundColor: Color.fromRGBO(49, 49, 49, 1.0))
+  // - bottomSheetTheme: BottomSheetThemeData(backgroundColor: Theme.of(context).colorScheme.background)
   //
   // - also why is home and profile a scaffold but this and upload aren't? see if they should be...
 
@@ -34,24 +34,27 @@ class _SocialPageState extends State<SocialPage> {
         children: [
           TextFormField(
             controller: searchTerm,
+            onTapOutside: (event) {
+              FocusScope.of(context).unfocus();
+            },
             style: const TextStyle(
               fontFamily: "dubai",
               decoration: TextDecoration.none,
               color: Colors.white,
               fontSize: 18,
             ),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               filled: true,
-              fillColor: Color.fromRGBO(91, 91, 91, 1.0),
+              fillColor: const Color.fromRGBO(91, 91, 91, 1.0),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color.fromRGBO(255, 163, 0, 1.0))
+                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)
               ),
               prefixIcon: Icon(
                 Icons.search_outlined,
-                color: Color.fromRGBO(255, 163, 0, 1.0)
+                color: Theme.of(context).colorScheme.primary
               ),
               hintText: "search...",
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 fontFamily: "dubai",
                 color: Color.fromARGB(255, 223, 223, 223),
                 fontWeight: FontWeight.bold,
@@ -81,13 +84,13 @@ class _SocialPageState extends State<SocialPage> {
                 },
               );
             },
-            child: const Text(
+            child: Text(
               'Friends',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontFamily: "dubai",
                 decoration: TextDecoration.none,
-                color: Color.fromRGBO(255, 163, 0, 1.0),
+                color: Theme.of(context).colorScheme.primary,
                 fontSize: 21,
                 height: 1,
               ),

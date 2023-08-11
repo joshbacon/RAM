@@ -3,10 +3,8 @@
 <br />
 <div align="center">
   <a href="https://github.com/joshbacon/RAM">
-    <img src="assets/icon.png" alt="Logo" width="200" height="47">
+    <img src="assets/icon.png" alt="Logo" width="250" height="59">
   </a>
-
-  <h3 align="center" style="color:#008000;">R.A.M.</h3>
 
   <p align="center">
     <a href="https://github.com/joshbacon/RAM">View Site</a>
@@ -25,7 +23,7 @@
 
 <!-- [![codegambit Screen Shot][product-screenshot]](https://codegambit.io) -->
 
-`RAM` is an android social media app intended to focus on CS & tech related humour. Complete with the basic features of creating an account and uploading a post whlie interacting with others along; along with being able to add friends, view their profile, and chat with them.
+`RAM` is an android social media app intended to focus on CS & tech related humour. Complete with the basic features of creating an account and uploading a post whlie interacting with other's posts; along with being able to add friends, view their profile, and chat with them.
 
 
 
@@ -33,8 +31,8 @@
 
 The frontend is built entirely with Flutter, making use of its many widgets and libraries. To communicate with the MySQL database on the backend, I wrote a custom REST API in PHP.
 
-* [![PHP][PHP.js]][PHP-url]
 * [![flutter][flutter.com]][flutter-url]
+* [![PHP][PHP.js]][PHP-url]
 * [![MySQL][MySQL]][MySQL-url]
 
 ### Coming Up

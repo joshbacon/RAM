@@ -60,9 +60,10 @@ class _LoginPageState extends State<LoginPage> {
   OutlineInputBorder borderTheme = OutlineInputBorder(
     borderRadius: BorderRadius.circular(25.0),
     borderSide: const BorderSide(
+      // color: Theme.of(context).colorScheme.primary,
       color: Color.fromRGBO(255, 163, 0, 1.0),
       width: 2.0,
-    )
+    ),
   );
 
   
@@ -71,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Container(
@@ -89,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
               //   style: TextStyle(
               //     fontFamily: "dubai",
               //     decoration: TextDecoration.none,
-              //     color: Color.fromRGBO(255, 163, 0, 1.0),
+              //     color: Theme.of(context).colorScheme.primary,
               //     fontSize: 100,
               //     height: 1,
               //   ),
@@ -105,12 +106,12 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const Spacer(flex: 7),
-              const Text(
+              Text(
                 "Create an account or sign in.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: "dubai",
-                  color: Color.fromRGBO(255, 163, 0, 1.0),
+                  color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -133,9 +134,9 @@ class _LoginPageState extends State<LoginPage> {
                   disabledBorder: borderTheme,
                   enabledBorder: borderTheme,
                   border: borderTheme,
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.arrow_forward_ios,
-                    color: Color.fromRGBO(255, 163, 0, 1.0)
+                    color: Theme.of(context).colorScheme.primary
                   ),
                   hintText: "username",
                   hintStyle: const TextStyle(
@@ -165,9 +166,9 @@ class _LoginPageState extends State<LoginPage> {
                   disabledBorder: borderTheme,
                   enabledBorder: borderTheme,
                   border: borderTheme,
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     Icons.arrow_forward_ios,
-                    color: Color.fromRGBO(255, 163, 0, 1.0)
+                    color: Theme.of(context).colorScheme.primary
                   ),
                   hintText: "password",
                   hintStyle: const TextStyle(
@@ -257,7 +258,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(width: 275, height: 3, decoration:
                 BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
-                  color: const Color.fromRGBO(255, 163, 0, 1.0)
+                  color: Theme.of(context).colorScheme.primary
                 ),
               ),
               const Spacer(flex: 2),

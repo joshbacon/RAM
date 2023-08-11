@@ -62,9 +62,9 @@ class _AnonPageState extends State<AnonPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: RefreshIndicator(
-        color: const Color.fromRGBO(255, 163, 0, 1.0),
+        color: Theme.of(context).colorScheme.primary,
         backgroundColor: const Color.fromARGB(255, 69, 69, 69),
         onRefresh: () async {
           _refresh();
@@ -74,9 +74,11 @@ class _AnonPageState extends State<AnonPage> {
           controller: controller,
           child: postList.isEmpty() ?
             Column(
-              children: const [
-                SizedBox(height: 100),
-                CircularProgressIndicator(color: Color.fromRGBO(255, 163, 0, 1.0))
+              children: [
+                const SizedBox(height: 100),
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary
+                )
               ]
             ) :
             ListView.builder(
@@ -92,9 +94,9 @@ class _AnonPageState extends State<AnonPage> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTap,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: const Color.fromRGBO(91, 91, 91, 1.0),
-        unselectedItemColor: const Color.fromRGBO(255, 163, 0, 1.0),
-        selectedItemColor: const Color.fromRGBO(255, 163, 0, 1.0),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        unselectedItemColor: Theme.of(context).colorScheme.primary,
+        selectedItemColor: Theme.of(context).colorScheme.primary,
         selectedFontSize: 13,
         unselectedFontSize: 13,
         elevation: 1,

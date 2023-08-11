@@ -32,12 +32,12 @@ class _ProfileCardState extends State<ProfileCard> {
       width: w * 0.8,
       child: Card(
         clipBehavior: Clip.hardEdge,
-        color: const Color.fromRGBO(49, 49, 49, 1.0),
+        color: Theme.of(context).colorScheme.background,
         elevation: 10,
         child: Stack(
           children: [
             InkWell(
-              splashColor: const Color.fromRGBO(255, 163, 0, 1.0),
+              splashColor: Theme.of(context).colorScheme.primary,
               onTap: () {
                 Navigator.push(
                   context,
@@ -65,7 +65,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         left: 10,
                         child: CircleAvatar(
                           radius: w/10,
-                          backgroundColor: const Color.fromRGBO(49, 49, 49, 1.0),
+                          backgroundColor: Theme.of(context).colorScheme.background,
                           backgroundImage: userData['profile'],
                         )
                       ),
@@ -78,24 +78,18 @@ class _ProfileCardState extends State<ProfileCard> {
                       const SizedBox(width: 10),
                       Text(
                         userData['username'],
-                        style: const TextStyle(
-                          fontFamily: "dubai",
-                          decoration: TextDecoration.none,
-                          color: Color.fromRGBO(255, 163, 0, 1.0),
-                          fontSize: 21,
-                          height: 1,
-                        ),
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const Spacer(flex: 1),
                       IconButton(
                         onPressed: () {},
                         highlightColor: const Color.fromARGB(0, 255, 255, 255),
-                        splashColor: const Color.fromRGBO(255, 163, 0, 0.5),
+                        splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
                         splashRadius: 40,
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.chat,
                           size: 30,
-                          color: Color.fromRGBO(255, 163, 0, 1.0),
+                          color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
                     ]
