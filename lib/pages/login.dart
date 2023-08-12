@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response[0] && context.read<User>().username != 'null'){
       showLoginErr = false;
-      Navigator.push(context, MaterialPageRoute(builder: (context) => NavPage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const NavPage()));
     } else {
       setState(() {
         errorMessage = response[1];

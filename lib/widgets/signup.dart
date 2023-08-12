@@ -35,7 +35,6 @@ class _SignupPageState extends State<SignupPage> {
   
   void signup() async {
     final result = await context.read<User>().signup(username.text, password.text, email.text);
-    print(result);
     if (result[0]) {
       setState(() {
         isError = false;

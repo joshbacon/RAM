@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ram/widgets/fullimage.dart';
+import 'package:ram/widgets/post.dart';
 
-class LittlePost extends StatefulWidget {
+class LittlePost extends StatefulWidget implements Post {
   const LittlePost(this.data, {Key? key}) : super(key: key);
   
+  @override
   final Map<String, dynamic> data;
 
   @override

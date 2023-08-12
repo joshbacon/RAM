@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:ram/widgets/profilecard.dart';
 
@@ -26,8 +25,6 @@ class _SocialPageState extends State<SocialPage> {
 
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
-    double h = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.fromLTRB(15, 50, 15, 10),
       child: Column(

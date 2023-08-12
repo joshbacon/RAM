@@ -82,7 +82,6 @@ class User with ChangeNotifier {
     Map<String, dynamic> data = json.decode(response.body.trim());
     if (response.statusCode == 200){
       userData['uid'] = data["uid"].toString();
-      print(userData['uid']);
       userData['username'] = data["username"].toString();
       userData['joinedat'] = data["joinedat"].toString();
       userData['password'] = encrypted;

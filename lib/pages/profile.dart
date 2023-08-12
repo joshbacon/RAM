@@ -1,9 +1,10 @@
 import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ram/widgets/littlepost.dart';
+import 'package:ram/models/postlist.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
+import 'package:ram/widgets/post.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -25,48 +26,53 @@ class _ProfilePageState extends State<ProfilePage> {
   // - fix the alignment on the racket logo
   // - make it username button drop down and show a bio and date joined
 
-  static const List<LittlePost> lillist = [
-    LittlePost(
-      {
-        'pid': 0,
-        'uid': 1,
-        'username': 'Bacon',
-        'profilepicture': AssetImage('assets/defaultProfile.png'),
-        'ups': 420,
-        'downs': 69,
-        'anon': false,
-        'image': AssetImage('assets/test1.jpg')
-      }
-    ),
-    LittlePost(
-      {
-        'pid': 0,
-        'uid': 1,
-        'username': 'Bacon',
-        'profilepicture': AssetImage('assets/defaultProfile.png'),
-        'ups': 420,
-        'downs': 69,
-        'anon': false,
-        'image': AssetImage('assets/test2.png')
-      }
-    ),
-    LittlePost(
-      {
-        'pid': 0,
-        'uid': 1,
-        'username': 'Bacon',
-        'profilepicture': AssetImage('assets/defaultProfile.png'),
-        'ups': 420,
-        'downs': 69,
-        'anon': false,
-        'image': AssetImage('assets/test3.jpg')
-      }
-    ),
-  ];
+  // static const List<LittlePost> lillist = [
+  //   LittlePost(
+  //     {
+  //       'pid': 0,
+  //       'uid': 1,
+  //       'username': 'Bacon',
+  //       'profilepicture': AssetImage('assets/defaultProfile.png'),
+  //       'ups': 420,
+  //       'downs': 69,
+  //       'anon': false,
+  //       'image': AssetImage('assets/test1.jpg')
+  //     }
+  //   ),
+  //   LittlePost(
+  //     {
+  //       'pid': 0,
+  //       'uid': 1,
+  //       'username': 'Bacon',
+  //       'profilepicture': AssetImage('assets/defaultProfile.png'),
+  //       'ups': 420,
+  //       'downs': 69,
+  //       'anon': false,
+  //       'image': AssetImage('assets/test2.png')
+  //     }
+  //   ),
+  //   LittlePost(
+  //     {
+  //       'pid': 0,
+  //       'uid': 1,
+  //       'username': 'Bacon',
+  //       'profilepicture': AssetImage('assets/defaultProfile.png'),
+  //       'ups': 420,
+  //       'downs': 69,
+  //       'anon': false,
+  //       'image': AssetImage('assets/test3.jpg')
+  //     }
+  //   ),
+  // ];
 
   var totalUps = 1;
   var totalDowns = 1;
   int category = 0;
+
+  bool isLoading = false;
+  List<Post> list = [];
+  PostList posts = PostList.little();
+  ScrollController controller = ScrollController();
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
@@ -88,7 +94,36 @@ class _ProfilePageState extends State<ProfilePage> {
       // query for posts disliked by the user
       category = index;
     }
-  } 
+  }
+
+  Future<void> _refresh() async{
+    posts.getPosts(false, widget.user.uid).then((_) {
+      setState(() {
+        list = posts.getList();
+        isLoading = true;
+        isLoading = false;
+      });
+    });
+  }
+
+  void _scrollListener() {
+    if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
+      posts.getPosts(false, widget.user.uid).then((_) {
+        setState(() {
+          list = posts.getList();
+          isLoading = true;
+          isLoading = false;
+        });
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _refresh();
+    controller.addListener(_scrollListener);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,113 +186,120 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ]
       ),
-      body: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // profile pic container (edit button, banner image and circular avatar)
-            Stack(
-              clipBehavior: Clip.none,
-              alignment: AlignmentDirectional.bottomCenter,
-              children: [
-                Image(
-                  image: widget.user.banner,
-                  width: double.infinity,
-                  height: h/3,
-                  fit: BoxFit.cover,
-                ),
-                Positioned(
-                  top: h/3 - w/4,
-                  child: CircleAvatar(
-                    radius: w/6,
-                    backgroundColor: Theme.of(context).colorScheme.background,
-                    backgroundImage: widget.user.profile,
+      body: RefreshIndicator(
+        onRefresh: () {
+          return _refresh();
+        },
+        child: SingleChildScrollView(
+          physics: const ScrollPhysics(),
+          controller: controller,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // profile pic container (edit button, banner image and circular avatar)
+              Stack(
+                clipBehavior: Clip.none,
+                alignment: AlignmentDirectional.bottomCenter,
+                children: [
+                  Image(
+                    image: widget.user.banner,
+                    width: double.infinity,
+                    height: h/3,
+                    fit: BoxFit.cover,
+                  ),
+                  Positioned(
+                    top: h/3 - w/4,
+                    child: CircleAvatar(
+                      radius: w/6,
+                      backgroundColor: Theme.of(context).colorScheme.background,
+                      backgroundImage: widget.user.profile,
+                    )
                   )
-                )
-              ]
-            ),
-            const SizedBox(height: 45,),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              child: GestureDetector(
-                onTap: (){}, // slide everything below the bar down to show user info (data joined and such)
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    (widget.user.username == 'bacon') ? const Image( image: AssetImage('assets/racketTag.png'), width: 25, height: 25,): const Text(''),
-                    (widget.user.username == 'bacon') ? const SizedBox(width: 15,): const Text(''),
-                    Text(
-                      widget.user.username,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
+                ]
+              ),
+              const SizedBox(height: 45,),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                child: GestureDetector(
+                  onTap: (){}, // slide everything below the bar down to show user info (data joined and such)
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      (widget.user.username == 'bacon') ? const Image( image: AssetImage('assets/racketTag.png'), width: 25, height: 25,): const Text(''),
+                      (widget.user.username == 'bacon') ? const SizedBox(width: 15,): const Text(''),
+                      Text(
+                        widget.user.username,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(width: 50),
-                Container(
-                  width: (totalUps / (totalUps + totalDowns))*(w-100),
-                  height: 3,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(1),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(width: 50),
+                  Container(
+                    width: (totalUps / (totalUps + totalDowns))*(w-100),
+                    height: 3,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      color: Theme.of(context).colorScheme.primary
+                    ),
+                  ),
+                  Container(
+                    width: (totalDowns / (totalUps + totalDowns))*(w-100),
+                    height: 3,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(1),
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ),
+                  const SizedBox(width: 50),
+                ],
+              ),
+              const SizedBox(height: 15),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {},
+                    splashRadius: 0.1,
+                    icon: const Icon(Icons.dashboard),
+                    iconSize: w/6.5,
                     color: Theme.of(context).colorScheme.primary
                   ),
-                ),
-                Container(
-                  width: (totalDowns / (totalUps + totalDowns))*(w-100),
-                  height: 3,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(1),
-                    color: Theme.of(context).colorScheme.secondary,
+                  GestureDetector(
+                    child: Image(
+                      image: const AssetImage("assets/dPlus.png"),
+                      width: w/6.5,
+                      height: w/6.5,
+                    ),
+                    onTap: (){}
                   ),
-                ),
-                const SizedBox(width: 50),
-              ],
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  splashRadius: 0.1,
-                  icon: const Icon(Icons.dashboard),
-                  iconSize: w/6.5,
-                  color: Theme.of(context).colorScheme.primary
-                ),
-                GestureDetector(
-                  child: Image(
-                    image: const AssetImage("assets/dPlus.png"),
-                    width: w/6.5,
-                    height: w/6.5,
-                  ),
-                  onTap: (){}
-                ),
-                GestureDetector(
-                  child: Image(
-                    image: const AssetImage("assets/dMinus.png"),
-                    width: w/6.5,
-                    height: w/6.5,
-                  ),
-                  onTap: (){}
-                )
-              ]
-            ),
-            const SizedBox(height: 30),
-            MasonryView(
-              listOfItem: lillist,
-              numberOfColumn: 2,
-              itemBuilder: (item) {
-                return item;
-              },
-            ),
-          ],
-        )
+                  GestureDetector(
+                    child: Image(
+                      image: const AssetImage("assets/dMinus.png"),
+                      width: w/6.5,
+                      height: w/6.5,
+                    ),
+                    onTap: (){}
+                  )
+                ]
+              ),
+              const SizedBox(height: 30),
+              // the list doesn't get updated visually, need to hot restart the app from vscode
+              MasonryView(
+                listOfItem: list,
+                numberOfColumn: 2,
+                itemBuilder: (item) {
+                  return item;
+                },
+              ),
+            ],
+          )
+        ),
       )
     );
   }

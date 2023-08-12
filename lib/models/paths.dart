@@ -28,8 +28,8 @@ String getUser(uid) {
   return dotenv.env['API_PATH']!+"/ramdb_api/user/getuserinfo.php?uid="+uid;
 }
 
-String getPost(pid) {
-  return dotenv.env['API_PATH']!+"/ramdb_api/post/getpost.php?pid="+pid;
+String getPost(pid, uid) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/post/getpost.php?pid="+pid+"&uid="+uid;
 }
 
 String interact() {

@@ -16,7 +16,7 @@ class NavPage extends StatefulWidget {
 
 class _NavPageState extends State<NavPage> {
   
-  int pageIndex = 0;
+  int pageIndex = 3;
 
   @override
   void didChangeDependencies() {

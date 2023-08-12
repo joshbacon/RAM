@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
-
-import '../models/user.dart';
 import '../widgets/loader.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   void _refresh() async {
     postList.reset();
-    postList.getPosts(false).then((_) {
+    postList.getPosts(false, "0").then((_) {
       setState(() {
         isLoading = true;
         isLoading = false;
@@ -46,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   void _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-    postList.getPosts(false).then((_) {
+    postList.getPosts(false, "0").then((_) {
       setState(() {
         isLoading = true;
         isLoading = false;
@@ -57,7 +54,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: RefreshIndicator(

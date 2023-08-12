@@ -35,12 +35,7 @@ class _PostState extends State<Post> {
     request.fields['up'] = up;
   
     var response = await request.send();
-    if( response.statusCode == 200 ){
-      print('worked');
-      return true;
-    }
-    print('!worked');
-    return false;
+    return response.statusCode == 200;
   }
 
   Future<void> showProfile(context, user) async {

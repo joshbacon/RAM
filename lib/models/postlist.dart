@@ -1,15 +1,21 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:ram/widgets/littlepost.dart';
 import 'package:ram/widgets/post.dart';
 import '../models/paths.dart' as paths;
 
 class PostList {
 
+  bool little = false;
   static List<Post> list = [];
   static int nextPID = 0;
 
   PostList();
+
+  PostList.little() {
+    little = true;
+  }
 
   int length() {
     return list.length;
@@ -23,10 +29,14 @@ class PostList {
     return list[index];
   }
 
-  Future<void> getPosts(bool isAnon) async {
+  List<Post> getList() {
+    return list;
+  }
+
+  Future<void> getPosts(bool isAnon, String uid) async {
 
     final response = await http.get(
-      Uri.parse(paths.getPost(nextPID.toString()))
+      Uri.parse(paths.getPost(nextPID.toString(), uid))
     );
     if (response.statusCode == 200) {
       try {
@@ -41,12 +51,13 @@ class PostList {
               post['ups']++;
               post['downs']++;
             }
-            list.add(Post(post));
+            list.add(little ? LittlePost(post) : Post(post));
             nextPID = post['pid']-1;
           }
         }
       } catch (e) {
         Map<String, dynamic> result = json.decode(response.body);
+        // do something with the error
       }
     }
     // Limit the list to 25 posts?

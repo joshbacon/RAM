@@ -31,7 +31,7 @@ class _AnonPageState extends State<AnonPage> {
 
   void _refresh() async {
     postList.reset();
-    postList.getPosts(true).then((_) {
+    postList.getPosts(true, "0").then((_) {
       setState(() {
         isLoading = true;
         isLoading = false;
@@ -41,7 +41,7 @@ class _AnonPageState extends State<AnonPage> {
 
   void _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-    postList.getPosts(true).then((_) {
+    postList.getPosts(true, "0").then((_) {
       setState(() {
         isLoading = true;
         isLoading = false;
