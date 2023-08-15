@@ -16,7 +16,11 @@ class NavPage extends StatefulWidget {
 
 class _NavPageState extends State<NavPage> {
   
-  int pageIndex = 3;
+  int pageIndex = 0;
+
+  late var pages = [
+    const HomePage(), const UploadPage(), const SocialPage(), ProfilePage(context.watch<User>())
+  ];
 
   @override
   void didChangeDependencies() {
@@ -30,11 +34,6 @@ class _NavPageState extends State<NavPage> {
       precacheImage(context.read<User>().banner, context);
     }
   }
-
-  late var pages = [
-    const HomePage(), const UploadPage(), const SocialPage(), ProfilePage(context.watch<User>())
-  ];
-
 
   void onTap(int index){
     setState(() {

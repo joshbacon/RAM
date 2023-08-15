@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Container(
+        child: SizedBox(
           width: w,
           height: h,
           child: Padding(

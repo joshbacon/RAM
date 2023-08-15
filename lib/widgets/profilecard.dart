@@ -26,7 +26,7 @@ class _ProfileCardState extends State<ProfileCard> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
-    return Container(
+    return SizedBox(
       width: w * 0.8,
       child: Card(
         clipBehavior: Clip.hardEdge,

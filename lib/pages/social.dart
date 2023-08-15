@@ -66,10 +66,10 @@ class _SocialPageState extends State<SocialPage> {
               showModalBottomSheet(
                 context: context,
                 builder: (BuildContext context) {
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
+                  return const SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
                     child: Column(
-                      children: const [
+                      children: [
                         ProfileCard(),
                         ProfileCard(),
                         ProfileCard(),

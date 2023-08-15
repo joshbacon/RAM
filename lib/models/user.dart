@@ -13,6 +13,8 @@ class User with ChangeNotifier {
     "uid": "0",
     "username": "null",
     "joinedat": "null",
+    "ups": 1,
+    "downs": 1,
     "password": "null",
     "profile": const AssetImage('assets/defaultProfile.png'),
     "banner": const AssetImage('assets/defaultBanner.png')
@@ -28,6 +30,8 @@ class User with ChangeNotifier {
   String get username => userData['username'];
   dynamic get profile => userData['profile'];
   dynamic get banner => userData['banner'];
+  dynamic get ups => userData['ups'];
+  dynamic get downs => userData['downs'];
 
 
   Future<User> getUserInfo(uid) async{
@@ -41,6 +45,10 @@ class User with ChangeNotifier {
       userInfo['uid'] = info["uid"].toString();
       userInfo['username'] = info["username"].toString();
       userInfo['joinedat'] = info['joinedat'].toString();
+      userInfo['ups'] = info['ups'];
+      userInfo['downs'] = info['downs'];
+      print(userInfo['ups'] + " ups and it is a " + userInfo['ups'].runtimeType);
+      print(userInfo['downs'] + " downs and it is a " + userInfo['downs'].runtimeType);
       if (info['profile'] != null){
         userInfo['profile'] = NetworkImage(paths.image(info["profile"].toString()));
       }
@@ -65,6 +73,8 @@ class User with ChangeNotifier {
     userData['uid'] = '0';
     userData['username'] = 'null';
     userData['password'] = 'null';
+    userData['ups'] = 0;
+    userData['downs'] = 0;
     userData['profile'] = const AssetImage('assets/defaultProfile.png');
     userData['banner'] = const AssetImage('assets/defaultBanner.png');
     saveData();
@@ -78,12 +88,14 @@ class User with ChangeNotifier {
     final response = await http.get(
       Uri.parse(paths.login(usernameIn, encrypted))
     );
-
+    print(response.body.trim());
     Map<String, dynamic> data = json.decode(response.body.trim());
     if (response.statusCode == 200){
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();
       userData['joinedat'] = data["joinedat"].toString();
+      userData['ups'] = data['ups'].toString();
+      userData['downs'] = data['downs'].toString();
       userData['password'] = encrypted;
       if (data['profile'] != null){
         userData['profile'] = NetworkImage(paths.image(data["profile"].toString()));
@@ -114,6 +126,8 @@ class User with ChangeNotifier {
       userData['uid'] = data["uid"].toString();
       userData['joinedat'] = data['joinedat'].toString();
       userData['username'] = data["username"].toString();
+      userData['ups'] = data['ups'];
+      userData['downs'] = data['downs'];
       userData['password'] = passwordIn;
       notifyListeners();
       saveData();

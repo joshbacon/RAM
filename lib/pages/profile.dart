@@ -65,11 +65,10 @@ class _ProfilePageState extends State<ProfilePage> {
   //   ),
   // ];
 
-  var totalUps = 1;
-  var totalDowns = 1;
+  int totalUps = 1;
+  int totalDowns = 1;
   int category = 0;
 
-  bool isLoading = false;
   List<Post> list = [];
   PostList posts = PostList.little();
   ScrollController controller = ScrollController();
@@ -97,11 +96,10 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _refresh() async{
+    posts.reset();
     posts.getPosts(false, widget.user.uid).then((_) {
       setState(() {
         list = posts.getList();
-        isLoading = true;
-        isLoading = false;
       });
     });
   }
@@ -111,8 +109,6 @@ class _ProfilePageState extends State<ProfilePage> {
       posts.getPosts(false, widget.user.uid).then((_) {
         setState(() {
           list = posts.getList();
-          isLoading = true;
-          isLoading = false;
         });
       });
     }
@@ -241,7 +237,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   const SizedBox(width: 50),
                   Container(
-                    width: (totalUps / (totalUps + totalDowns))*(w-100),
+                    // width: (widget.user.ups / (widget.user.ups + widget.user.downs))*(w-100),
+                    width: (1 / (1 + 1))*(w-100),
                     height: 3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(1),
@@ -249,7 +246,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Container(
-                    width: (totalDowns / (totalUps + totalDowns))*(w-100),
+                    // width: (widget.user.downs / (widget.user.ups + widget.user.downs))*(w-100),
+                    width: (1 / (1 + 1))*(w-100),
                     height: 3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(1),

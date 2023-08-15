@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                 thickness: 3,
               ),
               postList.isEmpty() ?
-              Column(children: const [
+              const Column(children: [
                 SizedBox(height: 100),
                 Loader()
               ]) :

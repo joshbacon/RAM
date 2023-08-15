@@ -65,7 +65,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       body: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        child: Container(
+        child: SizedBox(
           width: w,
           height: h,
           child: Padding(
