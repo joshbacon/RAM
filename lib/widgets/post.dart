@@ -129,7 +129,6 @@ class _PostState extends State<Post> {
                 ),
               ),
               Container(
-                // width: (widget.data['downs'] / (widget.data['ups'] + widget.data['downs']))*(w-156),
                 width: (widget.data['downs'] / (widget.data['ups'] + widget.data['downs']))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(

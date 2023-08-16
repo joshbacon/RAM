@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
 
   void _refresh() async {
     postList.reset();
-    postList.getPosts(false, "0").then((_) {
+    postList.getPosts(false, "0", 0).then((_) {
       setState(() {
         isLoading = true;
         isLoading = false;
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
 
   void _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-    postList.getPosts(false, "0").then((_) {
+    postList.getPosts(false, "0", 0).then((_) {
       setState(() {
         isLoading = true;
         isLoading = false;

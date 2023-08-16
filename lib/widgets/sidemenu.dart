@@ -16,9 +16,6 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
 
-  //var profileImage = const AssetImage('assets/defaultProfile.png');
-  //var bannerImage = const AssetImage('assets/defaultBanner.png');
-
   TextEditingController newUsername = TextEditingController();
 
   bool showUserBox = false;
@@ -55,27 +52,18 @@ class _SideMenuState extends State<SideMenu> {
           actions: <Widget>[
             msg.contains('logout') ?
             TextButton(
-              child: const Text( "cancel",
-                style: TextStyle(
-                  fontFamily: "dubai",
-                  color: Color.fromARGB(255, 56, 56, 56),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              child: Text(
+                "cancel",
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-            ) : const Text(''),
+            ) : Container(),
             TextButton(
-              child: const Text(
+              child: Text(
                 "ok",
-                style: TextStyle(
-                  fontFamily: "dubai",
-                  color: Color.fromARGB(255, 56, 56, 56),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -107,19 +95,23 @@ class _SideMenuState extends State<SideMenu> {
               )
             ),
           ),
+          const SizedBox(height: 10),
           Text(
             "Settings",
-            style: Theme.of(context).textTheme.titleSmall,
+            style: Theme.of(context).textTheme.titleMedium?.apply(decoration: TextDecoration.none),
           ),
           ListTile(
             leading: const Icon(Icons.edit_rounded),
-            title: const Text('Update Username'),
-            iconColor: Colors.white,
-            textColor: Colors.white,
+            title: Text(
+              'Update Username',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            iconColor: Theme.of(context).colorScheme.primary,
+            textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () => {
-              //setState(() {
-                showUserBox = !showUserBox
-              //}),
+              setState(() {
+                showUserBox = !showUserBox;
+              }),
             },
           ),
           Visibility(
@@ -134,7 +126,7 @@ class _SideMenuState extends State<SideMenu> {
                 alignment: Alignment.centerRight,
                 icon: const Icon(Icons.check_box_rounded, size: 34,),
                 onPressed: () async {
-                  if (await context.read<User>().updateUsername(newUsername.text)) {
+                  if (newUsername.text.isNotEmpty && await context.read<User>().updateUsername(newUsername.text)) {
                     //setState(() {
                       _showDialog('Your username has been updated.');
                       showUserBox = false;
@@ -167,9 +159,12 @@ class _SideMenuState extends State<SideMenu> {
           ),
           ListTile(
             leading: const Icon(Icons.supervised_user_circle_rounded),
-            title: const Text('Update Profile Picture'),
-            iconColor: Colors.white,
-            textColor: Colors.white,
+            title: Text(
+              'Update Profile Picture',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            iconColor: Theme.of(context).colorScheme.primary,
+            textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () async {
               XFile? imagePicked = await acceptImage();
               if ( imagePicked != null && await context.read<User>().updateProfilePicture(File(imagePicked.path)) ) {
@@ -198,9 +193,12 @@ class _SideMenuState extends State<SideMenu> {
           ),
           ListTile(
             leading: const Icon(Icons.photo_size_select_actual_rounded),
-            title: const Text('Update Banner Picture'),
-            iconColor: Colors.white,
-            textColor: Colors.white,
+            title: Text(
+              'Update Banner Picture',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            iconColor: Theme.of(context).colorScheme.primary,
+            textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () async {
               XFile? imagePicked = await acceptImage();
               if ( imagePicked != null && await context.read<User>().updateBannerPicture(File(imagePicked.path)) ) {
@@ -230,9 +228,12 @@ class _SideMenuState extends State<SideMenu> {
           const Spacer(),
           ListTile(
               leading: const Icon(Icons.exit_to_app),
-              title: const Text('Logout'),
-              iconColor: Colors.white,
-              textColor: Colors.white,
+              title: Text(
+                'Logout',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+              iconColor: Theme.of(context).colorScheme.primary,
+              textColor: Theme.of(context).colorScheme.onBackground,
               onTap: () => {
                 _showDialog("Are you sure you want to logout?")
               },

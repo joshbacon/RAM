@@ -2,6 +2,7 @@ import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ram/models/postlist.dart';
+import 'package:ram/widgets/loader.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/widgets/post.dart';
@@ -20,54 +21,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   // TODO:
-  // - make category buttons functional
-  // - grab posts based on selected category
-  // - show in a weird cool style (think pinterest)
+  // - make filter buttons functional
+  // - grab posts based on selected filter
   // - fix the alignment on the racket logo
   // - make it username button drop down and show a bio and date joined
 
-  // static const List<LittlePost> lillist = [
-  //   LittlePost(
-  //     {
-  //       'pid': 0,
-  //       'uid': 1,
-  //       'username': 'Bacon',
-  //       'profilepicture': AssetImage('assets/defaultProfile.png'),
-  //       'ups': 420,
-  //       'downs': 69,
-  //       'anon': false,
-  //       'image': AssetImage('assets/test1.jpg')
-  //     }
-  //   ),
-  //   LittlePost(
-  //     {
-  //       'pid': 0,
-  //       'uid': 1,
-  //       'username': 'Bacon',
-  //       'profilepicture': AssetImage('assets/defaultProfile.png'),
-  //       'ups': 420,
-  //       'downs': 69,
-  //       'anon': false,
-  //       'image': AssetImage('assets/test2.png')
-  //     }
-  //   ),
-  //   LittlePost(
-  //     {
-  //       'pid': 0,
-  //       'uid': 1,
-  //       'username': 'Bacon',
-  //       'profilepicture': AssetImage('assets/defaultProfile.png'),
-  //       'ups': 420,
-  //       'downs': 69,
-  //       'anon': false,
-  //       'image': AssetImage('assets/test3.jpg')
-  //     }
-  //   ),
-  // ];
-
   int totalUps = 1;
   int totalDowns = 1;
-  int category = 0;
+  int filter = 0;
 
   List<Post> list = [];
   PostList posts = PostList.little();
@@ -81,35 +42,40 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
-  void setCategory(int index) {
+  void setFilter(int index) {
     // at some point look into caching images
     if (index == 0) {
       // query for the users posts
-      category = index;
+      filter = index;
     } else if (index == 1) {
       // query for posts liked by the user
-      category = index;
+      filter = index;
     } else if (index == 2) {
       // query for posts disliked by the user
-      category = index;
+      filter = index;
     }
+    _refresh();
   }
 
   Future<void> _refresh() async{
-    posts.reset();
-    posts.getPosts(false, widget.user.uid).then((_) {
-      setState(() {
-        list = posts.getList();
+    posts.reset().then((_) {
+      posts.getPosts(false, widget.user.uid, filter).then((_) {
+        setState(() {
+          list = posts.getList();
+        });
       });
     });
   }
 
   void _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-      posts.getPosts(false, widget.user.uid).then((_) {
-        setState(() {
-          list = posts.getList();
-        });
+      posts.getPosts(false, widget.user.uid, filter).then((_) {
+        List<Post> newPosts = posts.getList();
+        if (list != newPosts && newPosts.isNotEmpty) {
+          setState(() {
+            list = newPosts;
+          });
+        }
       });
     }
   }
@@ -126,6 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+
     return Scaffold(
       key: _drawerKey,
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -237,8 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   const SizedBox(width: 50),
                   Container(
-                    // width: (widget.user.ups / (widget.user.ups + widget.user.downs))*(w-100),
-                    width: (1 / (1 + 1))*(w-100),
+                    width: (widget.user.ups / (widget.user.ups + widget.user.downs))*(w-100),
                     height: 3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(1),
@@ -246,8 +212,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                   Container(
-                    // width: (widget.user.downs / (widget.user.ups + widget.user.downs))*(w-100),
-                    width: (1 / (1 + 1))*(w-100),
+                    width: (widget.user.downs / (widget.user.ups + widget.user.downs))*(w-100),
                     height: 3,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(1),
@@ -262,32 +227,48 @@ class _ProfilePageState extends State<ProfilePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      setFilter(0);
+                    },
                     splashRadius: 0.1,
-                    icon: const Icon(Icons.dashboard),
+                    icon: Icon(
+                      Icons.dashboard,
+                      color: Theme.of(context).colorScheme.primary.withAlpha(filter == 0 ? 255 : 100),
+                    ),
                     iconSize: w/6.5,
                     color: Theme.of(context).colorScheme.primary
                   ),
                   GestureDetector(
-                    child: Image(
-                      image: const AssetImage("assets/dPlus.png"),
+                    child: Image.asset(
+                      "assets/dPlus.png",
+                      color: Theme.of(context).colorScheme.onBackground.withAlpha(filter == 1 ? 255 : 100),
+                      colorBlendMode: BlendMode.modulate,
                       width: w/6.5,
                       height: w/6.5,
                     ),
-                    onTap: (){}
+                    onTap: () {
+                      setFilter(1);
+                    }
                   ),
                   GestureDetector(
-                    child: Image(
-                      image: const AssetImage("assets/dMinus.png"),
+                    child: Image.asset(
+                      "assets/dMinus.png",
+                      color: Theme.of(context).colorScheme.onBackground.withAlpha(filter == 2 ? 255 : 100),
+                      colorBlendMode: BlendMode.modulate,
                       width: w/6.5,
                       height: w/6.5,
                     ),
-                    onTap: (){}
+                    onTap: () {
+                      setFilter(2);
+                    }
                   )
                 ]
               ),
               const SizedBox(height: 30),
-              // the list doesn't get updated visually, need to hot restart the app from vscode
+              list.isEmpty ?
+              const Text(
+                "No posts yet.",
+              ) :
               MasonryView(
                 listOfItem: list,
                 numberOfColumn: 2,

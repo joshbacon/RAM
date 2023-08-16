@@ -33,10 +33,10 @@ class PostList {
     return list;
   }
 
-  Future<void> getPosts(bool isAnon, String uid) async {
+  Future<void> getPosts(bool isAnon, String uid, int up) async {
 
     final response = await http.get(
-      Uri.parse(paths.getPost(nextPID.toString(), uid))
+      Uri.parse(paths.getPost(nextPID.toString(), uid, up.toString()))
     );
     if (response.statusCode == 200) {
       try {
@@ -57,7 +57,9 @@ class PostList {
         }
       } catch (e) {
         Map<String, dynamic> result = json.decode(response.body);
-        // do something with the error
+        if (!result['status']){
+          reset();
+        }
       }
     }
     // Limit the list to 25 posts?
