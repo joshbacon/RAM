@@ -36,6 +36,10 @@ String interact() {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/interact.php";
 }
 
+String checkInteraction(uid, pid) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/post/getinteract.php?pid="+pid+"&uid="+uid;
+}
+
 String profileImage(uid, exten) {
   return dotenv.env['API_PATH']!+"/ram_images/users/"+uid+"profile"+exten;
 }

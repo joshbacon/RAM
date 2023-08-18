@@ -12,16 +12,20 @@ class FullImage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: SizedBox(
-              width: w,
-              height: h,
-              child: Image(
-                fit: BoxFit.contain,
-                image: data['image'],
+          InteractiveViewer(
+            minScale: 1.0,
+            maxScale: 2.0,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: SizedBox(
+                width: w,
+                height: h,
+                child: Image(
+                  fit: BoxFit.contain,
+                  image: data['image'],
+                ),
               ),
             ),
           ),

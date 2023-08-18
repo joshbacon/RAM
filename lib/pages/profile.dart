@@ -2,7 +2,6 @@ import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ram/models/postlist.dart';
-import 'package:ram/widgets/loader.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/widgets/post.dart';

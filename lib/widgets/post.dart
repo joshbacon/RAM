@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,19 +24,48 @@ class _PostState extends State<Post> {
   // TODO:
   // - tapping the image makes it full screen and the comments appear when you scroll down (need a back button)
   // -- also have a add comment box at the top UNLESS it's in anon mode
-  // - get interactions working
+  // - get interactions working (working?... needs testing)
 
   Future<bool> interact(uid, up) async {
-    
+    // Grab the most recent interaction from this user on this post
     var uri = Uri.parse(paths.interact());
-    var request = http.MultipartRequest("POST", uri);
+    final response = await http.get(
+      Uri.parse(paths.checkInteraction(uid, widget.data['pid'].toString()))
+    );
+    Map<String, dynamic> result = <String, dynamic>{};
+    if (response.statusCode == 200) {
+      try {
+        result = json.decode(response.body);
+        if ( result['status'] ) {
+          result.remove('status');
+          result['iid'] = int.parse(result['iid']);
+          result['pid'] = int.parse(result['pid']);
+          result['uid'] = int.parse(result['uid']);
+          result['up'] = result['up'] == 'true';
+          result['date'] = DateTime.parse(result['date']);
+        }
+      } catch (e) {
+        Map<String, dynamic> result = json.decode(response.body);
+      }
+    }
 
-    request.fields['pid'] = widget.data['pid'].toString();
-    request.fields['uid'] = uid;
-    request.fields['up'] = up;
-  
-    var response = await request.send();
-    return response.statusCode == 200;
+    // only process interaction if it's not a repeat
+    if (result.isNotEmpty && result['up'] != up) {
+      setState(() {
+        up ? widget.data['ups'] += 1 : widget.data['downs'] += 1;
+      });
+
+      var uri = Uri.parse(paths.interact());
+      var request = http.MultipartRequest("POST", uri);
+
+      request.fields['pid'] = widget.data['pid'].toString();
+      request.fields['uid'] = uid;
+      request.fields['up'] = up.toString();
+    
+      var response = await request.send();
+      return response.statusCode == 200;
+    }
+    return false;
   }
 
   Future<void> showProfile(context, user) async {
@@ -111,17 +141,13 @@ class _PostState extends State<Post> {
                     height: 40,
                   ),
                   onPressed: () {
-                    //setState(() {
-                      widget.data['ups'] += 1;
-                      interact(context.read<User>().uid, true);
-                      // make a DB call to update post
-                    //});
+                    interact(context.read<User>().uid, widget.data['pid']);
                   },
                 ),
               ),
               const SizedBox( width: 15, height: 25 ),
               Container(
-                width: (widget.data['ups'] / (widget.data['ups'] + widget.data['downs']))*(w-(widget.data['anon']?60:156)),
+                width: (widget.data['ups'] == 0 ? 1 : widget.data['ups'] / (widget.data['ups'] == 0 ? 1 : widget.data['ups'] + widget.data['downs'] == 0 ? 1 : widget.data['downs']))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
@@ -129,7 +155,7 @@ class _PostState extends State<Post> {
                 ),
               ),
               Container(
-                width: (widget.data['downs'] / (widget.data['ups'] + widget.data['downs']))*(w-(widget.data['anon']?60:156)),
+                width: (widget.data['downs'] == 0 ? 1 : widget.data['downs'] / (widget.data['ups'] == 0 ? 1 : widget.data['ups'] + widget.data['downs'] == 0 ? 1 : widget.data['downs']))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
@@ -143,11 +169,7 @@ class _PostState extends State<Post> {
                   padding: EdgeInsets.zero,
                   icon: const Image( image: AssetImage("assets/dMinusRed.png"), width: 40, height: 40,),
                   onPressed: () {
-                    //setState(() {
-                      widget.data['downs'] += 1;
-                      interact(context.read<User>().uid, false);
-                      // make a DB call to update post
-                    //});
+                    interact(context.read<User>().uid, false);
                   },
                 ),
               ),

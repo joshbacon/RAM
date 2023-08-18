@@ -47,10 +47,6 @@ class PostList {
             post['anon'] = isAnon;
             post['profilepicture'] = NetworkImage(paths.image(post['profilepicture']));
             post['image'] = NetworkImage(paths.image(post['image']));
-            if(post['ups'] == 0 && post['downs'] == 0) {
-              post['ups']++;
-              post['downs']++;
-            }
             list.add(little ? LittlePost(post) : Post(post));
             nextPID = post['pid']-1;
           }

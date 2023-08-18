@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
-import '../widgets/loader.dart';
+import 'package:ram/widgets/loader.dart';
+import 'package:ram/widgets/post.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  List<Post> list = [];
   PostList postList = PostList();
   ScrollController controller = ScrollController();
   bool isLoading = false;
@@ -32,23 +34,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _refresh() async {
-    postList.reset();
-    postList.getPosts(false, "0", 0).then((_) {
-      setState(() {
-        isLoading = true;
-        isLoading = false;
+    print("REFRESHING");
+    postList.reset().then((_) {
+      postList.getPosts(false, "0", 0).then((_) {
+        setState(() {
+          list = postList.getList();
+          print("LIST (42): " + list.toString());
+        });
       });
     });
   }
 
   void _scrollListener() {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-    postList.getPosts(false, "0", 0).then((_) {
-      setState(() {
-        isLoading = true;
-        isLoading = false;
+      postList.getPosts(false, "0", 0).then((_) {
+        List<Post> newPosts = postList.getList();
+        if (list != newPosts && newPosts.isNotEmpty) {
+          setState(() {
+            list = newPosts;
+          });
+        }
       });
-    });
     }
   }
 
@@ -79,7 +85,7 @@ class _HomePageState extends State<HomePage> {
               const Divider( 
                 thickness: 3,
               ),
-              postList.isEmpty() ?
+              list.isEmpty ?
               const Column(children: [
                 SizedBox(height: 100),
                 Loader()
@@ -88,9 +94,9 @@ class _HomePageState extends State<HomePage> {
                 // key: const ValueKey(1),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: postList.length(),
+                itemCount: list.length,
                 itemBuilder: (context, index) {
-                  return postList.at(index);
+                  return list[index];
                 },
               )
             ]
