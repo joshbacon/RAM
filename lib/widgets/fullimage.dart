@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FullImage extends StatelessWidget {
+
+  // have a comment section under the image
+
   const FullImage(this.data, {Key? key}) : super(key: key);
 
   final Map<String, dynamic> data;

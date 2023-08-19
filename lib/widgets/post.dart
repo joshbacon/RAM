@@ -21,45 +21,47 @@ class Post extends StatefulWidget {
 
 class _PostState extends State<Post> {
 
-  // TODO:
-  // - tapping the image makes it full screen and the comments appear when you scroll down (need a back button)
-  // -- also have a add comment box at the top UNLESS it's in anon mode
-  // - get interactions working (working?... needs testing)
-
   Future<bool> interact(uid, up) async {
     // Grab the most recent interaction from this user on this post
-    var uri = Uri.parse(paths.interact());
     final response = await http.get(
       Uri.parse(paths.checkInteraction(uid, widget.data['pid'].toString()))
     );
     Map<String, dynamic> result = <String, dynamic>{};
     if (response.statusCode == 200) {
       try {
+        print(response.body);
         result = json.decode(response.body);
         if ( result['status'] ) {
-          result.remove('status');
-          result['iid'] = int.parse(result['iid']);
-          result['pid'] = int.parse(result['pid']);
-          result['uid'] = int.parse(result['uid']);
-          result['up'] = result['up'] == 'true';
+          result['up'] = result['up'] == 1;
           result['date'] = DateTime.parse(result['date']);
         }
       } catch (e) {
         Map<String, dynamic> result = json.decode(response.body);
+        print(result);
       }
     }
 
     // only process interaction if it's not a repeat
-    if (result.isNotEmpty && result['up'] != up) {
+    if (!result['status'] || (result['status'] && result['up'] != up)) {
       setState(() {
-        up ? widget.data['ups'] += 1 : widget.data['downs'] += 1;
+        if (!result['status']) {
+          up ? widget.data['ups'] += 1 : widget.data['downs'] += 1;
+        } else if (result['status'] && result['up'] != up){
+          if (up) {
+            widget.data['ups'] += 1;
+            widget.data['downs'] -= 1;
+          } else {
+            widget.data['ups'] -= 1;
+            widget.data['downs'] += 1;
+          }
+        }
       });
 
       var uri = Uri.parse(paths.interact());
       var request = http.MultipartRequest("POST", uri);
 
       request.fields['pid'] = widget.data['pid'].toString();
-      request.fields['uid'] = uid;
+      request.fields['uid'] = uid.toString();
       request.fields['up'] = up.toString();
     
       var response = await request.send();
@@ -80,6 +82,8 @@ class _PostState extends State<Post> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
+    int ups = widget.data['ups'] == 0 && widget.data['downs'] == 0 ? 1 : widget.data['ups'];
+    int downs = widget.data['ups'] == 0 && widget.data['downs'] == 0 ? 1 : widget.data['downs'];
     return Column(
       children: [
         Padding(
@@ -141,13 +145,13 @@ class _PostState extends State<Post> {
                     height: 40,
                   ),
                   onPressed: () {
-                    interact(context.read<User>().uid, widget.data['pid']);
+                    interact(context.read<User>().uid, true);
                   },
                 ),
               ),
               const SizedBox( width: 15, height: 25 ),
               Container(
-                width: (widget.data['ups'] == 0 ? 1 : widget.data['ups'] / (widget.data['ups'] == 0 ? 1 : widget.data['ups'] + widget.data['downs'] == 0 ? 1 : widget.data['downs']))*(w-(widget.data['anon']?60:156)),
+                width: (ups / (ups + downs))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),
@@ -155,7 +159,7 @@ class _PostState extends State<Post> {
                 ),
               ),
               Container(
-                width: (widget.data['downs'] == 0 ? 1 : widget.data['downs'] / (widget.data['ups'] == 0 ? 1 : widget.data['ups'] + widget.data['downs'] == 0 ? 1 : widget.data['downs']))*(w-(widget.data['anon']?60:156)),
+                width: (downs / (ups + downs))*(w-(widget.data['anon']?60:156)),
                 height: 3,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(1),

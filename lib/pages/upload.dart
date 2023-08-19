@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:ram/models/user.dart';
 import 'package:image_picker/image_picker.dart';
@@ -61,6 +62,7 @@ class _UploadPageState extends State<UploadPage> {
   @override
   Widget build(BuildContext context) {
     double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Padding(
@@ -110,25 +112,32 @@ class _UploadPageState extends State<UploadPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: addLocal ? [
               const SizedBox(height: 100),
-              IconButton(
-                onPressed: () async {
-                  XFile? imagePicked = await acceptImage();
-                  if ( imagePicked != null && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
-                    setState(() {
-                      _showDialog('Your post has been uploaded');
-                      showUploadErr = false;
-                    });
-                  } else {
-                    setState(() {
-                      showUploadErr = true;
-                    });
-                  }
-                },
-                iconSize: min(w/5, 100),
-                icon: Icon(
-                  Icons.add_a_photo_outlined,
-                  color: Theme.of(context).colorScheme.primary
-                )
+              DottedBorder(
+                dashPattern: const [8, 4],
+                strokeWidth: 2,
+                color: Theme.of(context).colorScheme.onBackground,
+                child: IconButton(
+                  highlightColor: Theme.of(context).colorScheme.primary.withAlpha(69),
+                  padding: EdgeInsets.all(min(w, h)/8),
+                  onPressed: () async {
+                    XFile? imagePicked = await acceptImage();
+                    if ( imagePicked != null && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
+                      setState(() {
+                        _showDialog('Your post has been uploaded');
+                        showUploadErr = false;
+                      });
+                    } else {
+                      setState(() {
+                        showUploadErr = true;
+                      });
+                    }
+                  },
+                  iconSize: min(w/5, 100),
+                  icon: Icon(
+                    Icons.add_a_photo_outlined,
+                    color: Theme.of(context).colorScheme.primary
+                  )
+                ),
               ),
               const SizedBox(height: 50),
               Text(
@@ -167,9 +176,7 @@ class _UploadPageState extends State<UploadPage> {
                 controller: urlController,
                 maxLines: 3,
                 minLines: 1,
-                onTapOutside: (event) {
-                  FocusScope.of(context).unfocus();
-                },
+                onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 decoration: InputDecoration(
                   enabledBorder: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white)

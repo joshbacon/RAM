@@ -9,7 +9,11 @@ String signup() {
 }
 
 String updateUsername() {
-  return dotenv.env['API_PATH']!+"/ramdb_api/user/signup.php";
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/updateusername.php";
+}
+
+String updateBio() {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/updatebio.php";
 }
 
 String acceptImage() {
@@ -37,7 +41,7 @@ String interact() {
 }
 
 String checkInteraction(uid, pid) {
-  return dotenv.env['API_PATH']!+"/ramdb_api/post/getinteract.php?pid="+pid+"&uid="+uid;
+  return dotenv.env['API_PATH']!+"/ramdb_api/post/getinteracts.php?pid="+pid+"&uid="+uid;
 }
 
 String profileImage(uid, exten) {

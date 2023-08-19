@@ -31,31 +31,13 @@ class _SocialPageState extends State<SocialPage> {
         children: [
           TextFormField(
             controller: searchTerm,
-            onTapOutside: (event) {
-              FocusScope.of(context).unfocus();
-            },
-            style: const TextStyle(
-              fontFamily: "dubai",
-              decoration: TextDecoration.none,
-              color: Colors.white,
-              fontSize: 18,
-            ),
+            onTapOutside: (event) => FocusScope.of(context).unfocus(),
+            style: Theme.of(context).textTheme.bodyMedium,
             decoration: InputDecoration(
-              filled: true,
-              fillColor: const Color.fromRGBO(91, 91, 91, 1.0),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Theme.of(context).colorScheme.primary)
-              ),
+              hintText: "search...",
               prefixIcon: Icon(
                 Icons.search_outlined,
                 color: Theme.of(context).colorScheme.primary
-              ),
-              hintText: "search...",
-              hintStyle: const TextStyle(
-                fontFamily: "dubai",
-                color: Color.fromARGB(255, 223, 223, 223),
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
               ),
             ),
           ),

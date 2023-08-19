@@ -78,7 +78,6 @@ class MyApp extends StatelessWidget {
             decoration: TextDecoration.none,
             color: offWhite,
             fontSize: 20,
-            height: 1,
           ),
           bodySmall: TextStyle(
             fontFamily: "dubai",
@@ -89,7 +88,17 @@ class MyApp extends StatelessWidget {
         ),
 
         inputDecorationTheme: const InputDecorationTheme(
-
+          filled: true,
+          fillColor: Color.fromRGBO(91, 91, 91, 1.0),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: orange),
+          ),
+          hintStyle: TextStyle(
+            fontFamily: "dubai",
+            color: Color.fromARGB(255, 223, 223, 223),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
 
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(

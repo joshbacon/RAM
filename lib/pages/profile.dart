@@ -5,6 +5,7 @@ import 'package:ram/models/postlist.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/widgets/post.dart';
+import 'package:intl/intl.dart';
 
 
 class ProfilePage extends StatefulWidget {
@@ -88,10 +89,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-
     return Scaffold(
       key: _drawerKey,
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -181,20 +180,44 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               const SizedBox(height: 45,),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                padding: const EdgeInsets.symmetric(vertical: 5,),
                 child: GestureDetector(
                   onTap: (){}, // slide everything below the bar down to show user info (data joined and such)
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                  child: Column(
                     children: [
-                      (widget.user.username == 'bacon') ? const Image( image: AssetImage('assets/racketTag.png'), width: 25, height: 25,): const Text(''),
-                      (widget.user.username == 'bacon') ? const SizedBox(width: 15,): const Text(''),
-                      Text(
-                        widget.user.username,
-                        style: Theme.of(context).textTheme.bodyLarge,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Visibility(
+                            visible: widget.user.uid == '1',
+                            child: const Row(
+                              children: [
+                                Image(
+                                  image: AssetImage('assets/racketTag.png'), width: 25, height: 25,
+                                ),
+                                SizedBox(width: 10,),
+                              ]
+                            ),
+                          ),
+                          Text(
+                            widget.user.username,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ],
                       ),
-                    ],
+                      Text(
+                        "joined " + DateFormat('MMM d y').format(widget.user.joinedat),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      Visibility(
+                        visible: widget.user.bio != null,
+                        child: Text(
+                          widget.user.bio!,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ),
+                    ]
                   ),
                 ),
               ),

@@ -120,6 +120,7 @@ class _SideMenuState extends State<SideMenu> {
               tileColor: const Color.fromRGBO(69, 69, 69, 1.0),
               title: TextField(
                 controller: newUsername,
+                onTapOutside: (event) => FocusScope.of(context).unfocus(),
                 style: Theme.of(context).textTheme.bodySmall,
               ),
               trailing: IconButton(

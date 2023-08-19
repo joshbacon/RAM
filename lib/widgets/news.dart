@@ -19,7 +19,9 @@ class News extends StatelessWidget {
       child: Text(
         "welcome to the app! any news or updates will be posted here at the top of the homescreen",
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyMedium,
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+          height: 1,
+        ),
       ),
     );
   }

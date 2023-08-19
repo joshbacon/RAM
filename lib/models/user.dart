@@ -12,7 +12,8 @@ class User with ChangeNotifier {
   Map<String, dynamic> userData = {
     "uid": "0",
     "username": "null",
-    "joinedat": "null",
+    "bio": null,
+    "joinedat": DateTime.now().toLocal(),
     "ups": 1,
     "downs": 1,
     "password": "null",
@@ -28,11 +29,12 @@ class User with ChangeNotifier {
 
   String get uid => userData['uid'];
   String get username => userData['username'];
+  String? get bio => userData['bio'];
+  DateTime get joinedat => userData['joinedat'];
   dynamic get profile => userData['profile'];
   dynamic get banner => userData['banner'];
   dynamic get ups => userData['ups'];
   dynamic get downs => userData['downs'];
-
 
   Future<User> getUserInfo(uid) async{
     final response = await http.get(
@@ -44,11 +46,10 @@ class User with ChangeNotifier {
       Map<String, dynamic> userInfo = {};
       userInfo['uid'] = info["uid"].toString();
       userInfo['username'] = info["username"].toString();
-      userInfo['joinedat'] = info['joinedat'].toString();
+      userInfo['bio'] = info["bio"].toString();
+      userInfo['joinedat'] = DateTime.parse(info['joinedat']).toLocal();
       userInfo['ups'] = info['ups'] == 0 ? 1 : info['ups'];
       userInfo['downs'] = info['downs'] == 0 ? 1 : info['downs'];
-      print(userInfo['ups'] + " ups and it is a " + userInfo['ups'].runtimeType);
-      print(userInfo['downs'] + " downs and it is a " + userInfo['downs'].runtimeType);
       if (info['profile'] != null){
         userInfo['profile'] = NetworkImage(paths.image(info["profile"].toString()));
       }
@@ -73,6 +74,8 @@ class User with ChangeNotifier {
     userData['uid'] = '0';
     userData['username'] = 'null';
     userData['password'] = 'null';
+    userData['bio'] = 'null';
+    userData['joinedat'] = DateTime.now().toLocal();
     userData['ups'] = 0;
     userData['downs'] = 0;
     userData['profile'] = const AssetImage('assets/defaultProfile.png');
@@ -92,7 +95,8 @@ class User with ChangeNotifier {
     if (response.statusCode == 200){
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();
-      userData['joinedat'] = data["joinedat"].toString();
+      userData['bio'] = data["bio"].toString();
+      userData['joinedat'] = DateTime.parse(data["joinedat"]).toLocal();
       userData['ups'] = data['ups'] == 0 ? 1 : data['ups'];
       userData['downs'] = data['downs'] == 0 ? 1 : data['downs'];
       userData['password'] = encrypted;
@@ -123,8 +127,9 @@ class User with ChangeNotifier {
     Map<String, dynamic> data = json.decode(response.body);
     if (response.statusCode == 200 && data['status']){
       userData['uid'] = data["uid"].toString();
-      userData['joinedat'] = data['joinedat'].toString();
       userData['username'] = data["username"].toString();
+      userData['bio'] = data["bio"].toString();
+      userData['joinedat'] = DateTime.parse(data['joinedat']).toLocal();
       userData['ups'] = data['ups'] == 0 ? 1 : data['ups'];
       userData['downs'] = data['downs'] == 0 ? 1 : data['downs'];
       userData['password'] = passwordIn;
@@ -145,6 +150,25 @@ class User with ChangeNotifier {
       Map<String, dynamic> data = json.decode(response.body);
       if (data['status']){
         userData['username'] = newUsername;
+        saveData();
+        notifyListeners();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  
+  Future<bool> updateBio(newBio) async{
+    final response = await http.put(
+      Uri.parse(paths.updateUsername()),
+      body: newBio + ";" + userData['uid']
+    );
+
+    if (response.statusCode == 200){
+      Map<String, dynamic> data = json.decode(response.body);
+      if (data['status']){
+        userData['bio'] = newBio;
         saveData();
         notifyListeners();
         return true;
@@ -222,10 +246,7 @@ class User with ChangeNotifier {
     request.fields['location'] = 'posts';
   
     var response = await request.send();
-    if (response.statusCode == 200){
-      return true;
-    }
-    return false;
+    return response.statusCode == 200;
   }
 
   Future<bool> uploadPostFromURL(image) async{
