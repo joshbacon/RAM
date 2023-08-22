@@ -21,9 +21,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
 
   // TODO:
-  // - make filter buttons functional
-  // - grab posts based on selected filter
-  // - fix the alignment on the racket logo
   // - make it username button drop down and show a bio and date joined
 
   int totalUps = 1;
@@ -36,6 +33,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
+  void addFriend(user) {
+
+  }
+
   void openDrawer() {
     setState(() {
       _drawerKey.currentState?.openDrawer();
@@ -45,14 +46,11 @@ class _ProfilePageState extends State<ProfilePage> {
   void setFilter(int index) {
     // at some point look into caching images
     if (index == 0) {
-      // query for the users posts
-      filter = index;
+      filter = index; // query for the users posts
     } else if (index == 1) {
-      // query for posts liked by the user
-      filter = index;
+      filter = index; // query for posts liked by the user
     } else if (index == 2) {
-      // query for posts disliked by the user
-      filter = index;
+      filter = index; // query for posts disliked by the user
     }
     _refresh();
   }
@@ -115,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Visibility(
-            visible: context.watch<User>().uid != widget.user.uid,
+            visible: context.watch<User>().uid != widget.user.uid, // and need to check if already friends
             child:  FloatingActionButton(
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
@@ -126,7 +124,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
-                //send a friend request
+                addFriend(context.read<User>());
               }
             ),
           ),
@@ -211,7 +209,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
                       Visibility(
-                        visible: widget.user.bio != null,
+                        visible: widget.user.bio != 'null',
                         child: Text(
                           widget.user.bio!,
                           style: Theme.of(context).textTheme.bodySmall,

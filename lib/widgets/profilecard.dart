@@ -4,24 +4,15 @@ import '../pages/profile.dart';
 
 class ProfileCard extends StatefulWidget {
   
-  const ProfileCard({Key? key}) : super(key: key);
-  // const ProfileCard(this.user, {Key? key}) : super(key: key);
+  const ProfileCard(this.user, {Key? key}) : super(key: key);
 
-  // final User user;
+  final User user;
 
   @override
   State<ProfileCard> createState() => _ProfileCardState();
 }
 
 class _ProfileCardState extends State<ProfileCard> {
-
-  Map<String, dynamic> userData = {
-    "uid": "1",
-    "username": "Bacon",
-    "joinedat": "null",
-    "profile": const AssetImage('assets/defaultProfile.png'),
-    "banner": const AssetImage('assets/defaultBanner.png')
-  };
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +32,7 @@ class _ProfileCardState extends State<ProfileCard> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ProfilePage(
-                      User(userData)
+                      widget.user
                     )
                   )
                 );
@@ -53,7 +44,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     alignment: AlignmentDirectional.bottomStart,
                     children: [
                       Image(
-                        image: userData['banner'],
+                        image: widget.user.banner,
                         width: double.infinity,
                         height: 100,
                         fit: BoxFit.cover,
@@ -64,7 +55,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         child: CircleAvatar(
                           radius: w/10,
                           backgroundColor: Theme.of(context).colorScheme.background,
-                          backgroundImage: userData['profile'],
+                          backgroundImage: widget.user.profile,
                         )
                       ),
                     ],
@@ -75,7 +66,7 @@ class _ProfileCardState extends State<ProfileCard> {
                     children: [
                       const SizedBox(width: 10),
                       Text(
-                        userData['username'],
+                        widget.user.username,
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const Spacer(flex: 1),
@@ -85,11 +76,22 @@ class _ProfileCardState extends State<ProfileCard> {
                         splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
                         splashRadius: 40,
                         icon: Icon(
-                          Icons.chat,
+                          Icons.group_add_outlined,
                           size: 30,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
+                      // IconButton(
+                      //   onPressed: () {},
+                      //   highlightColor: const Color.fromARGB(0, 255, 255, 255),
+                      //   splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
+                      //   splashRadius: 40,
+                      //   icon: Icon(
+                      //     Icons.chat,
+                      //     size: 30,
+                      //     color: Theme.of(context).colorScheme.primary,
+                      //   ),
+                      // ),
                     ]
                   ),
                 ],

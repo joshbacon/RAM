@@ -29,15 +29,13 @@ class _PostState extends State<Post> {
     Map<String, dynamic> result = <String, dynamic>{};
     if (response.statusCode == 200) {
       try {
-        print(response.body);
         result = json.decode(response.body);
         if ( result['status'] ) {
           result['up'] = result['up'] == 1;
           result['date'] = DateTime.parse(result['date']);
         }
       } catch (e) {
-        Map<String, dynamic> result = json.decode(response.body);
-        print(result);
+        // Map<String, dynamic> result = json.decode(response.body);
       }
     }
 

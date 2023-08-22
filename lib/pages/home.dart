@@ -34,12 +34,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _refresh() async {
-    print("REFRESHING");
     postList.reset().then((_) {
       postList.getPosts(false, "0", 0).then((_) {
         setState(() {
           list = postList.getList();
-          print("LIST (42): " + list.toString());
         });
       });
     });

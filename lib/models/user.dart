@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import "package:async/async.dart";
+import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import './paths.dart' as paths;
-import './security.dart';
+import 'package:ram/models/paths.dart' as paths;
+import 'package:ram/models/security.dart';
 
 class User with ChangeNotifier {
 
@@ -24,6 +24,11 @@ class User with ChangeNotifier {
   User.asNull();
 
   User(Map<String, dynamic> userIn) {
+    // TODO:
+    // move the type setting from getUserInfo up here so you can just call user with whatever
+    // and need to check for nulls because profile card doesn't pull everything
+    //
+    // good time to set common types (i.e. uid is sometimes used as an int and sometimes a string)
     userData = userIn;
   }
 
@@ -176,6 +181,41 @@ class User with ChangeNotifier {
     }
     return false;
   }
+
+  Future<List<User>> getFriends() async {
+    final response = await http.get(
+      Uri.parse(paths.getFriends(userData['uid']))
+    );
+    if (response.statusCode == 200) {
+      try {
+        List<dynamic> results = json.decode(response.body);
+        List<User> friends = [];
+        for (var user in results) {
+          if ( user['status'] ){
+            friends.add(User(user));
+          }
+        }
+        return friends;
+      } catch (e) {
+        Map<String, dynamic> result = json.decode(response.body);
+        if (!result['status']){
+        }
+      }
+    }
+    return [];
+  }
+
+  Future<bool> addFriend(friendeeID) async{
+    final response = await http.post(
+      Uri.parse(paths.addFriend()),
+      body: {
+        'friender_id': userData['uid'],
+        'friendee_id': friendeeID
+      }
+    );
+
+    return response.statusCode == 200;
+  }
     
 
   Future<bool> updateProfilePicture(image) async{
@@ -259,8 +299,6 @@ class User with ChangeNotifier {
       }
     );
 
-    if (response.statusCode == 200){
-      return true;
-    } else { return false; }
+    return response.statusCode == 200;
   }
 }

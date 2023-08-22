@@ -16,6 +16,10 @@ String updateBio() {
   return dotenv.env['API_PATH']!+"/ramdb_api/user/updatebio.php";
 }
 
+String addFriend() {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/addfriend.php";
+}
+
 String acceptImage() {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/acceptimage.php";
 }
@@ -30,6 +34,14 @@ String image(value) {
 
 String getUser(uid) {
   return dotenv.env['API_PATH']!+"/ramdb_api/user/getuserinfo.php?uid="+uid;
+}
+
+String searchUsers(query) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/searchusers.php?query="+query;
+}
+
+String getFriends(uid) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/searchusers.php?query="+uid;
 }
 
 String getPost(pid, uid, up) {

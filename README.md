@@ -37,7 +37,7 @@ The frontend is built entirely with Flutter, making use of its many widgets and 
 
 ### Coming Up
 
-I plan to continue to make updates that increase overall performance and offer new ways of interacting with others.
+I plan to continue to make updates that increase overall performance, such as image caching, and offer new ways of interacting with others. I want to extend the friend system so users can send posts and message each other and groups.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
