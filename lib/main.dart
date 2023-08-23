@@ -64,7 +64,6 @@ class MyApp extends StatelessWidget {
             decoration: TextDecoration.none,
             color: orange,
             fontSize: 21,
-            height: 1,
           ),
           bodyLarge: TextStyle(
             fontFamily: "dubai",

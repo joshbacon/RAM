@@ -192,14 +192,17 @@ class User with ChangeNotifier {
         List<User> friends = [];
         for (var user in results) {
           if ( user['status'] ){
+            user.remove('status');
+            user['uid'] == user['uid'].toString();
+            user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
+            user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
             friends.add(User(user));
           }
         }
         return friends;
       } catch (e) {
-        Map<String, dynamic> result = json.decode(response.body);
-        if (!result['status']){
-        }
+        // Map<String, dynamic> result = json.decode(response.body);
+        return [];
       }
     }
     return [];

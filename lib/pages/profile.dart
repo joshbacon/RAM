@@ -22,6 +22,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // TODO:
   // - make it username button drop down and show a bio and date joined
+  // - change add button to message button if already a friend
 
   int totalUps = 1;
   int totalDowns = 1;

@@ -41,7 +41,7 @@ String searchUsers(query) {
 }
 
 String getFriends(uid) {
-  return dotenv.env['API_PATH']!+"/ramdb_api/user/searchusers.php?query="+uid;
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/getfriends.php?uid="+uid;
 }
 
 String getPost(pid, uid, up) {
