@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ram/pages/login.dart';
 import 'package:ram/models/postlist.dart';
+import 'package:ram/widgets/loader.dart';
 
 class AnonPage extends StatefulWidget {
   const AnonPage({Key? key}) : super(key: key);
@@ -73,12 +74,10 @@ class _AnonPageState extends State<AnonPage> {
           physics: const AlwaysScrollableScrollPhysics(),
           controller: controller,
           child: postList.isEmpty() ?
-            Column(
+            const Column(
               children: [
-                const SizedBox(height: 100),
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary
-                )
+                SizedBox(height: 100),
+                Loader()
               ]
             ) :
             ListView.builder(

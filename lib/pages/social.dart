@@ -28,6 +28,7 @@ class _SocialPageState extends State<SocialPage> {
 
   List<ProfileCard> searchList = [];
   List<ProfileCard> friendList = [];
+  List<ProfileCard> requestList = [];
 
   _getFriends() async {
     List<User> results = await context.read<User>().getFriends();
@@ -36,14 +37,26 @@ class _SocialPageState extends State<SocialPage> {
     });
   }
 
+  _getRequests() async {
+    List<User> results = await context.read<User>().getRequests();
+    setState(() {
+      requestList = results.map((user) => ProfileCard(user)).toList();
+    });
+  }
+
   _onSearchChanged(query, uid) {
-    if (query == "") return;
+    if (query == "") {
+      setState(() {
+        searchList = [];
+      });
+      return;
+    }
     if (_debounce?.isActive ?? false) {
       _debounce?.cancel();
     }
     _debounce = Timer(const Duration(milliseconds: 500), () async {
       final response = await http.get(
-        Uri.parse(paths.searchUsers(query))
+        Uri.parse(paths.searchUsers(query, context.read<User>().uid))
       );
       if (response.statusCode == 200) {
         try {
@@ -51,7 +64,7 @@ class _SocialPageState extends State<SocialPage> {
           for (var user in results) {
             if ( user['status'] ){
               final response = await http.get(
-                Uri.parse(paths.searchUsers(query))
+                Uri.parse(paths.searchUsers(query, context.read<User>().uid))
               );
               if (response.statusCode == 200) {
                 try {
@@ -59,12 +72,16 @@ class _SocialPageState extends State<SocialPage> {
                   List<ProfileCard> newList = [];
                   for (var uu in users) {
                     if ( uu['status'] ){
-                      uu.remove('status');
                       User profile = User({
                         'uid': uu['uid'].toString(),
                         'username': uu['username'],
+                        'bio': uu["bio"].toString(),
+                        'joinedat': DateTime.parse(uu["joinedat"]).toLocal(),
+                        'ups': uu['ups'] == 0 ? 1 : uu['ups'],
+                        'downs': uu['downs'] == 0 ? 1 : uu['downs'],
                         'profile': uu['profile'] != null ? NetworkImage(paths.image(uu["profile"].toString())) : const AssetImage('assets/defaultProfile.png'),
-                        'banner': uu['banner'] != null ? NetworkImage(paths.image(uu["banner"].toString())) : const AssetImage('assets/defaultBanner.png')
+                        'banner': uu['banner'] != null ? NetworkImage(paths.image(uu["banner"].toString())) : const AssetImage('assets/defaultBanner.png'),
+                        'isFriend': uu['isFriend'] == 1
                       });
                       if (profile.uid != uid) {
                         newList.add(ProfileCard(profile));
@@ -100,6 +117,7 @@ class _SocialPageState extends State<SocialPage> {
   @override
   void initState() {
     _getFriends();
+    _getRequests();
     super.initState();
   }
 
@@ -140,6 +158,27 @@ class _SocialPageState extends State<SocialPage> {
               itemBuilder: (context, index) {
                 return searchList[index];
               },
+            ),
+          ),
+          Visibility(
+            visible: searchList.isEmpty && requestList.isNotEmpty,
+            child: Column(
+              children: [
+                const SizedBox(height: 15,),
+                Text(
+                  "Requests",
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                ListView.builder(
+                  // key: const ValueKey(1),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: requestList.length,
+                  itemBuilder: (context, index) {
+                    return requestList[index];
+                  },
+                ),
+              ],
             ),
           ),
           const Spacer(flex: 1,),

@@ -70,28 +70,34 @@ class _ProfileCardState extends State<ProfileCard> {
                         style: Theme.of(context).textTheme.titleSmall,
                       ),
                       const Spacer(flex: 1),
-                      IconButton(
-                        onPressed: () {},
-                        highlightColor: const Color.fromARGB(0, 255, 255, 255),
-                        splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
-                        splashRadius: 40,
-                        icon: Icon(
-                          Icons.group_add_outlined,
-                          size: 30,
-                          color: Theme.of(context).colorScheme.primary,
+                      Visibility(
+                        visible: !widget.user.isFriend,
+                        child: IconButton(
+                          onPressed: () {},
+                          highlightColor: const Color.fromARGB(0, 255, 255, 255),
+                          splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
+                          splashRadius: 40,
+                          icon: Icon(
+                            Icons.group_add_outlined,
+                            size: 30,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
-                      // IconButton(
-                      //   onPressed: () {},
-                      //   highlightColor: const Color.fromARGB(0, 255, 255, 255),
-                      //   splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
-                      //   splashRadius: 40,
-                      //   icon: Icon(
-                      //     Icons.chat,
-                      //     size: 30,
-                      //     color: Theme.of(context).colorScheme.primary,
-                      //   ),
-                      // ),
+                      Visibility(
+                        visible: widget.user.isFriend,
+                        child: IconButton(
+                          onPressed: () {},
+                          highlightColor: const Color.fromARGB(0, 255, 255, 255),
+                          splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
+                          splashRadius: 40,
+                          icon: Icon(
+                            Icons.chat,
+                            size: 30,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      )
                     ]
                   ),
                 ],

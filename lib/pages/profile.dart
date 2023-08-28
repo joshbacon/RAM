@@ -114,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Visibility(
-            visible: context.watch<User>().uid != widget.user.uid, // and need to check if already friends
+            visible: context.watch<User>().uid != widget.user.uid && !widget.user.isFriend,
             child:  FloatingActionButton(
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
@@ -125,7 +125,25 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
+                // check if there is already a request from the other person and just accept that if so
+                // else addFriend
                 addFriend(context.read<User>());
+              }
+            ),
+          ),
+          Visibility(
+            visible: widget.user.isFriend,
+            child:  FloatingActionButton(
+              heroTag: "addBtn",
+              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
+              foregroundColor: Theme.of(context).colorScheme.background,
+              child: Icon(
+                Icons.chat,
+                size: 48,
+                color: Theme.of(context).colorScheme.primary
+              ),
+              onPressed: () {
+                // go to the chat room
               }
             ),
           ),

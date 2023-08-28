@@ -32,7 +32,7 @@ class User with ChangeNotifier {
     userData = userIn;
   }
 
-  String get uid => userData['uid'];
+  String get uid => userData['uid'].toString();
   String get username => userData['username'];
   String? get bio => userData['bio'];
   DateTime get joinedat => userData['joinedat'];
@@ -40,6 +40,7 @@ class User with ChangeNotifier {
   dynamic get banner => userData['banner'];
   dynamic get ups => userData['ups'];
   dynamic get downs => userData['downs'];
+  bool get isFriend => userData['isFriend'];
 
   Future<User> getUserInfo(uid) async{
     final response = await http.get(
@@ -186,6 +187,7 @@ class User with ChangeNotifier {
     final response = await http.get(
       Uri.parse(paths.getFriends(userData['uid']))
     );
+
     if (response.statusCode == 200) {
       try {
         List<dynamic> results = json.decode(response.body);
@@ -194,8 +196,47 @@ class User with ChangeNotifier {
           if ( user['status'] ){
             user.remove('status');
             user['uid'] == user['uid'].toString();
+            user['username'] = user["username"].toString();
+            user['bio'] = user["bio"].toString();
+            user['joinedat'] = DateTime.parse(user["joinedat"]).toLocal();
+            user['ups'] = user['ups'] == 0 ? 1 : user['ups'];
+            user['downs'] = user['downs'] == 0 ? 1 : user['downs'];
             user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
             user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
+            user['isFriend'] = user['isFriend'] == 1;
+            friends.add(User(user));
+          }
+        }
+        return friends;
+      } catch (e) {
+        // Map<String, dynamic> result = json.decode(response.body);
+        return [];
+      }
+    }
+    return [];
+  }
+
+  Future<List<User>> getRequests() async {
+    final response = await http.get(
+      Uri.parse(paths.getRequests(userData['uid']))
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        List<dynamic> results = json.decode(response.body);
+        List<User> friends = [];
+        for (var user in results) {
+          if ( user['status'] ){
+            user.remove('status');
+            user['uid'] == user['uid'].toString();
+            user['username'] = user["username"].toString();
+            user['bio'] = user["bio"].toString();
+            user['joinedat'] = DateTime.parse(user["joinedat"]).toLocal();
+            user['ups'] = user['ups'] == 0 ? 1 : user['ups'];
+            user['downs'] = user['downs'] == 0 ? 1 : user['downs'];
+            user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
+            user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
+            user['isFriend'] = user['isFriend'] == 1;
             friends.add(User(user));
           }
         }
