@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../pages/profile.dart';
 
@@ -71,9 +72,13 @@ class _ProfileCardState extends State<ProfileCard> {
                       ),
                       const Spacer(flex: 1),
                       Visibility(
-                        visible: !widget.user.isFriend,
+                        visible: !widget.user.isFriend!,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            widget.user.addFriend(context.read<User>().uid).then((_) => {
+                              setState(() {})
+                            });
+                          },
                           highlightColor: const Color.fromARGB(0, 255, 255, 255),
                           splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
                           splashRadius: 40,
@@ -85,7 +90,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         ),
                       ),
                       Visibility(
-                        visible: widget.user.isFriend,
+                        visible: widget.user.isFriend!,
                         child: IconButton(
                           onPressed: () {},
                           highlightColor: const Color.fromARGB(0, 255, 255, 255),

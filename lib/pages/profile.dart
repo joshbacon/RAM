@@ -34,8 +34,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
-  void addFriend(user) {
-
+  void addFriend() {
+    widget.user.addFriend(context.read<User>().uid).then((_) => {
+      setState(() {})
+    });
   }
 
   void openDrawer() {
@@ -114,7 +116,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           Visibility(
-            visible: context.watch<User>().uid != widget.user.uid && !widget.user.isFriend,
+            visible: context.watch<User>().uid != widget.user.uid && !widget.user.isFriend!,
             child:  FloatingActionButton(
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
@@ -125,14 +127,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
-                // check if there is already a request from the other person and just accept that if so
-                // else addFriend
-                addFriend(context.read<User>());
+                addFriend();
               }
             ),
           ),
           Visibility(
-            visible: widget.user.isFriend,
+            visible: widget.user.isFriend ?? false,
             child:  FloatingActionButton(
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),

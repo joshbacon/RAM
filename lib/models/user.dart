@@ -40,7 +40,7 @@ class User with ChangeNotifier {
   dynamic get banner => userData['banner'];
   dynamic get ups => userData['ups'];
   dynamic get downs => userData['downs'];
-  bool get isFriend => userData['isFriend'];
+  bool? get isFriend => userData['isFriend'];
 
   Future<User> getUserInfo(uid) async{
     final response = await http.get(
@@ -249,16 +249,21 @@ class User with ChangeNotifier {
     return [];
   }
 
-  Future<bool> addFriend(friendeeID) async{
+  Future<bool> addFriend(friend) async{
     final response = await http.post(
       Uri.parse(paths.addFriend()),
       body: {
-        'friender_id': userData['uid'],
-        'friendee_id': friendeeID
+        'self': userData['uid'].toString(),
+        'friend': friend.toString()
       }
     );
 
-    return response.statusCode == 200;
+    print(response.body);
+    if (response.statusCode == 200 && json.decode(response.body)['accepted']) {
+      userData['isFriend'] = true;
+      return true;
+    }
+    return false;
   }
     
 
