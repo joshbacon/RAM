@@ -84,6 +84,12 @@ class MyApp extends StatelessWidget {
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
+          displaySmall: TextStyle(
+            fontFamily: "dubai",
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          )
         ),
 
         inputDecorationTheme: const InputDecorationTheme(

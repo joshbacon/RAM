@@ -167,11 +167,12 @@ class User with ChangeNotifier {
   
   Future<bool> updateBio(newBio) async{
     final response = await http.put(
-      Uri.parse(paths.updateUsername()),
+      Uri.parse(paths.updateBio()),
       body: newBio + ";" + userData['uid']
     );
 
     if (response.statusCode == 200){
+      print(response.body);
       Map<String, dynamic> data = json.decode(response.body);
       if (data['status']){
         userData['bio'] = newBio;

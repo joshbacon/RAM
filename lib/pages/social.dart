@@ -17,12 +17,9 @@ class SocialPage extends StatefulWidget {
 class _SocialPageState extends State<SocialPage> {
 
   // TODO:
-  // - implement a friend system (request/accept)
   // - implement a chat feature
   //
   // - also why is home and profile a scaffold but this and upload aren't? see if they should be...
-
-  TextEditingController searchTerm = TextEditingController();
 
   Timer? _debounce;
 
@@ -134,7 +131,6 @@ class _SocialPageState extends State<SocialPage> {
       child: Column(
         children: [
           TextFormField(
-            controller: searchTerm,
             onChanged: (query) {
               _onSearchChanged(query, context.read<User>().uid);
             },
