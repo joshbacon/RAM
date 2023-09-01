@@ -2,6 +2,7 @@ import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ram/models/postlist.dart';
+import 'package:ram/pages/chat.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/widgets/post.dart';
@@ -19,10 +20,6 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-
-  // TODO:
-  // - make it username button drop down and show a bio and date joined
-  // - change add button to message button if already a friend
 
   int totalUps = 1;
   int totalDowns = 1;
@@ -144,6 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               onPressed: () {
                 // go to the chat room
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Chat()));
               }
             ),
           ),
@@ -198,44 +196,41 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(height: 45,),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5,),
-                child: GestureDetector(
-                  onTap: (){}, // slide everything below the bar down to show user info (data joined and such)
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Visibility(
-                            visible: widget.user.uid == '1',
-                            child: const Row(
-                              children: [
-                                Image(
-                                  image: AssetImage('assets/racketTag.png'), width: 25, height: 25,
-                                ),
-                                SizedBox(width: 10,),
-                              ]
-                            ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Visibility(
+                          visible: widget.user.uid == '1',
+                          child: const Row(
+                            children: [
+                              Image(
+                                image: AssetImage('assets/racketTag.png'), width: 25, height: 25,
+                              ),
+                              SizedBox(width: 10,),
+                            ]
                           ),
-                          Text(
-                            widget.user.username,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
-                      ),
-                      Text(
-                        "joined " + DateFormat('MMM d y').format(widget.user.joinedat),
+                        ),
+                        Text(
+                          widget.user.username,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "joined " + DateFormat('MMM d y').format(widget.user.joinedat),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    Visibility(
+                      visible: widget.user.bio != 'null',
+                      child: Text(
+                        widget.user.bio!,
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
-                      Visibility(
-                        visible: widget.user.bio != 'null',
-                        child: Text(
-                          widget.user.bio!,
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ),
-                    ]
-                  ),
+                    ),
+                  ]
                 ),
               ),
               Row(

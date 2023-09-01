@@ -32,8 +32,8 @@ String image(value) {
   return dotenv.env['API_PATH']!+"/"+value;
 }
 
-String getUser(uid) {
-  return dotenv.env['API_PATH']!+"/ramdb_api/user/getuserinfo.php?uid="+uid;
+String getUser(uid, self) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/getuserinfo.php?uid="+uid+"&self="+self;
 }
 
 String searchUsers(query, uid) {

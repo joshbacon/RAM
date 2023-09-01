@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ram/pages/chat.dart';
 import '../models/user.dart';
 import '../pages/profile.dart';
 
@@ -96,10 +97,13 @@ class _ProfileCardState extends State<ProfileCard> {
                           highlightColor: const Color.fromARGB(0, 255, 255, 255),
                           splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
                           splashRadius: 40,
-                          icon: Icon(
-                            Icons.chat,
-                            size: 30,
+                          icon: IconButton(
+                            icon: const Icon(Icons.chat),
+                            iconSize: 30,
                             color: Theme.of(context).colorScheme.primary,
+                            onPressed: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Chat()));
+                            },
                           ),
                         ),
                       )

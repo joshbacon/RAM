@@ -88,7 +88,7 @@ class _PostState extends State<Post> {
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: GestureDetector(
             onTap: () {
-              if (!widget.data['anon'] && context.read<User>().uid != widget.data['uid']){
+              if (!widget.data['anon'] && context.read<User>().uid.toString() != widget.data['uid'].toString()){
                 showProfile(context, context.read<User>().getUserInfo);
               }
             },

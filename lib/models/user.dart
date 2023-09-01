@@ -24,11 +24,6 @@ class User with ChangeNotifier {
   User.asNull();
 
   User(Map<String, dynamic> userIn) {
-    // TODO:
-    // move the type setting from getUserInfo up here so you can just call user with whatever
-    // and need to check for nulls because profile card doesn't pull everything
-    //
-    // good time to set common types (i.e. uid is sometimes used as an int and sometimes a string)
     userData = userIn;
   }
 
@@ -44,7 +39,7 @@ class User with ChangeNotifier {
 
   Future<User> getUserInfo(uid) async{
     final response = await http.get(
-      Uri.parse(paths.getUser(uid.toString()))
+      Uri.parse(paths.getUser(uid.toString(), userData['uid']))
     );
 
     Map<String, dynamic> info = json.decode(response.body);
@@ -62,6 +57,7 @@ class User with ChangeNotifier {
       if (info['banner'] != null){
         userInfo['banner'] = NetworkImage(paths.image(info["banner"].toString()));
       }
+      userInfo['isFriend'] = info['isFriend'] == 1;
       return User(userInfo);
     }
     return User.asNull();
@@ -172,7 +168,6 @@ class User with ChangeNotifier {
     );
 
     if (response.statusCode == 200){
-      print(response.body);
       Map<String, dynamic> data = json.decode(response.body);
       if (data['status']){
         userData['bio'] = newBio;
@@ -259,7 +254,6 @@ class User with ChangeNotifier {
       }
     );
 
-    print(response.body);
     if (response.statusCode == 200 && json.decode(response.body)['accepted']) {
       userData['isFriend'] = true;
       return true;

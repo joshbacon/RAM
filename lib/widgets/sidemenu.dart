@@ -37,18 +37,7 @@ class _SideMenuState extends State<SideMenu> {
     Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
-  void _updateText() {
-    // print(newText.text + " AND " + newText.text.length.toString());
-    // setState(() {
-    //   print(255 - newText.text.length);
-    //   remainingChars = (255 - newText.text.length).toString();
-    //   print(remainingChars);
-    // });
-    // print(remainingChars);
-  }
-
   Future<void> _showUpdateDialog(String type) async {
-    // print(newText.text);
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -232,38 +221,6 @@ class _SideMenuState extends State<SideMenu> {
               // }),
             },
           ),
-          // Visibility(
-          //   visible: showUserBox,
-          //   child: ListTile(
-          //     tileColor: const Color.fromRGBO(69, 69, 69, 1.0),
-          //     title: TextField(
-          //       controller: newText,
-          //       onTapOutside: (event) => FocusScope.of(context).unfocus(),
-          //       style: Theme.of(context).textTheme.bodySmall,
-          //     ),
-          //     trailing: IconButton(
-          //       alignment: Alignment.centerRight,
-          //       icon: const Icon(Icons.check_box_rounded, size: 34,),
-          //       onPressed: () async {
-          //         if (newText.text.isNotEmpty && await context.read<User>().updateUsername(newText.text)) {
-          //           //setState(() {
-          //             _showMsgDialog('Your username has been updated.');
-          //             showUserBox = false;
-          //             newText.clear();
-          //             showUserErr = false;
-          //           //});
-          //         } else {
-          //           //setState(() {
-          //             showUserErr = true;
-          //           //});
-          //         }
-          //       },
-          //     ),
-          //     iconColor: Theme.of(context).colorScheme.primary,
-          //     textColor: Colors.white,
-          //     onTap: () => {},
-          //   ),
-          // ),
           Visibility(
             visible: showUserErr,
             child: const Text(
