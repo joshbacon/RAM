@@ -102,6 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
               heroTag: "backBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
               foregroundColor: Theme.of(context).colorScheme.background,
+              elevation: 0.0,
               child: Icon(
                 Icons.arrow_back_rounded,
                 size: 48,
@@ -118,6 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
               foregroundColor: Theme.of(context).colorScheme.background,
+              elevation: 0.0,
               child: Icon(
                 Icons.group_add_outlined,
                 size: 48,
@@ -134,6 +136,7 @@ class _ProfilePageState extends State<ProfilePage> {
               heroTag: "addBtn",
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
               foregroundColor: Theme.of(context).colorScheme.background,
+              elevation: 0.0,
               child: Icon(
                 Icons.chat,
                 size: 48,

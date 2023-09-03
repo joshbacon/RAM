@@ -123,7 +123,7 @@ class User with ChangeNotifier {
         'username': usernameIn,
         'password': passwordIn,
         'email': emailIn
-      }
+      },
     );
 
     Map<String, dynamic> data = json.decode(response.body);
@@ -251,7 +251,7 @@ class User with ChangeNotifier {
       body: {
         'self': userData['uid'].toString(),
         'friend': friend.toString()
-      }
+      },
     );
 
     if (response.statusCode == 200 && json.decode(response.body)['accepted']) {
@@ -259,6 +259,21 @@ class User with ChangeNotifier {
       return true;
     }
     return false;
+  }
+
+  Future<bool> sendMessage(to, group, message) async {
+    final response = await http.post(
+      Uri.parse(paths.sendMessage()),
+      body: {
+        'sender': userData['uid'].toString(),
+        'receiver': to.toString(),
+        'group': group.toString(),
+        'message': message
+      },
+    );
+    print(response.body);
+
+    return response.statusCode == 200 && json.decode(response.body)['status'];
   }
     
 

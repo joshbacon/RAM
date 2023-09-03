@@ -52,6 +52,10 @@ String getPost(pid, uid, up) {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/getpost.php?pid="+pid+"&uid="+uid+"&up="+up;
 }
 
+String sendMessage() {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/sendmessage.php";
+}
+
 String interact() {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/interact.php";
 }

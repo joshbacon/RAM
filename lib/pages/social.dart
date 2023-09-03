@@ -17,8 +17,6 @@ class SocialPage extends StatefulWidget {
 class _SocialPageState extends State<SocialPage> {
 
   // TODO:
-  // - implement a chat feature
-  //
   // - also why is home and profile a scaffold but this and upload aren't? see if they should be...
 
   Timer? _debounce;
@@ -130,7 +128,7 @@ class _SocialPageState extends State<SocialPage> {
       padding: const EdgeInsets.fromLTRB(15, 50, 15, 10),
       child: Column(
         children: [
-          TextFormField(
+          TextField(
             onChanged: (query) {
               _onSearchChanged(query, context.read<User>().uid);
             },

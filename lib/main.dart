@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
           background: darkGrey,
           onBackground: offWhite,
           tertiary: lightGrey,
+          tertiaryContainer: darkishLightGrey,
           surface: middleGrey,
           onSurface: orange
         ),
