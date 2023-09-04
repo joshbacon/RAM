@@ -1,6 +1,7 @@
 import 'package:flutter_masonry_view/flutter_masonry_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ram/models/group.dart';
 import 'package:ram/models/postlist.dart';
 import 'package:ram/pages/chat.dart';
 import 'package:ram/widgets/sidemenu.dart';
@@ -137,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Chat()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, const Group.personal())));
               }
             ),
           ),

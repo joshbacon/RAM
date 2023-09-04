@@ -28,7 +28,7 @@ class PostList {
   Future<void> getPosts(bool isAnon, String uid, int up) async {
 
     final response = await http.get(
-      Uri.parse(paths.getPost(nextPID.toString(), uid, up.toString()))
+      Uri.parse(paths.getPosts(nextPID.toString(), uid, up.toString()))
     );
     if (response.statusCode == 200) {
       try {
@@ -50,11 +50,6 @@ class PostList {
         }
       }
     }
-    // Limit the list to 25 posts?
-    // this might do a weird scrolling thing cause the list builder doesn't account for it
-    // if (length() > 25) {
-    //   list.removeRange(0, length()-25);
-    // }
   }
 
   void reset() {

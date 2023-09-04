@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ram/models/group.dart';
+import 'package:ram/models/messagelist.dart';
 import 'package:ram/models/user.dart';
+import 'package:ram/models/message.dart';
+import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
+import 'package:ram/widgets/loader.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({Key? key}) : super(key: key);
+  const Chat(this.friend, this.group, {Key? key}) : super(key: key);
+
+  final User friend;
+  final Group group;
 
   @override
   State<Chat> createState() => _ChatState();
@@ -12,61 +20,23 @@ class Chat extends StatefulWidget {
 class _ChatState extends State<Chat> {
 
   final ScrollController _scrollController = ScrollController(
-    // initialScrollOffset: 1.0,
     keepScrollOffset: true,
   );
 
-  static const String user1 = "josh";
-  static const String user2 = "luke";
-  static const int uid = 2;
-  static const int group = 0;
-
   TextEditingController message = TextEditingController();
-  // String message = "";
 
-  final List<Message> messages = [
-    const Message("hey", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hi", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you're so cool", false, AssetImage('assets/defaultProfile.png')),
-    const Message("I know, I made this app. but then we right something completely stupid here and just see what happens", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you must be so smart", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hey", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hi", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you're so cool", false, AssetImage('assets/defaultProfile.png')),
-    const Message("I know, I made this app", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you must be so smart", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hey", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hi", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you're so cool", false, AssetImage('assets/defaultProfile.png')),
-    const Message("I know, I made this app", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you must be so smart", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hey", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hi", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you're so cool", false, AssetImage('assets/defaultProfile.png')),
-    const Message("I know, I made this app", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you must be so smart", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hey", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hi", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you're so cool", false, AssetImage('assets/defaultProfile.png')),
-    const Message("I know, I made this app", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you must be so smart", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hey", false, AssetImage('assets/defaultProfile.png')),
-    const Message("hi", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you're so cool", false, AssetImage('assets/defaultProfile.png')),
-    const Message("I know, I made this app", true, AssetImage('assets/defaultProfile.png')),
-    const Message("you must be so smart", false, AssetImage('assets/defaultProfile.png')),
-  ];
+  final MessageList messages = MessageList();
 
   _sendMessage() async {
     if (message.text.isEmpty) return;
 
     final text = message.text;
     message.text = "";
-    messages.add(Message(text, true, const AssetImage('assets/defaultProfile.png')));
+    messages.addMessage(Message(text, context.read<User>().uid, context.read<User>().profile));
     _scrollToBottom();
 
-    if (!await context.read<User>().sendMessage(uid, group, text)) {
-      messages.remove(messages.last);
+    if (!await context.read<User>().sendMessage(widget.friend.uid, widget.group.getID, text)) {
+      messages.removeMessage();
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Message could not send'),
@@ -75,12 +45,19 @@ class _ChatState extends State<Chat> {
     }
   }
 
+  _refreshMessages() async {
+    await messages.getMessages(context.read<User>().uid, widget.friend.uid, widget.group.getID.toString());
+    setState(() { }); // use ChangeNotifier instead of this empty setstate stuff
+  }
+
   _scrollToBottom() {
-    _scrollController.animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 100), 
-      curve: Curves.ease,
-    );
+    if (!messages.isEmpty) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100), 
+        curve: Curves.ease,
+      );
+    }
   }
 
   @override
@@ -88,6 +65,7 @@ class _ChatState extends State<Chat> {
     message.addListener(() {
       setState(() { });
     });
+    _refreshMessages();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom();
@@ -105,26 +83,36 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(user2),
+        title: Text(widget.friend.username),
       ),
       body: Column(
         children: [
           Expanded(
             child: messages.isEmpty ?
-              Text(
-                "Be the first to send a message!",
-                style: Theme.of(context).textTheme.titleMedium,
+              Center(
+                child: Text(
+                  "Be the first to send a message!",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
               ) :
+              // CustomRefreshIndicator(
+              //   onRefresh: () => getNewMessages(),
+              //   trigger: IndicatorTrigger.trailingEdge,
+              //   trailingScrollIndicatorVisible: false,
+              //   leadingScrollIndicatorVisible: true,
+              //   builder: (BuildContext context, Widget child, IndicatorController controller) {
+              //     return const Loader();
+              //   },
               SingleChildScrollView(
                 controller: _scrollController,
-                padding: const EdgeInsets.all(5.0),
                 child: ListView.builder(
                   // key: const ValueKey(1),
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
-                    return messages[index];
+                    return messages.at(index);
                   },
                 ),
               ),
@@ -161,81 +149,5 @@ class _ChatState extends State<Chat> {
         ]
       ),
     );
-  }
-}
-
-class Message extends StatelessWidget {
-  const Message(this.message, this.sender, this.profileImage, {Key? key}) : super(key: key);
-
-  final String message;
-  final bool sender;
-  final dynamic profileImage;
-
-  @override
-  Widget build(BuildContext context) {
-    double w = MediaQuery.of(context).size.width;
-    if (sender) {
-      return Row(
-        children: [
-          SizedBox(width: w/15 + 10),
-          const Spacer(),
-          Container(
-            constraints: BoxConstraints(
-              maxWidth: w - (w/15)*2 - 50,
-            ),
-            child: Text(
-              message,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.tertiaryContainer,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(15),
-                topRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20),
-              ),
-            ),
-          ),
-          const SizedBox(width: 5.0),
-          CircleAvatar(
-            radius: w/15,
-            backgroundColor: Theme.of(context).colorScheme.background,
-            backgroundImage: profileImage,
-          ),
-        ],
-      );
-    } else {
-      return Row(
-        children: [
-          CircleAvatar(
-            radius: w/15,
-            backgroundColor: Theme.of(context).colorScheme.background,
-            backgroundImage: profileImage,
-          ),
-          const SizedBox(width: 5.0),
-          Container(
-            constraints: BoxConstraints(
-              maxWidth: w - (w/15)*2 - 50,
-            ),
-            child: Text(
-              message,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(15),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-          ),
-          const Spacer(),
-          SizedBox(width: w/15 + 10),
-        ],
-      );
-    }
   }
 }
