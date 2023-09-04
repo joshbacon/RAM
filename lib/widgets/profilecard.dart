@@ -93,17 +93,16 @@ class _ProfileCardState extends State<ProfileCard> {
                       Visibility(
                         visible: widget.user.isFriend!,
                         child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const Chat()));
+                          },
                           highlightColor: const Color.fromARGB(0, 255, 255, 255),
                           splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
                           splashRadius: 40,
-                          icon: IconButton(
-                            icon: const Icon(Icons.chat),
-                            iconSize: 30,
+                          icon: Icon(
+                            Icons.chat,
+                            size: 30,
                             color: Theme.of(context).colorScheme.primary,
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const Chat()));
-                            },
                           ),
                         ),
                       )

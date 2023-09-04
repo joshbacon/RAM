@@ -32,22 +32,14 @@ class _AnonPageState extends State<AnonPage> {
 
   void _refresh() async {
     postList.reset();
-    postList.getPosts(true, "0", 0).then((_) {
-      setState(() {
-        isLoading = true;
-        isLoading = false;
-      });
-    });
+    await postList.getPosts(true, "0", 0);
+    setState(() { });
   }
 
-  void _scrollListener() {
+  void _scrollListener() async {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-    postList.getPosts(true, "0", 0).then((_) {
-      setState(() {
-        isLoading = true;
-        isLoading = false;
-      });
-    });
+      await postList.getPosts(true, "0", 0);
+      setState(() { });
     }
   }
 
@@ -73,7 +65,7 @@ class _AnonPageState extends State<AnonPage> {
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           controller: controller,
-          child: postList.isEmpty() ?
+          child: postList.isEmpty ?
             const Column(
               children: [
                 SizedBox(height: 100),
@@ -83,7 +75,7 @@ class _AnonPageState extends State<AnonPage> {
             ListView.builder(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: postList.length(),
+              itemCount: postList.length,
               itemBuilder: (context, index) {
                 return postList.at(index);
               },

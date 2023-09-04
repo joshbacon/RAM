@@ -55,6 +55,7 @@ class _LoaderState extends State<Loader> with TickerProviderStateMixin{
         angle: angle,
         child: SizedBox(
           width: width,
+          height: width,
           child: Image.asset(
             'assets/icon.png',
           ),

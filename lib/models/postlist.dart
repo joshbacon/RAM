@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:ram/widgets/littlepost.dart';
 import 'package:ram/widgets/post.dart';
-import '../models/paths.dart' as paths;
+import 'package:ram/models/paths.dart' as paths;
 
 class PostList {
 
@@ -17,20 +17,12 @@ class PostList {
     little = true;
   }
 
-  int length() {
-    return list.length;
-  }
-
-  bool isEmpty() {
-    return list.isEmpty;
-  }
+  int get length => list.length;
+  bool get isEmpty => list.isEmpty;
+  List<Post> get getList => list;
 
   Post at(index) {
     return list[index];
-  }
-
-  List<Post> getList() {
-    return list;
   }
 
   Future<void> getPosts(bool isAnon, String uid, int up) async {
@@ -65,7 +57,7 @@ class PostList {
     // }
   }
 
-  Future<void> reset() async {
+  void reset() {
     list = [];
     nextPID = 0;
   }

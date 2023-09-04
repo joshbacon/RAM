@@ -271,7 +271,6 @@ class User with ChangeNotifier {
         'message': message
       },
     );
-    print(response.body);
 
     return response.statusCode == 200 && json.decode(response.body)['status'];
   }

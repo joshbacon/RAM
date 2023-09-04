@@ -5,7 +5,6 @@ import 'package:ram/models/postlist.dart';
 import 'package:ram/pages/chat.dart';
 import 'package:ram/widgets/sidemenu.dart';
 import 'package:ram/models/user.dart';
-import 'package:ram/widgets/post.dart';
 import 'package:intl/intl.dart';
 
 
@@ -25,16 +24,14 @@ class _ProfilePageState extends State<ProfilePage> {
   int totalDowns = 1;
   int filter = 0;
 
-  List<Post> list = [];
-  PostList posts = PostList.little();
+  PostList postList = PostList.little();
   ScrollController controller = ScrollController();
 
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
-  void addFriend() {
-    widget.user.addFriend(context.read<User>().uid).then((_) => {
-      setState(() {})
-    });
+  void addFriend() async {
+    await widget.user.addFriend(context.read<User>().uid);
+    setState(() {});
   }
 
   void openDrawer() {
@@ -56,25 +53,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _refresh() async{
-    posts.reset().then((_) {
-      posts.getPosts(false, widget.user.uid, filter).then((_) {
-        setState(() {
-          list = posts.getList();
-        });
-      });
-    });
+    postList.reset();
+    await postList.getPosts(false, widget.user.uid, filter);
+    setState(() { });
   }
 
-  void _scrollListener() {
+  void _scrollListener() async {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-      posts.getPosts(false, widget.user.uid, filter).then((_) {
-        List<Post> newPosts = posts.getList();
-        if (list != newPosts && newPosts.isNotEmpty) {
-          setState(() {
-            list = newPosts;
-          });
-        }
-      });
+      await postList.getPosts(false, widget.user.uid, filter);
+      setState(() { });
     }
   }
 
@@ -83,6 +70,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
     _refresh();
     controller.addListener(_scrollListener);
+  }
+
+  @override
+  void dispose() {
+    controller.removeListener(_scrollListener);
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -143,7 +137,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
-                // go to the chat room
                 Navigator.push(context, MaterialPageRoute(builder: (context) => const Chat()));
               }
             ),
@@ -153,6 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: FloatingActionButton(
               backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
               foregroundColor: Theme.of(context).colorScheme.background,
+              elevation: 0.0,
               child: Icon(
                 Icons.settings,
                 size: 48,
@@ -175,7 +169,6 @@ class _ProfilePageState extends State<ProfilePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // profile pic container (edit button, banner image and circular avatar)
               Stack(
                 clipBehavior: Clip.none,
                 alignment: AlignmentDirectional.bottomCenter,
@@ -302,12 +295,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 ]
               ),
               const SizedBox(height: 30),
-              list.isEmpty ?
-              const Text(
+              if (postList.isEmpty) const Text(
                 "No posts yet.",
-              ) :
-              MasonryView(
-                listOfItem: list,
+              ) else MasonryView(
+                listOfItem: postList.getList,
                 numberOfColumn: 2,
                 itemBuilder: (item) {
                   return item;

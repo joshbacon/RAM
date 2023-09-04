@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ram/widgets/news.dart';
 import 'package:ram/models/postlist.dart';
 import 'package:ram/widgets/loader.dart';
-import 'package:ram/widgets/post.dart';
 
 class HomePage extends StatefulWidget {
 
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  List<Post> list = [];
   PostList postList = PostList();
   ScrollController controller = ScrollController();
   bool isLoading = false;
@@ -34,25 +32,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _refresh() async {
-    postList.reset().then((_) {
-      postList.getPosts(false, "0", 0).then((_) {
-        setState(() {
-          list = postList.getList();
-        });
-      });
-    });
+    postList.reset();
+    await postList.getPosts(false, "0", 0);
+    setState(() { }); // use ChangeNotifier instead of this empty setstate stuff
   }
 
-  void _scrollListener() {
+  void _scrollListener() async {
     if (controller.offset >= controller.position.maxScrollExtent && !controller.position.outOfRange) {
-      postList.getPosts(false, "0", 0).then((_) {
-        List<Post> newPosts = postList.getList();
-        if (list != newPosts && newPosts.isNotEmpty) {
-          setState(() {
-            list = newPosts;
-          });
-        }
-      });
+      await postList.getPosts(false, "0", 0);
+      setState(() { });
     }
   }
 
@@ -83,18 +71,17 @@ class _HomePageState extends State<HomePage> {
               const Divider( 
                 thickness: 3,
               ),
-              list.isEmpty ?
+              postList.isEmpty ?
               const Column(children: [
                 SizedBox(height: 100),
                 Loader()
               ]) :
               ListView.builder(
-                // key: const ValueKey(1),
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: list.length,
+                itemCount: postList.length,
                 itemBuilder: (context, index) {
-                  return list[index];
+                  return postList.at(index);
                 },
               )
             ]

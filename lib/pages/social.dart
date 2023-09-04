@@ -19,6 +19,8 @@ class _SocialPageState extends State<SocialPage> {
   // TODO:
   // - also why is home and profile a scaffold but this and upload aren't? see if they should be...
 
+  final FocusNode _focus = FocusNode();
+
   Timer? _debounce;
 
   List<ProfileCard> searchList = [];
@@ -37,6 +39,10 @@ class _SocialPageState extends State<SocialPage> {
     setState(() {
       requestList = results.map((user) => ProfileCard(user)).toList();
     });
+  }
+
+  void _onFocusChange() {
+    debugPrint("Focus: ${_focus.hasFocus.toString()}");
   }
 
   _onSearchChanged(query, uid) {
@@ -113,12 +119,15 @@ class _SocialPageState extends State<SocialPage> {
   void initState() {
     _getFriends();
     _getRequests();
+    _focus.addListener(_onFocusChange);
     super.initState();
   }
 
   @override
   void dispose() {
     _debounce?.cancel();
+    _focus.removeListener(_onFocusChange);
+    _focus.dispose();
     super.dispose();
   }
 
@@ -129,6 +138,7 @@ class _SocialPageState extends State<SocialPage> {
       child: Column(
         children: [
           TextField(
+            focusNode: _focus,
             onChanged: (query) {
               _onSearchChanged(query, context.read<User>().uid);
             },
@@ -144,38 +154,50 @@ class _SocialPageState extends State<SocialPage> {
           ),
           Visibility(
             visible: searchList.isNotEmpty,
-            child: ListView.builder(
-              // key: const ValueKey(1),
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: searchList.length,
-              itemBuilder: (context, index) {
-                return searchList[index];
-              },
+            child: Expanded(
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: searchList.length,
+                  itemBuilder: (context, index) {
+                    return searchList[index];
+                  },
+                ),
+              ),
             ),
           ),
           Visibility(
-            visible: searchList.isEmpty && requestList.isNotEmpty,
-            child: Column(
-              children: [
-                const SizedBox(height: 15,),
-                Text(
-                  "Requests",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-                ListView.builder(
-                  // key: const ValueKey(1),
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: requestList.length,
-                  itemBuilder: (context, index) {
-                    return requestList[index];
-                  },
-                ),
-              ],
+            visible: searchList.isEmpty && requestList.isNotEmpty && !_focus.hasFocus,
+            child: Expanded(
+              child: Column(
+                children: [
+                  const SizedBox(height: 15,),
+                  Text(
+                    "Requests",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 5,),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: requestList.length,
+                        itemBuilder: (context, index) {
+                          return requestList[index];
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-          const Spacer(flex: 1,),
+          Visibility(
+            visible: !searchList.isNotEmpty && (!requestList.isNotEmpty || _focus.hasFocus),
+            child: const Spacer(),
+          ),
           const Divider(thickness: 3,),
           TextButton(
             onPressed: () {
@@ -199,7 +221,9 @@ class _SocialPageState extends State<SocialPage> {
                             ],
                           ),
                         ),
-                        const Divider(),
+                        Divider(
+                          color: Theme.of(context).colorScheme.background,
+                        ),
                         Visibility(
                           visible: friendList.isNotEmpty,
                           child: ListView.builder(
@@ -210,6 +234,16 @@ class _SocialPageState extends State<SocialPage> {
                             itemBuilder: (context, index) {
                               return friendList[index];
                             },
+                          ),
+                        ),
+                        Visibility(
+                          visible: friendList.isEmpty,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 15.0),
+                            child: Text(
+                              "No added friends yet.",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
                           ),
                         ),
                       ]
