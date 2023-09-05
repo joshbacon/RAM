@@ -14,14 +14,13 @@ class Message extends StatelessWidget {
     double w = MediaQuery.of(context).size.width;
     if (sender == context.read<User>().uid) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0.0),
+        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
         child: Row(
           children: [
-            SizedBox(width: w/15 + 10),
             const Spacer(),
             Container(
               constraints: BoxConstraints(
-                maxWidth: w - (w/15)*2 - 50,
+                maxWidth: w - (w/15)*2 - 75,
               ),
               child: Text(
                 message,
@@ -37,7 +36,7 @@ class Message extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 5.0),
+            const SizedBox(width: 10.0),
             CircleAvatar(
               radius: w/15,
               backgroundColor: Theme.of(context).colorScheme.background,
@@ -47,35 +46,37 @@ class Message extends StatelessWidget {
         ),
       );
     } else {
-      return Row(
-        children: [
-          CircleAvatar(
-            radius: w/15,
-            backgroundColor: Theme.of(context).colorScheme.background,
-            backgroundImage: profileImage,
-          ),
-          const SizedBox(width: 5.0),
-          Container(
-            constraints: BoxConstraints(
-              maxWidth: w - (w/15)*2 - 50,
+      return Padding(
+        padding: const EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 0.0),
+        child: Row(
+          children: [
+            CircleAvatar(
+              radius: w/15,
+              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundImage: profileImage,
             ),
-            child: Text(
-              message,
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(15),
-                bottomRight: Radius.circular(20),
+            const SizedBox(width: 10.0),
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: w - (w/15)*2 - 75,
+              ),
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(15),
+                  bottomRight: Radius.circular(20),
+                ),
               ),
             ),
-          ),
-          const Spacer(),
-          SizedBox(width: w/15 + 10),
-        ],
+            const Spacer(),
+          ],
+        ),
       );
     }
   }

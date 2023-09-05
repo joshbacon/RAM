@@ -35,12 +35,11 @@ class MessageList {
       try {
         List<dynamic> results = json.decode(response.body);
         for (var msg in results) {
-            print(msg['profilpicture'].runtimeType);
           if ( msg['status'] ){
             list.add(Message(
               msg['message'],
               msg['sender'].toString(),
-              msg['profilepicture'] != Null ? NetworkImage(paths.image(msg['profilepicture'])) : const AssetImage('assets/defaultProfile.png')
+              msg['profilepicture'] != null ? NetworkImage(paths.image(msg['profilepicture'])) : const AssetImage('assets/defaultProfile.png')
             ));
             nextMID = msg['mid']+1;
           }

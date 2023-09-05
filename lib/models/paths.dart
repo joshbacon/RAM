@@ -48,6 +48,14 @@ String getRequests(uid) {
   return dotenv.env['API_PATH']!+"/ramdb_api/user/getrequests.php?uid="+uid;
 }
 
+String getGroups(uid) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/getgroups.php?uid="+uid;
+}
+
+String getParticipants(uid, gid) {
+  return dotenv.env['API_PATH']!+"/ramdb_api/user/getparticipants.php?uid="+uid+"&gid="+gid;
+}
+
 String getPosts(pid, uid, up) {
   return dotenv.env['API_PATH']!+"/ramdb_api/post/getposts.php?pid="+pid+"&uid="+uid+"&up="+up;
 }

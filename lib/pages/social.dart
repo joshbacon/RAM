@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ram/models/group.dart';
 import 'package:ram/models/user.dart';
+import 'package:ram/widgets/groupcard.dart';
 import 'package:ram/widgets/profilecard.dart';
 import 'package:ram/models/paths.dart' as paths;
 import 'package:http/http.dart' as http;
@@ -26,6 +28,7 @@ class _SocialPageState extends State<SocialPage> {
   List<ProfileCard> searchList = [];
   List<ProfileCard> friendList = [];
   List<ProfileCard> requestList = [];
+  List<GroupCard> groupList = [];
 
   _getFriends() async {
     List<User> results = await context.read<User>().getFriends();
@@ -38,6 +41,13 @@ class _SocialPageState extends State<SocialPage> {
     List<User> results = await context.read<User>().getRequests();
     setState(() {
       requestList = results.map((user) => ProfileCard(user)).toList();
+    });
+  }
+
+  _getGroups() async {
+    List<Group> results = await context.read<User>().getGroups();
+    setState(() {
+      groupList = results.map((group) => GroupCard(group)).toList();
     });
   }
 
@@ -119,6 +129,7 @@ class _SocialPageState extends State<SocialPage> {
   void initState() {
     _getFriends();
     _getRequests();
+    _getGroups();
     _focus.addListener(_onFocusChange);
     super.initState();
   }
@@ -153,7 +164,7 @@ class _SocialPageState extends State<SocialPage> {
             ),
           ),
           Visibility(
-            visible: searchList.isNotEmpty,
+            visible: searchList.isNotEmpty || _focus.hasFocus,
             child: Expanded(
               child: SingleChildScrollView(
                 child: ListView.builder(
@@ -168,16 +179,11 @@ class _SocialPageState extends State<SocialPage> {
             ),
           ),
           Visibility(
-            visible: searchList.isEmpty && requestList.isNotEmpty && !_focus.hasFocus,
+            visible: searchList.isEmpty && !_focus.hasFocus && requestList.isNotEmpty,
             child: Expanded(
               child: Column(
                 children: [
-                  const SizedBox(height: 15,),
-                  Text(
-                    "Requests",
-                    style: Theme.of(context).textTheme.titleSmall,
-                  ),
-                  const SizedBox(height: 5,),
+                  const SizedBox(height: 20,),
                   Expanded(
                     child: SingleChildScrollView(
                       child: ListView.builder(
@@ -195,7 +201,28 @@ class _SocialPageState extends State<SocialPage> {
             ),
           ),
           Visibility(
-            visible: !searchList.isNotEmpty && (!requestList.isNotEmpty || _focus.hasFocus),
+            visible: searchList.isEmpty && !_focus.hasFocus && groupList.isNotEmpty,
+            child: Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: groupList.length,
+                        itemBuilder: (context, index) {
+                          return groupList[index];
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Visibility(
+            visible: searchList.isEmpty && requestList.isEmpty && groupList.isEmpty,
             child: const Spacer(),
           ),
           const Divider(thickness: 3,),

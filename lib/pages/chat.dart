@@ -76,6 +76,7 @@ class _ChatState extends State<Chat> {
   void dispose() {
     _scrollController.dispose();
     message.dispose();
+    messages.reset();
     super.dispose();
   }
 
@@ -83,7 +84,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.friend.username),
+        title: widget.friend.uid != "0" ? Text(widget.friend.username) : Text(widget.group.getName),
       ),
       body: Column(
         children: [

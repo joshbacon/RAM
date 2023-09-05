@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:async/async.dart';
 import 'package:path/path.dart';
+import 'package:ram/models/group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ram/models/paths.dart' as paths;
 import 'package:ram/models/security.dart';
@@ -237,6 +238,30 @@ class User with ChangeNotifier {
           }
         }
         return friends;
+      } catch (e) {
+        // Map<String, dynamic> result = json.decode(response.body);
+        return [];
+      }
+    }
+    return [];
+  }
+
+  Future<List<Group>> getGroups() async {
+    final response = await http.get(
+      Uri.parse(paths.getGroups(userData['uid']))
+    );
+
+    if (response.statusCode == 200) {
+      try {
+        List<dynamic> results = json.decode(response.body);
+        List<Group> groups = [];
+        for (var group in results) {
+          if ( group['status'] ){
+            group.remove('status');
+            groups.add(Group(group['gid'], group["name"]));
+          }
+        }
+        return groups;
       } catch (e) {
         // Map<String, dynamic> result = json.decode(response.body);
         return [];
