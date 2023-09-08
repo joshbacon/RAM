@@ -37,11 +37,13 @@ class _ChatState extends State<Chat> {
 
     if (!await context.read<User>().sendMessage(widget.friend.uid, widget.group.getID, text)) {
       messages.removeMessage();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Message could not send'),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Message could not send'),
+          ),
+        );
+      }
     }
   }
 

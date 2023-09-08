@@ -7,22 +7,47 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class News extends StatelessWidget {
   const News({Key? key}) : super(key: key);
 
+  Future<void> enterBug() async {
+    try {
+      await launchUrl(Uri.parse('https://github.com/joshbacon/ram/issues/new'));
+      // await launch('https://github.com/joshbacon/ram/issues/new');
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(25, 0, 25, 5),
-      child: Text(
-        "welcome to the app!\ni am implementing a testing process named TIP (test in production) so submit a bug here if something doesn't work",
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-          height: 1,
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(25, 0, 25, 5),
+          child: Text(
+            "welcome to the app!\ni am implementing a testing process named TIP (test in production)",
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              height: 1,
+            ),
+          ),
         ),
-      ),
+        Center(
+          child: InkWell(
+            child: Text(
+              "submit a bug",
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                height: 1,
+              ),
+            ),
+            onTap: () => enterBug(),
+          )
+        )
+      ],
     );
   }
 }

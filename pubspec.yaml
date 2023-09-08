@@ -31,9 +31,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
-  http: ^0.13.4
-  image_picker: ^0.8.5+3
-  image: ^3.2.0
+  http: ^1.1.0
+  image_picker: ^1.0.4
+  image: ^4.0.17
   shared_preferences: ^2.1.1
   provider: ^6.0.5
   flutter_dotenv: ^5.1.0
@@ -42,6 +42,8 @@ dependencies:
   dotted_border: ^2.0.0+3
   intl: ^0.18.1
   custom_refresh_indicator: ^2.2.1
+  url_launcher: ^6.1.14
+  path: any
   
 
 dev_dependencies:
@@ -53,7 +55,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

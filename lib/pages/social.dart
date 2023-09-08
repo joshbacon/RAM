@@ -66,8 +66,9 @@ class _SocialPageState extends State<SocialPage> {
       _debounce?.cancel();
     }
     _debounce = Timer(const Duration(milliseconds: 500), () async {
+      String uid = context.read<User>().uid;
       final response = await http.get(
-        Uri.parse(paths.searchUsers(query, context.read<User>().uid))
+        Uri.parse(paths.searchUsers(query, uid))
       );
       if (response.statusCode == 200) {
         try {
@@ -75,7 +76,7 @@ class _SocialPageState extends State<SocialPage> {
           for (var user in results) {
             if ( user['status'] ){
               final response = await http.get(
-                Uri.parse(paths.searchUsers(query, context.read<User>().uid))
+                Uri.parse(paths.searchUsers(query, uid))
               );
               if (response.statusCode == 200) {
                 try {

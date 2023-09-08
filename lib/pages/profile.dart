@@ -217,7 +217,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ],
                     ),
                     Text(
-                      "joined " + DateFormat('MMM d y').format(widget.user.joinedat),
+                      "joined ${DateFormat('MMM d y').format(widget.user.joinedat)}",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     Visibility(

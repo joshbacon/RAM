@@ -22,10 +22,6 @@ class Message extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: w - (w/15)*2 - 75,
               ),
-              child: Text(
-                message,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.tertiaryContainer,
@@ -34,6 +30,10 @@ class Message extends StatelessWidget {
                   topRight: Radius.circular(20),
                   bottomLeft: Radius.circular(20),
                 ),
+              ),
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
             const SizedBox(width: 10.0),
@@ -60,10 +60,6 @@ class Message extends StatelessWidget {
               constraints: BoxConstraints(
                 maxWidth: w - (w/15)*2 - 75,
               ),
-              child: Text(
-                message,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
               padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 1.0),
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
@@ -72,6 +68,10 @@ class Message extends StatelessWidget {
                   topRight: Radius.circular(15),
                   bottomRight: Radius.circular(20),
                 ),
+              ),
+              child: Text(
+                message,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
             ),
             const Spacer(),

@@ -39,7 +39,7 @@ class _GroupCardState extends State<GroupCard> {
       width: w * 0.8,
       child: Card(
         clipBehavior: Clip.hardEdge,
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.tertiary,
         elevation: 10,
         child: Stack(
           children: [

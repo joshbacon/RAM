@@ -40,7 +40,7 @@ class _SignupPageState extends State<SignupPage> {
         isError = false;
         message = result[1];
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const NavPage()));
+      if (context.mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => const NavPage()));
     } else {
       setState(() {
         isError = true;

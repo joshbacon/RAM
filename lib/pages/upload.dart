@@ -121,7 +121,7 @@ class _UploadPageState extends State<UploadPage> {
                   padding: EdgeInsets.all(min(w, h)/8),
                   onPressed: () async {
                     XFile? imagePicked = await acceptImage();
-                    if ( imagePicked != null && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
+                    if ( imagePicked != null && context.mounted && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
                       setState(() {
                         _showDialog('Your post has been uploaded');
                         showUploadErr = false;

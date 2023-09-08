@@ -42,14 +42,16 @@ class _LoginPageState extends State<LoginPage> {
   void login(autoLogin) async {
     final response = await context.read<User>().login(username.text, password.text, autoLogin);
 
-    if (response[0] && context.read<User>().username != 'null'){
-      showLoginErr = false;
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const NavPage()));
-    } else {
-      setState(() {
-        errorMessage = response[1];
-        showLoginErr = true;        
-      });
+    if (context.mounted) {
+      if (response[0] && context.read<User>().username != 'null'){
+        showLoginErr = false;
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const NavPage()));
+      } else {
+        setState(() {
+          errorMessage = response[1];
+          showLoginErr = true;        
+        });
+      }
     }
   }
 

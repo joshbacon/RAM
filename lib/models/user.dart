@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:async/async.dart';
 import 'package:path/path.dart';
 import 'package:ram/models/group.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -303,7 +302,8 @@ class User with ChangeNotifier {
 
   Future<bool> updateProfilePicture(image) async{
 
-    var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
+    var stream = http.ByteStream(image.openRead());
+    stream.cast();
     var length = await image.length();
     var uri = Uri.parse(paths.acceptImage());
 
@@ -329,7 +329,8 @@ class User with ChangeNotifier {
 
   Future<bool> updateBannerPicture(image) async{
 
-    var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
+    var stream = http.ByteStream(image.openRead());
+    stream.cast();
     var length = await image.length();
     var uri = Uri.parse(paths.acceptImage());
 
@@ -355,7 +356,8 @@ class User with ChangeNotifier {
   // Copied from updateBannerPicture, need to adapt to upload a post
   Future<bool> uploadPost(image) async{
 
-    var stream = http.ByteStream(DelegatingStream.typed(image.openRead()));
+    var stream = http.ByteStream(image.openRead());
+    stream.cast();
     var length = await image.length();
     var uri = Uri.parse(paths.acceptImage());
 

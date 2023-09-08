@@ -44,7 +44,7 @@ class _SideMenuState extends State<SideMenu> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            "Update " + type,
+            "Update $type",
             style: Theme.of(context).textTheme.titleSmall,
           ),
           actions: <Widget>[
@@ -94,18 +94,18 @@ class _SideMenuState extends State<SideMenu> {
                     // make the update username call
                     context.read<User>().updateUsername(newText).then((result) {
                       if (result) {
-                        _showMsgDialog(type + " has been updated");
+                        _showMsgDialog("$type has been updated");
                       } else {
-                        _showMsgDialog("Something went wrong, " + type + " was not updated");
+                        _showMsgDialog("Something went wrong, $type was not updated");
                       }
                     });
                   } else if (type.contains('Bio')) {
                     // make the update bio call
                     context.read<User>().updateBio(newText).then((result) {
                       if (result) {
-                        _showMsgDialog(type + " has been updated");
+                        _showMsgDialog("$type has been updated");
                       } else {
-                        _showMsgDialog("Something went wrong, " + type + " was not updated");
+                        _showMsgDialog("Something went wrong, $type was not updated");
                       }
                     });
                   }
@@ -174,16 +174,16 @@ class _SideMenuState extends State<SideMenu> {
       child: Column(
         children: <Widget>[
           DrawerHeader(
-            child: Image(
-              image: context.watch<User>().profile,
-              width: double.infinity,
-              alignment: Alignment.topLeft,
-            ),
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: context.watch<User>().banner,
               )
+            ),
+            child: Image(
+              image: context.watch<User>().profile,
+              width: double.infinity,
+              alignment: Alignment.topLeft,
             ),
           ),
           const SizedBox(height: 10),
@@ -243,7 +243,7 @@ class _SideMenuState extends State<SideMenu> {
             textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () async {
               XFile? imagePicked = await acceptImage();
-              if ( imagePicked != null && await context.read<User>().updateProfilePicture(File(imagePicked.path)) ) {
+              if ( imagePicked != null && context.mounted && await context.read<User>().updateProfilePicture(File(imagePicked.path)) ) {
                 //setState(() {
                   _showMsgDialog('Your profile picture has been updated.');
                   showProfileErr = false;
@@ -277,7 +277,7 @@ class _SideMenuState extends State<SideMenu> {
             textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () async {
               XFile? imagePicked = await acceptImage();
-              if ( imagePicked != null && await context.read<User>().updateBannerPicture(File(imagePicked.path)) ) {
+              if ( imagePicked != null && context.mounted && await context.read<User>().updateBannerPicture(File(imagePicked.path)) ) {
                 //(() {
                   _showMsgDialog("Your banner picture has been updated");
                   showBannerErr = false;

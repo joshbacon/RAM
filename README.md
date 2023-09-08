@@ -23,7 +23,7 @@
 
 <!-- [![codegambit Screen Shot][product-screenshot]](https://codegambit.io) -->
 
-`RAM` is an android social media app intended to focus on CS & tech related humour. Complete with the basic features of creating an account and uploading a post whlie interacting with other's posts; along with being able to add friends, view their profile, and chat with them.
+`RAM` is an android social media app intended to focus on CS & tech related humour. Complete with the basic features of creating an account and uploading a post while interacting with other's posts; along with being able to add friends, view their profile, and chat with them.
 
 
 
@@ -37,7 +37,7 @@ The frontend is built entirely with Flutter, making use of its many widgets and 
 
 ### Coming Up
 
-I plan to continue to make updates that increase overall performance, such as image caching, and offer new ways of interacting with others. I want to extend the friend system so users can send posts and message each other and groups.
+I plan to continue to make updates that increase overall performance, such as image caching, and offer new ways of interacting with others. I want to extend the chat system so users can send posts to each other and groups.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
