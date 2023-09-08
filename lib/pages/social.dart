@@ -51,10 +51,6 @@ class _SocialPageState extends State<SocialPage> {
     });
   }
 
-  void _onFocusChange() {
-    debugPrint("Focus: ${_focus.hasFocus.toString()}");
-  }
-
   _onSearchChanged(query, uid) {
     if (query == "") {
       setState(() {
@@ -131,14 +127,12 @@ class _SocialPageState extends State<SocialPage> {
     _getFriends();
     _getRequests();
     _getGroups();
-    _focus.addListener(_onFocusChange);
     super.initState();
   }
 
   @override
   void dispose() {
     _debounce?.cancel();
-    _focus.removeListener(_onFocusChange);
     _focus.dispose();
     super.dispose();
   }

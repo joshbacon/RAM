@@ -6,10 +6,13 @@ import 'package:ram/models/paths.dart' as paths;
 
 class Group {
 
-  static int id = 0;
-  static String name = "";
+  late final int id;
+  late final String name;
 
-  const Group.personal();
+  Group.personal() {
+    id = 0;
+    name = "";
+  }
 
   Group(int inID, String inName) {
     id = inID;

@@ -138,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, const Group.personal())));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, Group.personal())));
               }
             ),
           ),

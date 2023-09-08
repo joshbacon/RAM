@@ -95,7 +95,7 @@ class _ProfileCardState extends State<ProfileCard> {
                         visible: widget.user.isFriend!,
                         child: IconButton(
                           onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, const Group.personal())));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, Group.personal())));
                           },
                           highlightColor: const Color.fromARGB(0, 255, 255, 255),
                           splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
