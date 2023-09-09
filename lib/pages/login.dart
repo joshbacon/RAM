@@ -141,12 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context).colorScheme.primary
                   ),
                   hintText: "username",
-                  hintStyle: const TextStyle(
-                    fontFamily: "dubai",
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
               const Spacer(flex: 1),
@@ -173,12 +168,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Theme.of(context).colorScheme.primary
                   ),
                   hintText: "password",
-                  hintStyle: const TextStyle(
-                    fontFamily: "dubai",
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+                  hintStyle: Theme.of(context).textTheme.bodyMedium,
                 ),
               ),
               const Spacer(flex: 1),
