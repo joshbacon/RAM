@@ -95,12 +95,12 @@ class _ProfilePageState extends State<ProfilePage> {
             visible: context.watch<User>().uid != widget.user.uid,
             child: FloatingActionButton(
               heroTag: "backBtn",
-              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
+              backgroundColor: const Color.fromARGB(69, 0, 0, 0),
               foregroundColor: Theme.of(context).colorScheme.background,
               elevation: 0.0,
               child: Icon(
                 Icons.arrow_back_rounded,
-                size: 48,
+                size: 36,
                 color: Theme.of(context).colorScheme.primary
               ),
               onPressed: () {
@@ -110,36 +110,42 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Visibility(
             visible: context.watch<User>().uid != widget.user.uid && !widget.user.isFriend!,
-            child:  FloatingActionButton(
-              heroTag: "addBtn",
-              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
-              foregroundColor: Theme.of(context).colorScheme.background,
-              elevation: 0.0,
-              child: Icon(
-                Icons.group_add_outlined,
-                size: 48,
-                color: Theme.of(context).colorScheme.primary
+            child:  Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: FloatingActionButton(
+                heroTag: "addBtn",
+                backgroundColor: const Color.fromARGB(69, 0, 0, 0),
+                foregroundColor: Theme.of(context).colorScheme.background,
+                elevation: 0.0,
+                child: Icon(
+                  Icons.group_add_outlined,
+                  size: 36,
+                  color: Theme.of(context).colorScheme.primary
+                ),
+                onPressed: () {
+                  addFriend();
+                }
               ),
-              onPressed: () {
-                addFriend();
-              }
             ),
           ),
           Visibility(
             visible: widget.user.isFriend ?? false,
-            child:  FloatingActionButton(
-              heroTag: "addBtn",
-              backgroundColor: const Color.fromRGBO(255, 163, 0, 0.0),
-              foregroundColor: Theme.of(context).colorScheme.background,
-              elevation: 0.0,
-              child: Icon(
-                Icons.chat,
-                size: 48,
-                color: Theme.of(context).colorScheme.primary
+            child:  Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: FloatingActionButton(
+                heroTag: "chatBtn",
+                backgroundColor: const Color.fromARGB(69, 0, 0, 0),
+                foregroundColor: Theme.of(context).colorScheme.background,
+                elevation: 0.0,
+                child: Icon(
+                  Icons.chat,
+                  size: 36,
+                  color: Theme.of(context).colorScheme.primary
+                ),
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, Group.personal())));
+                }
               ),
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(widget.user, Group.personal())));
-              }
             ),
           ),
           Visibility(

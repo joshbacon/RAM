@@ -31,12 +31,13 @@ class _ChatState extends State<Chat> {
     if (message.text.isEmpty) return;
 
     final text = message.text;
-    message.text = "";
-    messages.addMessage(Message(text, context.read<User>().uid, context.read<User>().profile));
+    // message.text = "";
+    messages.addMessage(Message(text, context.read<User>().uid, context.read<User>().username, context.read<User>().profile));
     _scrollToBottom();
 
     if (!await context.read<User>().sendMessage(widget.friend.uid, widget.group.getID, text)) {
       messages.removeMessage();
+      setState(() { });
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -86,6 +87,7 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.tertiaryContainer,
         title: widget.friend.uid != "0" ? Text(widget.friend.username) : Text(widget.group.getName),
       ),
       body: Column(
@@ -124,21 +126,16 @@ class _ChatState extends State<Chat> {
             clipBehavior: Clip.none,
             alignment: AlignmentDirectional.centerEnd,
             children: [
-              Expanded(
-                child: TextField(
-                  // onChanged: (newMessage) {
-                  //   _onMessageChange(newMessage);
-                  // },
-                  controller: message,
-                  onTapOutside: (event) => FocusScope.of(context).unfocus(),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  decoration: InputDecoration(
-                    hintText: "message...",
-                    prefixIcon: Icon(
-                      Icons.search_outlined,
-                      color: Theme.of(context).colorScheme.primary
-                    ),
-                  ),
+              TextField(
+                // onChanged: (newMessage) {
+                //   _onMessageChange(newMessage);
+                // },
+                controller: message,
+                onTapOutside: (event) => FocusScope.of(context).unfocus(),
+                style: Theme.of(context).textTheme.bodyMedium,
+                decoration: InputDecoration(
+                  hintText: "message...",
+                  fillColor: Theme.of(context).colorScheme.tertiary,
                 ),
               ),
               IconButton(

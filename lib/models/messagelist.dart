@@ -38,10 +38,11 @@ class MessageList {
           if ( msg['status'] ){
             list.add(Message(
               msg['message'],
-              msg['sender'].toString(),
+              msg['senderID'].toString(),
+              msg['senderName'].toString(),
               msg['profilepicture'] != null ? NetworkImage(paths.image(msg['profilepicture'])) : const AssetImage('assets/defaultProfile.png')
             ));
-            nextMID = msg['mid']+1;
+            nextMID = int.parse(msg['mid'])+1;
           }
         }
       } catch (e) {

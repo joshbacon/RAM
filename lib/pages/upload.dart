@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 
+//TODO: compress files or give an error message when images are too large (preferrably the first)
+
 class UploadPage extends StatefulWidget {
 
   const UploadPage({Key? key}) : super(key: key);
@@ -17,7 +19,6 @@ class UploadPage extends StatefulWidget {
 class _UploadPageState extends State<UploadPage> {
 
   bool addLocal = true;
-  //bool addURL = false;
   bool showUploadErr = false;
 
   TextEditingController urlController = TextEditingController();
@@ -37,14 +38,14 @@ class _UploadPageState extends State<UploadPage> {
         return AlertDialog(
           title: Text(
             msg,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(decoration: TextDecoration.none),
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text( "Ok",
+              child: Text( "Ok",
                 style: TextStyle(
                   fontFamily: "dubai",
-                  color: Color.fromARGB(255, 56, 56, 56),
+                  color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),

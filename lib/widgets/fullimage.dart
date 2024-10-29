@@ -34,6 +34,11 @@ class FullImage extends StatelessWidget {
           ),
           // interaction bar also (???)
           //comment section
+          Column(
+            children: [
+              
+            ],
+          )
         ],
       ),
     );

@@ -67,7 +67,6 @@ class _LoginPageState extends State<LoginPage> {
       width: 2.0,
     ),
   );
-
   
   @override
   Widget build(BuildContext context) {

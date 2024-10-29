@@ -18,9 +18,6 @@ class SocialPage extends StatefulWidget {
 
 class _SocialPageState extends State<SocialPage> {
 
-  // TODO:
-  // - also why is home and profile a scaffold but this and upload aren't? see if they should be...
-
   final FocusNode _focus = FocusNode();
 
   Timer? _debounce;
@@ -89,7 +86,7 @@ class _SocialPageState extends State<SocialPage> {
                         'downs': uu['downs'] == 0 ? 1 : uu['downs'],
                         'profile': uu['profile'] != null ? NetworkImage(paths.image(uu["profile"].toString())) : const AssetImage('assets/defaultProfile.png'),
                         'banner': uu['banner'] != null ? NetworkImage(paths.image(uu["banner"].toString())) : const AssetImage('assets/defaultBanner.png'),
-                        'isFriend': uu['isFriend'] == 1
+                        'isFriend': uu['isFriend'] == 'true'
                       });
                       if (profile.uid != uid) {
                         newList.add(ProfileCard(profile));
@@ -158,6 +155,8 @@ class _SocialPageState extends State<SocialPage> {
               ),
             ),
           ),
+
+          // Show the search results if there are any
           Visibility(
             visible: searchList.isNotEmpty || _focus.hasFocus,
             child: Expanded(
@@ -173,6 +172,8 @@ class _SocialPageState extends State<SocialPage> {
               ),
             ),
           ),
+
+          // Show friend requests if there are any and you're not searching
           Visibility(
             visible: searchList.isEmpty && !_focus.hasFocus && requestList.isNotEmpty,
             child: Expanded(
@@ -195,6 +196,8 @@ class _SocialPageState extends State<SocialPage> {
               ),
             ),
           ),
+
+          // Show the groups if there are no search results and the serach box doesn't have focus
           Visibility(
             visible: searchList.isEmpty && !_focus.hasFocus && groupList.isNotEmpty,
             child: Expanded(
@@ -216,11 +219,15 @@ class _SocialPageState extends State<SocialPage> {
               ),
             ),
           ),
+
+          // Show an empty space if all search results are empty
           Visibility(
             visible: searchList.isEmpty && requestList.isEmpty && groupList.isEmpty,
             child: const Spacer(),
           ),
           const Divider(thickness: 3,),
+
+          // Bottom friends modal
           TextButton(
             onPressed: () {
               showModalBottomSheet(
@@ -230,17 +237,20 @@ class _SocialPageState extends State<SocialPage> {
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        Text(
-                          'Friends',
-                          textAlign: TextAlign.start,
-                          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                            shadows: <Shadow>[
-                              const Shadow(
-                                offset: Offset(0.0, 1.0),
-                                blurRadius: 10.0,
-                                color: Color.fromARGB(255, 0, 0, 0),
-                              ),
-                            ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0, bottom: 8.0),
+                          child: Text(
+                            'Friends',
+                            textAlign: TextAlign.start,
+                            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                              shadows: <Shadow>[
+                                const Shadow(
+                                  offset: Offset(0.0, 1.0),
+                                  blurRadius: 10.0,
+                                  color: Color.fromARGB(255, 0, 0, 0),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         Divider(

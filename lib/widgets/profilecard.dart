@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ram/models/group.dart';
 import 'package:ram/pages/chat.dart';
-import '../models/user.dart';
-import '../pages/profile.dart';
+import 'package:ram/models/user.dart';
+import 'package:ram/pages/profile.dart';
 
 class ProfileCard extends StatefulWidget {
   
@@ -34,9 +34,7 @@ class _ProfileCardState extends State<ProfileCard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ProfilePage(
-                      widget.user
-                    )
+                    builder: (context) => ProfilePage(widget.user)
                   )
                 );
               },

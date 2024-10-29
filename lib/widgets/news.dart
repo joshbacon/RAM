@@ -29,7 +29,7 @@ class News extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.fromLTRB(25, 0, 25, 5),
           child: Text(
-            "welcome to the app!\ni am implementing a testing process named TIP (test in production)",
+            "Welcome to the app!\nI'm implementing a testing process named TIP (test in production)",
             textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               height: 1,

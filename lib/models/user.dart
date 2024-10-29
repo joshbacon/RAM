@@ -49,15 +49,19 @@ class User with ChangeNotifier {
       userInfo['username'] = info["username"].toString();
       userInfo['bio'] = info["bio"].toString();
       userInfo['joinedat'] = DateTime.parse(info['joinedat']).toLocal();
-      userInfo['ups'] = info['ups'] == 0 ? 1 : info['ups'];
-      userInfo['downs'] = info['downs'] == 0 ? 1 : info['downs'];
+      userInfo['ups'] = info['ups'] == 0 ? 1 : int.parse(info['ups']);
+      userInfo['downs'] = info['downs'] == 0 ? 1 : int.parse(info['downs']);
       if (info['profile'] != null){
         userInfo['profile'] = NetworkImage(paths.image(info["profile"].toString()));
       }
       if (info['banner'] != null){
         userInfo['banner'] = NetworkImage(paths.image(info["banner"].toString()));
       }
-      userInfo['isFriend'] = info['isFriend'] == 1;
+      if (info['isFriend'] != null) {
+        userInfo['isFriend'] = info['isFriend'] == '1';
+      } else {
+        userInfo['isFriend'] = false;
+      }
       return User(userInfo);
     }
     return User.asNull();
@@ -95,6 +99,8 @@ class User with ChangeNotifier {
     );
     Map<String, dynamic> data = json.decode(response.body.trim());
     if (response.statusCode == 200){
+      data['ups'] = int.parse(data['ups']);
+      data['downs'] = int.parse(data['downs']);
       userData['uid'] = data["uid"].toString();
       userData['username'] = data["username"].toString();
       userData['bio'] = data["bio"].toString();
@@ -132,8 +138,8 @@ class User with ChangeNotifier {
       userData['username'] = data["username"].toString();
       userData['bio'] = data["bio"].toString();
       userData['joinedat'] = DateTime.parse(data['joinedat']).toLocal();
-      userData['ups'] = data['ups'] == 0 ? 1 : data['ups'];
-      userData['downs'] = data['downs'] == 0 ? 1 : data['downs'];
+      userData['ups'] = data['ups'] == 0 ? 1 : int.parse(data['ups']);
+      userData['downs'] = data['downs'] == 0 ? 1 : int.parse(data['downs']);
       userData['password'] = passwordIn;
       notifyListeners();
       saveData();
@@ -195,11 +201,11 @@ class User with ChangeNotifier {
             user['username'] = user["username"].toString();
             user['bio'] = user["bio"].toString();
             user['joinedat'] = DateTime.parse(user["joinedat"]).toLocal();
-            user['ups'] = user['ups'] == 0 ? 1 : user['ups'];
-            user['downs'] = user['downs'] == 0 ? 1 : user['downs'];
+            user['ups'] = user['ups'] == 0 ? 1 : int.parse(user['ups']);
+            user['downs'] = user['downs'] == 0 ? 1 : int.parse(user['downs']);
             user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
             user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
-            user['isFriend'] = user['isFriend'] == 1;
+            user['isFriend'] = user['isFriend'] == 'true';
             friends.add(User(user));
           }
         }
@@ -228,11 +234,11 @@ class User with ChangeNotifier {
             user['username'] = user["username"].toString();
             user['bio'] = user["bio"].toString();
             user['joinedat'] = DateTime.parse(user["joinedat"]).toLocal();
-            user['ups'] = user['ups'] == 0 ? 1 : user['ups'];
-            user['downs'] = user['downs'] == 0 ? 1 : user['downs'];
+            user['ups'] = user['ups'] == 0 ? 1 : int.parse(user['ups']);
+            user['downs'] = user['downs'] == 0 ? 1 : int.parse(user['downs']);
             user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
             user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
-            user['isFriend'] = user['isFriend'] == 1;
+            user['isFriend'] = user['isFriend'] == 'true';
             friends.add(User(user));
           }
         }
@@ -256,8 +262,7 @@ class User with ChangeNotifier {
         List<Group> groups = [];
         for (var group in results) {
           if ( group['status'] ){
-            group.remove('status');
-            groups.add(Group(group['gid'], group["name"]));
+            groups.add(Group(int.parse(group['gid']), group["name"]));
           }
         }
         return groups;
@@ -355,6 +360,12 @@ class User with ChangeNotifier {
     
   // Copied from updateBannerPicture, need to adapt to upload a post
   Future<bool> uploadPost(image) async{
+
+
+    // Sign Up DOES WORK
+    // the htpp send method is the same as uploadPostFromURL which doesn't work though
+    // so start by comparing acceptimage.php against signup.php and try to mimic the latter
+
 
     var stream = http.ByteStream(image.openRead());
     stream.cast();
