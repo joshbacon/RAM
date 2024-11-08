@@ -48,7 +48,7 @@ class _SocialPageState extends State<SocialPage> {
     });
   }
 
-  _onSearchChanged(query, uid) {
+  _toggleDebounce(query, uid) {
     if (query == "") {
       setState(() {
         searchList = [];
@@ -58,65 +58,67 @@ class _SocialPageState extends State<SocialPage> {
     if (_debounce?.isActive ?? false) {
       _debounce?.cancel();
     }
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
-      String uid = context.read<User>().uid;
-      final response = await http.get(
-        Uri.parse(paths.searchUsers(query, uid))
-      );
-      if (response.statusCode == 200) {
-        try {
-          List<dynamic> results = json.decode(response.body);
-          for (var user in results) {
-            if ( user['status'] ){
-              final response = await http.get(
-                Uri.parse(paths.searchUsers(query, uid))
-              );
-              if (response.statusCode == 200) {
-                try {
-                  List<dynamic> users = json.decode(response.body);
-                  List<ProfileCard> newList = [];
-                  for (var uu in users) {
-                    if ( uu['status'] ){
-                      User profile = User({
-                        'uid': uu['uid'].toString(),
-                        'username': uu['username'],
-                        'bio': uu["bio"].toString(),
-                        'joinedat': DateTime.parse(uu["joinedat"]).toLocal(),
-                        'ups': uu['ups'] == 0 ? 1 : uu['ups'],
-                        'downs': uu['downs'] == 0 ? 1 : uu['downs'],
-                        'profile': uu['profile'] != null ? NetworkImage(paths.image(uu["profile"].toString())) : const AssetImage('assets/defaultProfile.png'),
-                        'banner': uu['banner'] != null ? NetworkImage(paths.image(uu["banner"].toString())) : const AssetImage('assets/defaultBanner.png'),
-                        'isFriend': uu['isFriend'] == 'true'
-                      });
-                      if (profile.uid != uid) {
-                        newList.add(ProfileCard(profile));
-                      }
+    _debounce = Timer(const Duration(milliseconds: 500), () => _onSearchChanged(query, uid));
+  }
+
+  _onSearchChanged(query, uid) async {
+    String uid = context.read<User>().uid;
+    final response = await http.get(
+      Uri.parse(paths.searchUsers(query, uid))
+    );
+    if (response.statusCode == 200) {
+      try {
+        List<dynamic> results = json.decode(response.body);
+        for (var user in results) {
+          if ( user['status'] ){
+            final response = await http.get(
+              Uri.parse(paths.searchUsers(query, uid))
+            );
+            if (response.statusCode == 200) {
+              try {
+                List<dynamic> users = json.decode(response.body);
+                List<ProfileCard> newList = [];
+                for (var uu in users) {
+                  if ( uu['status'] ){
+                    User profile = User({
+                      'uid': uu['uid'].toString(),
+                      'username': uu['username'],
+                      'bio': uu["bio"].toString(),
+                      'joinedat': DateTime.parse(uu["joinedat"]).toLocal(),
+                      'ups': uu['ups'] == 0 ? 1 : int.parse(uu['ups']),
+                      'downs': uu['downs'] == 0 ? 1 : int.parse(uu['downs']),
+                      'profile': uu['profile'] != null ? NetworkImage(paths.image(uu["profile"].toString())) : const AssetImage('assets/defaultProfile.png'),
+                      'banner': uu['banner'] != null ? NetworkImage(paths.image(uu["banner"].toString())) : const AssetImage('assets/defaultBanner.png'),
+                      'isFriend': uu['isFriend'] == '1'
+                    });
+                    if (profile.uid != uid) {
+                      newList.add(ProfileCard(profile));
                     }
                   }
-                  setState(() {
-                    searchList = newList;
-                  });
-                } catch (e) {
-                  // Map<String, dynamic> result = json.decode(response.body);
-                  setState(() {
-                    searchList = [];
-                  });
                 }
+                setState(() {
+                  searchList = newList;
+                });
+              } catch (e) {
+                // Map<String, dynamic> result = json.decode(response.body);
+                setState(() {
+                  searchList = [];
+                });
               }
-            } else {
-              setState(() {
-                searchList = [];
-              });
             }
+          } else {
+            setState(() {
+              searchList = [];
+            });
           }
-        } catch (e) {
-          // Map<String, dynamic> result = json.decode(response.body);
-          setState(() {
-            searchList = [];
-          });
         }
+      } catch (e) {
+        // Map<String, dynamic> result = json.decode(response.body);
+        setState(() {
+          searchList = [];
+        });
       }
-    });
+    }
   }
 
   @override
@@ -143,7 +145,7 @@ class _SocialPageState extends State<SocialPage> {
           TextField(
             focusNode: _focus,
             onChanged: (query) {
-              _onSearchChanged(query, context.read<User>().uid);
+              _toggleDebounce(query, context.read<User>().uid);
             },
             onTapOutside: (event) => FocusScope.of(context).unfocus(),
             style: Theme.of(context).textTheme.bodyMedium,

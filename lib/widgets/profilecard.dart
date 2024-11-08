@@ -75,10 +75,11 @@ class _ProfileCardState extends State<ProfileCard> {
                         visible: !widget.user.isFriend!,
                         child: IconButton(
                           onPressed: () {
-                            widget.user.addFriend(context.read<User>().uid).then((_) => {
+                            context.read<User>().addFriend(widget.user.uid).then((_) => {
                               setState(() {})
                             });
                           },
+                          enableFeedback: widget.user.isFriend == null,
                           highlightColor: const Color.fromARGB(0, 255, 255, 255),
                           splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
                           splashRadius: 40,

@@ -64,7 +64,7 @@ class User with ChangeNotifier {
       if (info['isFriend'] != null) {
         userInfo['isFriend'] = info['isFriend'] == '1';
       } else {
-        userInfo['isFriend'] = false;
+        userInfo['isFriend'] = null;
       }
       return User(userInfo);
     }
@@ -209,7 +209,7 @@ class User with ChangeNotifier {
             user['downs'] = user['downs'] == 0 ? 1 : int.parse(user['downs']);
             user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
             user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
-            user['isFriend'] = user['isFriend'] == 'true';
+            user['isFriend'] = user['isFriend'] == '1';
             friends.add(User(user));
           }
         }
@@ -242,7 +242,7 @@ class User with ChangeNotifier {
             user['downs'] = user['downs'] == 0 ? 1 : int.parse(user['downs']);
             user['profile'] = user['profile'] != null ? NetworkImage(paths.image(user["profile"].toString())) : const AssetImage('assets/defaultProfile.png');
             user['banner'] = user['banner'] != null ? NetworkImage(paths.image(user["banner"].toString())) : const AssetImage('assets/defaultBanner.png');
-            user['isFriend'] = user['isFriend'] == 'true';
+            user['isFriend'] = user['isFriend'] == '1';
             friends.add(User(user));
           }
         }
@@ -278,7 +278,7 @@ class User with ChangeNotifier {
     return [];
   }
 
-  Future<bool> addFriend(friend) async{
+  Future<bool> addFriend(friend) async {
     final response = await http.post(
       Uri.parse(paths.addFriend()),
       body: {

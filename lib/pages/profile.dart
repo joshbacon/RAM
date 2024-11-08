@@ -68,10 +68,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    print("line 71: ${widget.user.uid}");
-    print("line 71: ${widget.user.username}");
-    print("line 71: ${widget.user.profile}");
-    print("line 71: ${widget.user.banner}");
     super.initState();
     _refresh();
     controller.addListener(_scrollListener);
@@ -121,6 +117,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 backgroundColor: const Color.fromARGB(69, 0, 0, 0),
                 foregroundColor: Theme.of(context).colorScheme.background,
                 elevation: 0.0,
+                enableFeedback: widget.user.isFriend == null,
                 child: Icon(
                   Icons.group_add_outlined,
                   size: 36,

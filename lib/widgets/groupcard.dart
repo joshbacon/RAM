@@ -38,62 +38,53 @@ class _GroupCardState extends State<GroupCard> {
     double w = MediaQuery.of(context).size.width;
     return SizedBox(
       width: w * 0.8,
-      child: Card(
-        clipBehavior: Clip.hardEdge,
-        color: Theme.of(context).colorScheme.tertiary,
-        elevation: 10,
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                  child: SizedBox(
-                    width: w*0.8,
-                    height: 70,
-                    child: participants.isNotEmpty ?
-                      ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: participants.length,
-                        itemBuilder: ((context, index) => CircleAvatar(
-                          radius: 30,
-                          backgroundColor: Theme.of(context).colorScheme.tertiary,
-                          backgroundImage: participants[index].profile,
-                        )),
-                      ) : const Loader(),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(User.asNull(), widget.group)));
+        },
+        child: Card(
+          clipBehavior: Clip.hardEdge,
+          color: Theme.of(context).colorScheme.tertiary,
+          elevation: 10,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                    child: SizedBox(
+                      width: w*0.8,
+                      height: 70,
+                      child: participants.isNotEmpty ?
+                        ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: participants.length,
+                          itemBuilder: ((context, index) => CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Theme.of(context).colorScheme.tertiary,
+                            backgroundImage: participants[index].profile,
+                          )),
+                        ) : const Loader(),
+                    ),
                   ),
-                ),
-                Container(
-                  color: Theme.of(context).colorScheme.background,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      const SizedBox(width: 10),
-                      Text(
-                        widget.group.getName,
-                        style: Theme.of(context).textTheme.titleSmall,
-                      ),
-                      const Spacer(flex: 1),
-                      IconButton(
-                        onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(User.asNull(), widget.group)));
-                        },
-                        highlightColor: const Color.fromARGB(0, 255, 255, 255),
-                        splashColor: Theme.of(context).colorScheme.primary.withAlpha(127),
-                        splashRadius: 40,
-                        icon: Icon(
-                          Icons.chat,
-                          size: 30,
-                          color: Theme.of(context).colorScheme.primary,
+                  Container(
+                    color: Theme.of(context).colorScheme.background,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        const SizedBox(width: 10),
+                        Text(
+                          widget.group.getName,
+                          style: Theme.of(context).textTheme.titleSmall,
                         ),
-                      ),
-                    ]
+                      ]
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ]
+                ],
+              ),
+            ]
+          ),
         ),
       ),
     );
