@@ -123,10 +123,7 @@ class _PostState extends State<Post> {
           onTap: () {
             showFullImage(context);
           },
-          child: Image(
-            image: widget.data['image'],
-            fit: BoxFit.fitWidth
-          ),
+          child: widget.data['image']
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),

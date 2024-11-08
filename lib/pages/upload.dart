@@ -30,6 +30,20 @@ class _UploadPageState extends State<UploadPage> {
     );
   }
 
+  Future<void> _uploadImage() async {
+    XFile? imagePicked = await acceptImage();
+    if ( imagePicked != null && context.mounted && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
+      setState(() {
+        _showDialog('Your post has been uploaded');
+        showUploadErr = false;
+      });
+    } else {
+      setState(() {
+        showUploadErr = true;
+      });
+    }
+  }
+
   Future<void> _showDialog(String msg) async {
     return showDialog<void>(
       context: context,
@@ -120,19 +134,7 @@ class _UploadPageState extends State<UploadPage> {
                 child: IconButton(
                   highlightColor: Theme.of(context).colorScheme.primary.withAlpha(69),
                   padding: EdgeInsets.all(min(w, h)/8),
-                  onPressed: () async {
-                    XFile? imagePicked = await acceptImage();
-                    if ( imagePicked != null && context.mounted && await context.read<User>().uploadPost(File(imagePicked.path)) ) {
-                      setState(() {
-                        _showDialog('Your post has been uploaded');
-                        showUploadErr = false;
-                      });
-                    } else {
-                      setState(() {
-                        showUploadErr = true;
-                      });
-                    }
-                  },
+                  onPressed: _uploadImage,
                   iconSize: min(w/5, 100),
                   icon: Icon(
                     Icons.add_a_photo_outlined,

@@ -68,6 +68,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
+    print("line 71: ${widget.user.uid}");
+    print("line 71: ${widget.user.username}");
+    print("line 71: ${widget.user.profile}");
+    print("line 71: ${widget.user.banner}");
     super.initState();
     _refresh();
     controller.addListener(_scrollListener);

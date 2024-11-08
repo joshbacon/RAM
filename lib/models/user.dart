@@ -53,9 +53,13 @@ class User with ChangeNotifier {
       userInfo['downs'] = info['downs'] == 0 ? 1 : int.parse(info['downs']);
       if (info['profile'] != null){
         userInfo['profile'] = NetworkImage(paths.image(info["profile"].toString()));
+      } else {
+        userInfo['profile'] = const AssetImage('assets/defaultProfile.png');
       }
       if (info['banner'] != null){
         userInfo['banner'] = NetworkImage(paths.image(info["banner"].toString()));
+      } else {
+        userInfo['banner'] = const AssetImage('assets/defaultBanner.png');
       }
       if (info['isFriend'] != null) {
         userInfo['isFriend'] = info['isFriend'] == '1';
@@ -305,6 +309,8 @@ class User with ChangeNotifier {
   }
     
 
+  // TODO: sometimes this and updateBannerPicture don't update on the screen,
+  //        even though they upload the image to the server
   Future<bool> updateProfilePicture(image) async{
 
     var stream = http.ByteStream(image.openRead());
@@ -357,15 +363,9 @@ class User with ChangeNotifier {
     }
     return false;
   }
-    
-  // Copied from updateBannerPicture, need to adapt to upload a post
+  
+  
   Future<bool> uploadPost(image) async{
-
-
-    // Sign Up DOES WORK
-    // the htpp send method is the same as uploadPostFromURL which doesn't work though
-    // so start by comparing acceptimage.php against signup.php and try to mimic the latter
-
 
     var stream = http.ByteStream(image.openRead());
     stream.cast();

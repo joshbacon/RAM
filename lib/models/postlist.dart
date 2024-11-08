@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:ram/widgets/littlepost.dart';
 import 'package:ram/widgets/post.dart';
@@ -35,10 +35,15 @@ class PostList {
         List<dynamic> results = json.decode(response.body);
         for (var post in results) {
           if ( post['status'] ){
-            post.remove('status');
             post['anon'] = isAnon;
             post['profilepicture'] = NetworkImage(paths.image(post['profilepicture']));
-            post['image'] = NetworkImage(paths.image(post['image']));
+            post['image'] = Image.network(
+              paths.image(post['image']),
+              fit: BoxFit.fitWidth,
+              errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                return const Image(image: AssetImage("assets/postNotFoundImage.png"));
+              }
+            );
             post['pid'] = int.parse(post['pid']);
             post['uid'] = int.parse(post['uid']);
             post['ups'] = int.parse(post['ups']);

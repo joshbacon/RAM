@@ -26,7 +26,7 @@ class _LittlePostState extends State<LittlePost> {
       },
       child: ClipRRect(
         borderRadius: BorderRadius.circular(15),
-        child: Image(image: widget.data['image']),
+        child: widget.data['image'],
       ),
     );
   }

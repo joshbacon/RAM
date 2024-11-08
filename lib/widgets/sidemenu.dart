@@ -16,7 +16,7 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
 
-  String newText = "";
+  TextEditingController newText = TextEditingController();
 
   bool showUserErr = false;
   bool showProfileErr = false;
@@ -38,6 +38,9 @@ class _SideMenuState extends State<SideMenu> {
   }
 
   Future<void> _showUpdateDialog(String type) async {
+    setState(() {
+      newText.text = (type == 'Bio' ? context.read<User>().bio : context.read<User>().username) ?? '';
+    });
     return showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -52,11 +55,12 @@ class _SideMenuState extends State<SideMenu> {
               maxLength: 255,
               minLines: type.contains('Bio') ? 3 : 1,
               maxLines: type.contains('Bio') ? 5 : 1,
-              onChanged: (text) {
-                setState(() {
-                  newText = text;             
-                });
-              },
+              controller: newText,
+              // onChanged: (text) {
+              //   setState(() {
+              //     newText = text;             
+              //   });
+              // },
               onTapOutside: (event) => FocusScope.of(context).unfocus(),
               style: Theme.of(context).textTheme.bodySmall,
               decoration: InputDecoration(
@@ -77,7 +81,7 @@ class _SideMenuState extends State<SideMenu> {
               TextButton(
                 child: Text(
                   "cancel",
-                  style: Theme.of(context).textTheme.titleSmall,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -86,13 +90,13 @@ class _SideMenuState extends State<SideMenu> {
               TextButton(
                 child: Text(
                   "ok",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.titleSmall,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
                   if (type.contains('Username')) {
                     // make the update username call
-                    context.read<User>().updateUsername(newText).then((result) {
+                    context.read<User>().updateUsername(newText.text).then((result) {
                       if (result) {
                         _showMsgDialog("$type has been updated");
                       } else {
@@ -100,7 +104,6 @@ class _SideMenuState extends State<SideMenu> {
                       }
                     });
                   } else if (type.contains('Bio')) {
-                    // make the update bio call
                     context.read<User>().updateBio(newText).then((result) {
                       if (result) {
                         _showMsgDialog("$type has been updated");
@@ -242,16 +245,22 @@ class _SideMenuState extends State<SideMenu> {
             iconColor: Theme.of(context).colorScheme.primary,
             textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () async {
+              showProfileErr = false;
               XFile? imagePicked = await acceptImage();
-              if ( imagePicked != null && context.mounted && await context.read<User>().updateProfilePicture(File(imagePicked.path)) ) {
-                //setState(() {
-                  _showMsgDialog('Your profile picture has been updated.');
-                  showProfileErr = false;
-                //});
+
+              if (imagePicked == null ) {
+                showProfileErr = true;
+                return;
+              }
+
+              final bytes = (await imagePicked.readAsBytes()).lengthInBytes;
+              final mb = (bytes / 1024) / 1024;
+              if (mb > 12) {
+                _showMsgDialog('Image must be less than 12MB.');
+              } else if (context.mounted && await context.read<User>().updateProfilePicture(File(imagePicked.path)) ) {
+                _showMsgDialog('Your profile picture has been updated.');
               } else {
-                //setState(() {
-                  showProfileErr = true;
-                //});
+                showProfileErr = true;
               }
             },
           ),
@@ -276,16 +285,22 @@ class _SideMenuState extends State<SideMenu> {
             iconColor: Theme.of(context).colorScheme.primary,
             textColor: Theme.of(context).colorScheme.onBackground,
             onTap: () async {
+              showBannerErr = false;
               XFile? imagePicked = await acceptImage();
-              if ( imagePicked != null && context.mounted && await context.read<User>().updateBannerPicture(File(imagePicked.path)) ) {
-                //(() {
-                  _showMsgDialog("Your banner picture has been updated");
-                  showBannerErr = false;
-                //});
+
+              if (imagePicked == null ) {
+                showBannerErr = true;
+                return;
+              }
+
+              final bytes = (await imagePicked.readAsBytes()).lengthInBytes;
+              final mb = (bytes / 1024) / 1024;
+              if (mb > 12) {
+                _showMsgDialog('Image must be less than 12MB.');
+              } else if (context.mounted && await context.read<User>().updateBannerPicture(File(imagePicked.path)) ) {
+                _showMsgDialog('Your banner picture has been updated.');
               } else {
-                //setState(() {
-                  showBannerErr = true;
-                //});
+                showBannerErr = true;
               }
             },
           ),

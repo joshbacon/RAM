@@ -4,8 +4,6 @@ import 'package:ram/models/group.dart';
 import 'package:ram/models/messagelist.dart';
 import 'package:ram/models/user.dart';
 import 'package:ram/models/message.dart';
-import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
-import 'package:ram/widgets/loader.dart';
 
 class Chat extends StatefulWidget {
   const Chat(this.friend, this.group, {Key? key}) : super(key: key);

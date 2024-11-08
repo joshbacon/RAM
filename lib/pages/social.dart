@@ -180,6 +180,7 @@ class _SocialPageState extends State<SocialPage> {
               child: Column(
                 children: [
                   const SizedBox(height: 20,),
+                  const Text('Requests'),
                   Expanded(
                     child: SingleChildScrollView(
                       child: ListView.builder(
@@ -203,6 +204,8 @@ class _SocialPageState extends State<SocialPage> {
             child: Expanded(
               child: Column(
                 children: [
+                  const SizedBox(height: 20,),
+                  const Text('Groups'),
                   Expanded(
                     child: SingleChildScrollView(
                       child: ListView.builder(
